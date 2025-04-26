@@ -1,0 +1,185 @@
+{
+  "settings": {
+    "title": "Settings",
+    "done": "Done",
+    "language": {
+      "title": "Language Settings"
+    },
+    "autocomplete": {
+      "title": "Autocomplete Settings",
+      "provider": "Provider",
+      "apiBase": "Base URL",
+      "apiKey": "API Key",
+      "model": "Model",
+      "enable": "Enable Autocomplete"
+    },
+    "other": {
+      "title": "Other Settings",
+      "customInstructions": "Custom Instructions",
+      "customInstructionsDesc": "These instructions are added to the end of the system prompt sent with every request.",
+      "planActSeparateModels": "Use different models for Plan and Act modes",
+      "planActSeparateModelsDesc": "Switching between Plan and Act mode will persist the API and model used in the previous mode. This may be helpful e.g. when using a strong reasoning model to architect a plan for a cheaper coding model to act on.",
+      "advancedSettings": "Advanced Settings",
+      "debug": "Debug",
+      "resetState": "Reset State",
+      "resetStateDesc": "This will reset all global state and secret storage in the extension."
+    },
+    "feedback": {
+      "text": "If you have any questions or feedback, feel free to open an issue at",
+      "version": "v{{version}}"
+    },
+    "planMode": "Plan Mode",
+    "actMode": "Act Mode",
+    "api": {
+      "provider": "API Provider",
+      "selectModel": "Select a model...",
+      "model": "Model",
+      "baseUrl": "Base URL",
+      "apiKey": "API Key",
+      "modelId": "Model ID",
+      "customBaseUrl": "Use custom base URL",
+      "customVpcEndpoint": "Use custom VPC endpoint",
+      "crossRegionInference": "Use cross-region inference",
+      "promptCaching": "Use prompt caching",
+      "awsCredentials": "AWS Credentials",
+      "awsProfile": "AWS Profile",
+      "awsAccessKey": "AWS Access Key",
+      "awsSecretKey": "AWS Secret Key",
+      "awsSessionToken": "AWS Session Token",
+      "awsRegion": "AWS Region",
+      "selectRegion": "Select a region...",
+      "gcpProjectId": "Google Cloud Project ID",
+      "gcpRegion": "Google Cloud Region",
+      "modelConfig": "Model Configuration",
+      "supportsImages": "Supports Images",
+      "supportsComputerUse": "Supports Computer Use",
+      "enableR1Format": "Enable R1 messages format",
+      "contextWindowSize": "Context Window Size",
+      "maxOutputTokens": "Max Output Tokens",
+      "inputPrice": "Input price",
+      "outputPrice": "Output price",
+      "temperature": "Temperature",
+      "sortProviderRouting": "Sort underlying provider routing",
+      "default": "Default",
+      "price": "Price",
+      "throughput": "Throughput",
+      "latency": "Latency",
+      "reasoningEffort": "Modify reasoning effort",
+      "low": "low",
+      "high": "high"
+    }
+  },
+  "chat": {
+    "addContext": "Add Context",
+    "addImages": "Add Images",
+    "planMode": "Plan",
+    "actMode": "Act",
+    "planModeTooltip": "In Plan mode, Codai will gather information to architect a plan",
+    "actModeTooltip": "In Act mode, Codai will complete the task immediately",
+    "toggleModeHint": "Toggle with {{metaKey}}+Shift+A",
+    "send": "Send",
+    "placeholder": "Type a message...",
+    "welcome": {
+      "title": "Hi, I'm Codai",
+      "description": "I can do all kinds of tasks thanks to breakthroughs in <1>{{claudeLink}}</1> agentic coding capabilities and access to tools that let me create & edit files, explore complex projects, use a browser, and execute terminal commands <i>(with your permission, of course)</i>. I can even use MCP to create new tools and extend my own capabilities.",
+      "claudeLink": "Claude 3.7 Sonnet's",
+      "claudeLinkText": "Claude 3.7 Sonnet's",
+      "signupText": "Sign up for an account to get started for free, or use an API key that provides access to models like Claude 3.7 Sonnet.",
+      "getStarted": "Get Started for Free",
+      "useOwnApiKey": "Use your own API key",
+      "letsGo": "Let's go!"
+    }
+  },
+  "autoApprove": {
+    "title": "Auto-approve:",
+    "none": "None",
+    "description": "Auto-approve allows Codai to perform the following actions without asking for permission. Please use with caution and only enable if you understand the risks.",
+    "maxRequests": "Max Requests:",
+    "maxRequestsDesc": "Codai will automatically make this many API requests before asking for approval to proceed with the task.",
+    "enableNotifications": "Enable Notifications",
+    "notificationsDesc": "Receive system notifications when Codai requires approval to proceed or when a task is completed.",
+    "actions": {
+      "readFiles": {
+        "label": "Read project files",
+        "shortName": "Read Local",
+        "description": "Allows Codai to read files within your workspace."
+      },
+      "readFilesExternally": {
+        "label": "Read all files",
+        "shortName": "Read (all)",
+        "description": "Allows Codai to read any file on your computer."
+      },
+      "editFiles": {
+        "label": "Edit project files",
+        "shortName": "Edit",
+        "description": "Allows Codai to modify files within your workspace."
+      },
+      "editFilesExternally": {
+        "label": "Edit all files",
+        "shortName": "Edit (all)",
+        "description": "Allows Codai to modify any file on your computer."
+      },
+      "executeSafeCommands": {
+        "label": "Execute safe commands",
+        "shortName": "Safe Commands",
+        "description": "Allows Codai to execute of safe terminal commands. If the model determines a command is potentially destructive, it will still require approval."
+      },
+      "executeAllCommands": {
+        "label": "Execute all commands",
+        "shortName": "All Commands",
+        "description": "Allows Codai to execute all terminal commands. Use at your own risk."
+      },
+      "useBrowser": {
+        "label": "Use the browser",
+        "shortName": "Browser",
+        "description": "Allows Codai to launch and interact with any website in a browser."
+      },
+      "useMcp": {
+        "label": "Use MCP servers",
+        "shortName": "MCP",
+        "description": "Allows Codai to use configured MCP servers which may modify filesystem or interact with APIs."
+      }
+    }
+  },
+  "mcp": {
+    "tabs": {
+      "marketplace": "Marketplace",
+      "addRemote": "Add Remote",
+      "installed": "Installed"
+    },
+    "addServer": {
+      "title": "Add a remote MCP server by providing a name and its URL endpoint. Learn more",
+      "serverName": "Server Name",
+      "serverNamePlaceholder": "mcp-server",
+      "serverUrl": "Server URL",
+      "serverUrlPlaceholder": "https://example.com/mcp-server",
+      "addButton": "Add Server",
+      "addingButton": "Adding...",
+      "connectingMessage": "Connecting to server... This may take a few seconds.",
+      "editConfig": "Edit Configuration",
+      "errors": {
+        "nameRequired": "Server name is required",
+        "urlRequired": "Server URL is required",
+        "invalidUrl": "Invalid URL format",
+        "failedToAdd": "Failed to add server"
+      }
+    },
+    "installed": {
+      "description": "The Model Context Protocol enables communication with locally running MCP servers that provide additional tools and resources to extend Codai's capabilities. You can use community-made servers or ask Codai to create new tools specific to your workflow (e.g., \"add a tool that gets the latest npm docs\").",
+      "modelContextProtocol": "Model Context Protocol",
+      "communityMadeServers": "community-made servers",
+      "seeDemo": "See a demo here.",
+      "configureServers": "Configure MCP Servers",
+      "advancedSettings": "Advanced MCP Settings"
+    },
+    "configuration": {
+      "title": "MCP Servers",
+      "done": "Done"
+    }
+  },
+  "account": {
+    "title": "Account",
+    "done": "Done",
+    "underConstruction": "Under construction..."
+  }
+} 

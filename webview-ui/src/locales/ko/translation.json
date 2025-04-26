@@ -1,0 +1,180 @@
+{
+  "settings": {
+    "title": "설정",
+    "done": "완료",
+    "language": {
+      "title": "언어 설정"
+    },
+    "autocomplete": {
+      "title": "자동 완성 설정",
+      "provider": "제공자",
+      "apiBase": "기본 URL",
+      "apiKey": "API 키",
+      "model": "모델",
+      "enable": "자동 완성 활성화"
+    },
+    "other": {
+      "title": "기타 설정",
+      "customInstructions": "사용자 정의 지시사항",
+      "customInstructionsDesc": "이 지시사항은 각 요청과 함께 전송되는 시스템 프롬프트 끝에 추가됩니다.",
+      "planActSeparateModels": "계획 및 실행 모드에 대해 다른 모델 사용",
+      "planActSeparateModelsDesc": "계획 및 실행 모드 간 전환 시 이전 모드에서 사용한 API와 모델이 유지됩니다. 예를 들어, 계획에는 강력한 모델을 사용하고 실행에는 더 저렴한 모델을 사용할 때 유용할 수 있습니다.",
+      "advancedSettings": "고급 설정",
+      "debug": "디버그",
+      "resetState": "상태 초기화",
+      "resetStateDesc": "이렇게 하면 확장 프로그램의 모든 전역 상태와 비밀 저장소가 초기화됩니다."
+    },
+    "feedback": {
+      "text": "질문이나 피드백이 있으시면 다음 주소로 이슈를 열어주세요",
+      "version": "버전 {{version}}"
+    },
+    "planMode": "계획 모드",
+    "actMode": "실행 모드",
+    "api": {
+      "provider": "API 제공자",
+      "selectModel": "모델 선택...",
+      "model": "모델",
+      "baseUrl": "기본 URL",
+      "apiKey": "API 키",
+      "modelId": "모델 ID",
+      "customBaseUrl": "사용자 정의 기본 URL 사용",
+      "customVpcEndpoint": "사용자 정의 VPC 엔드포인트 사용",
+      "crossRegionInference": "크로스 리전 추론 사용",
+      "promptCaching": "프롬프트 캐싱 사용",
+      "awsCredentials": "AWS 자격 증명",
+      "awsProfile": "AWS 프로필",
+      "awsAccessKey": "AWS 액세스 키",
+      "awsSecretKey": "AWS 시크릿 키",
+      "awsSessionToken": "AWS 세션 토큰",
+      "awsRegion": "AWS 리전",
+      "selectRegion": "리전 선택...",
+      "gcpProjectId": "Google Cloud 프로젝트 ID",
+      "gcpRegion": "Google Cloud 리전",
+      "modelConfig": "모델 구성",
+      "supportsImages": "이미지 지원",
+      "supportsComputerUse": "컴퓨터 사용 지원",
+      "enableR1Format": "R1 메시지 형식 활성화",
+      "contextWindowSize": "컨텍스트 창 크기",
+      "maxOutputTokens": "최대 출력 토큰 수",
+      "inputPrice": "입력 가격",
+      "outputPrice": "출력 가격",
+      "temperature": "온도",
+      "sortProviderRouting": "제공자 라우팅 정렬",
+      "default": "기본값",
+      "price": "가격",
+      "throughput": "처리량",
+      "latency": "지연 시간",
+      "reasoningEffort": "추론 노력 수정",
+      "low": "낮음",
+      "high": "높음"
+    }
+  },
+  "chat": {
+    "addContext": "컨텍스트 추가",
+    "addImages": "이미지 추가",
+    "planMode": "계획",
+    "actMode": "실행",
+    "planModeTooltip": "계획 모드에서 Codai은 계획을 세우기 위해 정보를 수집합니다",
+    "actModeTooltip": "실행 모드에서 Codai은 즉시 작업을 완료합니다",
+    "toggleModeHint": "{{metaKey}}+Shift+A로 전환",
+    "send": "전송",
+    "placeholder": "메시지를 입력하세요...",
+    "welcome": {
+      "title": "안녕하세요, 저는 Codai입니다",
+      "description": "<1>{{claudeLink}}</1>의 에이전트 코딩 기능 덕분에 다양한 작업을 수행할 수 있습니다. 파일을 생성하고 수정하고, 복잡한 프로젝트를 탐색하고, 브라우저를 사용하고, 터미널 명령을 실행할 수 있습니다(물론 귀하의 허락 하에). 심지어 MCP를 사용하여 새로운 도구를 만들고 제 능력을 확장할 수도 있습니다.",
+      "claudeLink": "Claude 3.7 Sonnet",
+      "claudeLinkText": "Claude 3.7 Sonnet",
+      "signupText": "무료로 시작하려면 계정에 가입하거나 Claude 3.7 Sonnet과 같은 모델에 접근할 수 있는 API 키를 사용하세요.",
+      "getStarted": "무료로 시작하기",
+      "useOwnApiKey": "자신의 API 키 사용",
+      "letsGo": "시작해 보세요!"
+    }
+  },
+  "autoApprove": {
+    "title": "자동 승인:",
+    "none": "없음",
+    "description": "자동 승인을 통해 Codai은 다음 작업을 허가 없이 수행할 수 있습니다. 위험을 이해하는 경우에만 주의해서 사용하세요.",
+    "maxRequests": "최대 요청 수:",
+    "maxRequestsDesc": "Codai은 작업을 계속하기 위해 승인을 요청하기 전에 이 수의 API 요청을 자동으로 수행합니다.",
+    "enableNotifications": "알림 활성화",
+    "notificationsDesc": "Codai이 계속하기 위해 승인이 필요하거나 작업이 완료되었을 때 시스템 알림을 받습니다.",
+    "actions": {
+      "readFiles": {
+        "label": "프로젝트 파일 읽기",
+        "shortName": "읽기(로컬)",
+        "description": "Codai이 작업 공간의 파일을 읽을 수 있도록 합니다."
+      },
+      "readFilesExternally": {
+        "label": "모든 파일 읽기",
+        "shortName": "읽기(전체)",
+        "description": "Codai이 컴퓨터의 모든 파일을 읽을 수 있도록 합니다."
+      },
+      "editFiles": {
+        "label": "프로젝트 파일 편집",
+        "shortName": "편집",
+        "description": "Codai이 작업 공간의 파일을 수정할 수 있도록 합니다."
+      },
+      "editFilesExternally": {
+        "label": "모든 파일 편집",
+        "shortName": "편집(전체)",
+        "description": "Codai이 컴퓨터의 모든 파일을 수정할 수 있도록 합니다."
+      },
+      "executeSafeCommands": {
+        "label": "안전한 명령 실행",
+        "shortName": "안전한 명령",
+        "description": "Codai이 안전한 터미널 명령을 실행할 수 있도록 합니다. 모델이 명령이 잠재적으로 파괴적일 수 있다고 판단하면 여전히 승인을 요청합니다."
+      },
+      "executeAllCommands": {
+        "label": "모든 명령 실행",
+        "shortName": "모든 명령",
+        "description": "Codai이 모든 터미널 명령을 실행할 수 있도록 합니다. 사용에 따른 책임은 귀하에게 있습니다."
+      },
+      "useBrowser": {
+        "label": "브라우저 사용",
+        "shortName": "브라우저",
+        "description": "Codai이 브라우저에서 모든 웹사이트를 실행하고 상호작용할 수 있도록 합니다."
+      },
+      "useMcp": {
+        "label": "MCP 서버 사용",
+        "shortName": "MCP",
+        "description": "Codai이 파일 시스템을 수정하거나 API와 상호작용할 수 있는 구성된 MCP 서버를 사용할 수 있도록 합니다."
+      }
+    }
+  },
+  "mcp": {
+    "tabs": {
+      "marketplace": "마켓플레이스",
+      "addRemote": "원격 추가",
+      "installed": "설치됨"
+    },
+    "addServer": {
+      "title": "이름과 엔드포인트 URL을 제공하여 원격 MCP 서버를 추가하세요. 자세히 알아보기",
+      "serverName": "서버 이름",
+      "serverNamePlaceholder": "mcp-server",
+      "serverUrl": "서버 URL",
+      "serverUrlPlaceholder": "https://example.com/mcp-server",
+      "addButton": "서버 추가",
+      "addingButton": "추가 중...",
+      "connectingMessage": "서버에 연결 중... 몇 초 정도 걸릴 수 있습니다.",
+      "editConfig": "구성 편집",
+      "errors": {
+        "nameRequired": "서버 이름이 필요합니다",
+        "urlRequired": "서버 URL이 필요합니다",
+        "invalidUrl": "잘못된 URL 형식",
+        "failedToAdd": "서버 추가 실패"
+      }
+    },
+    "installed": {
+      "description": "모델 컨텍스트 프로토콜(Model Context Protocol)을 통해 Codai의 기능을 확장하기 위한 추가 도구와 리소스를 제공하는 로컬로 실행되는 MCP 서버와 통신할 수 있습니다. 커뮤니티에서 만든 서버를 사용하거나 Codai에게 워크플로우에 맞는 새로운 도구를 만들도록 요청할 수 있습니다(예: \"최신 npm 문서를 가져오는 도구 추가\").",
+      "modelContextProtocol": "모델 컨텍스트 프로토콜",
+      "communityMadeServers": "커뮤니티에서 만든 서버",
+      "seeDemo": "여기에서 데모를 보세요.",
+      "configureServers": "MCP 서버 구성",
+      "advancedSettings": "고급 MCP 설정"
+    },
+    "configuration": {
+      "title": "MCP 서버",
+      "done": "완료"
+    }
+  }
+} 

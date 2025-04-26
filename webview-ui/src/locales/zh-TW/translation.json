@@ -1,0 +1,180 @@
+{
+  "settings": {
+    "title": "設定",
+    "done": "完成",
+    "language": {
+      "title": "語言設定"
+    },
+    "autocomplete": {
+      "title": "自動完成設定",
+      "provider": "提供者",
+      "apiBase": "基礎 URL",
+      "apiKey": "API 金鑰",
+      "model": "模型",
+      "enable": "啟用自動完成"
+    },
+    "other": {
+      "title": "其他設定",
+      "customInstructions": "自訂指令",
+      "customInstructionsDesc": "這些指令會添加到每個請求發送的系統提示詞末尾。",
+      "planActSeparateModels": "為計劃和執行模式使用不同的模型",
+      "planActSeparateModelsDesc": "在計劃和執行模式之間切換時，會保留上一個模式中使用的 API 和模型。這在例如使用強大模型進行計劃和使用較便宜的模型進行執行時可能很有用。",
+      "advancedSettings": "進階設定",
+      "debug": "除錯",
+      "resetState": "重設狀態",
+      "resetStateDesc": "這將重設擴充功能中的所有全域狀態和秘密儲存。"
+    },
+    "feedback": {
+      "text": "如果您有任何問題或意見，請在以下位置開啟問題",
+      "version": "版本 {{version}}"
+    },
+    "planMode": "計劃模式",
+    "actMode": "執行模式",
+    "api": {
+      "provider": "API 提供者",
+      "selectModel": "選擇模型...",
+      "model": "模型",
+      "baseUrl": "基礎 URL",
+      "apiKey": "API 金鑰",
+      "modelId": "模型 ID",
+      "customBaseUrl": "使用自訂基礎 URL",
+      "customVpcEndpoint": "使用自訂 VPC 端點",
+      "crossRegionInference": "使用跨區域推論",
+      "promptCaching": "使用提示詞快取",
+      "awsCredentials": "AWS 憑證",
+      "awsProfile": "AWS 設定檔",
+      "awsAccessKey": "AWS 存取金鑰",
+      "awsSecretKey": "AWS 秘密金鑰",
+      "awsSessionToken": "AWS 工作階段權杖",
+      "awsRegion": "AWS 區域",
+      "selectRegion": "選擇區域...",
+      "gcpProjectId": "Google Cloud 專案 ID",
+      "gcpRegion": "Google Cloud 區域",
+      "modelConfig": "模型設定",
+      "supportsImages": "支援圖片",
+      "supportsComputerUse": "支援電腦使用",
+      "enableR1Format": "啟用 R1 訊息格式",
+      "contextWindowSize": "上下文視窗大小",
+      "maxOutputTokens": "最大輸出標記數",
+      "inputPrice": "輸入價格",
+      "outputPrice": "輸出價格",
+      "temperature": "溫度",
+      "sortProviderRouting": "排序提供者路由",
+      "default": "預設",
+      "price": "價格",
+      "throughput": "吞吐量",
+      "latency": "延遲",
+      "reasoningEffort": "修改推理努力",
+      "low": "低",
+      "high": "高"
+    }
+  },
+  "chat": {
+    "addContext": "添加上下文",
+    "addImages": "添加圖片",
+    "planMode": "計劃",
+    "actMode": "執行",
+    "planModeTooltip": "在計劃模式下，Codai 將收集資訊以制定計劃",
+    "actModeTooltip": "在執行模式下，Codai 將立即完成任務",
+    "toggleModeHint": "使用 {{metaKey}}+Shift+A 切換",
+    "send": "發送",
+    "placeholder": "輸入訊息...",
+    "welcome": {
+      "title": "您好，我是 Codai",
+      "description": "感謝 <1>{{claudeLink}}</1> 的智能編碼能力，我可以執行各種任務。我可以創建和編輯文件、探索複雜專案、使用瀏覽器並執行終端命令（當然，在您的許可下）。我甚至可以使用 MCP 創建新工具並擴展自己的能力。",
+      "claudeLink": "Claude 3.7 Sonnet",
+      "claudeLinkText": "Claude 3.7 Sonnet",
+      "signupText": "註冊帳戶免費開始使用，或使用提供 Claude 3.7 Sonnet 等模型訪問權限的 API 金鑰。",
+      "getStarted": "免費開始使用",
+      "useOwnApiKey": "使用您自己的 API 金鑰",
+      "letsGo": "開始吧！"
+    }
+  },
+  "autoApprove": {
+    "title": "自動批准：",
+    "none": "無",
+    "description": "自動批准允許 Codai 在未經許可的情況下執行以下操作。請謹慎使用，僅在您了解風險時啟用。",
+    "maxRequests": "最大請求數：",
+    "maxRequestsDesc": "Codai 將自動執行此數量的 API 請求，然後在繼續任務之前請求批准。",
+    "enableNotifications": "啟用通知",
+    "notificationsDesc": "當 Codai 需要批准才能繼續或任務完成時接收系統通知。",
+    "actions": {
+      "readFiles": {
+        "label": "讀取專案文件",
+        "shortName": "讀取（本地）",
+        "description": "允許 Codai 讀取您工作區中的文件。"
+      },
+      "readFilesExternally": {
+        "label": "讀取所有文件",
+        "shortName": "讀取（全部）",
+        "description": "允許 Codai 讀取您電腦上的任何文件。"
+      },
+      "editFiles": {
+        "label": "編輯專案文件",
+        "shortName": "編輯",
+        "description": "允許 Codai 修改您工作區中的文件。"
+      },
+      "editFilesExternally": {
+        "label": "編輯所有文件",
+        "shortName": "編輯（全部）",
+        "description": "允許 Codai 修改您電腦上的任何文件。"
+      },
+      "executeSafeCommands": {
+        "label": "執行安全命令",
+        "shortName": "安全命令",
+        "description": "允許 Codai 執行安全的終端命令。如果模型確定命令可能具有破壞性，它仍會請求批准。"
+      },
+      "executeAllCommands": {
+        "label": "執行所有命令",
+        "shortName": "所有命令",
+        "description": "允許 Codai 執行所有終端命令。使用風險自負。"
+      },
+      "useBrowser": {
+        "label": "使用瀏覽器",
+        "shortName": "瀏覽器",
+        "description": "允許 Codai 在瀏覽器中啟動和與任何網站互動。"
+      },
+      "useMcp": {
+        "label": "使用 MCP 伺服器",
+        "shortName": "MCP",
+        "description": "允許 Codai 使用可能修改文件系統或與 API 互動的已配置 MCP 伺服器。"
+      }
+    }
+  },
+  "mcp": {
+    "tabs": {
+      "marketplace": "市場",
+      "addRemote": "添加遠程",
+      "installed": "已安裝"
+    },
+    "addServer": {
+      "title": "通過提供名稱和端點 URL 添加遠程 MCP 伺服器。了解更多",
+      "serverName": "伺服器名稱",
+      "serverNamePlaceholder": "mcp-server",
+      "serverUrl": "伺服器 URL",
+      "serverUrlPlaceholder": "https://example.com/mcp-server",
+      "addButton": "添加伺服器",
+      "addingButton": "正在添加...",
+      "connectingMessage": "正在連接到伺服器...這可能需要幾秒鐘。",
+      "editConfig": "編輯配置",
+      "errors": {
+        "nameRequired": "需要伺服器名稱",
+        "urlRequired": "需要伺服器 URL",
+        "invalidUrl": "無效的 URL 格式",
+        "failedToAdd": "添加伺服器失敗"
+      }
+    },
+    "installed": {
+      "description": "模型上下文協議（Model Context Protocol）允許與本地運行的 MCP 伺服器通信，這些伺服器提供額外的工具和資源來擴展 Codai 的功能。您可以使用社區製作的伺服器，或要求 Codai 創建適合您工作流程的新工具（例如，「添加一個獲取最新 npm 文檔的工具」）。",
+      "modelContextProtocol": "模型上下文協議",
+      "communityMadeServers": "社區製作的伺服器",
+      "seeDemo": "在此處查看演示。",
+      "configureServers": "配置 MCP 伺服器",
+      "advancedSettings": "進階 MCP 設定"
+    },
+    "configuration": {
+      "title": "MCP 伺服器",
+      "done": "完成"
+    }
+  }
+} 

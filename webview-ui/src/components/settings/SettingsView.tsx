@@ -1,0 +1,397 @@
+import { VSCodeButton, VSCodeCheckbox, VSCodeLink, VSCodeTextArea, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
+import { memo, useCallback, useEffect, useState } from "react"
+import { useExtensionState } from "@/context/ExtensionStateContext"
+import { validateApiConfiguration, validateModelId } from "@/utils/validate"
+import { vscode } from "@/utils/vscode"
+import SettingsButton from "@/components/common/SettingsButton"
+import ApiOptions from "./ApiOptions"
+import { TabButton } from "../mcp/configuration/McpConfigurationView"
+import { useEvent } from "react-use"
+import { ExtensionMessage } from "@shared/ExtensionMessage"
+import BrowserSettingsSection from "./BrowserSettingsSection"
+import { useTranslation } from "react-i18next"
+import { getLanguageConfig, updateLanguageConfig } from "@continuedev/core/util/codaiConfigUtil"
+
+const { IS_DEV } = process.env
+
+type SettingsViewProps = {
+	onDone: () => void
+}
+
+const SettingsView = ({ onDone }: SettingsViewProps) => {
+	const { t, i18n } = useTranslation()
+	const {
+		apiConfiguration,
+		version,
+		customInstructions,
+		setCustomInstructions,
+		openRouterModels,
+		telemetrySetting,
+		setTelemetrySetting,
+		chatSettings,
+		planActSeparateModelsSetting,
+		setPlanActSeparateModelsSetting,
+		// autocompleteConfig,
+		// setAutocompleteConfig,
+	} = useExtensionState()
+	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
+	const [modelIdErrorMessage, setModelIdErrorMessage] = useState<string | undefined>(undefined)
+	const [pendingTabChange, setPendingTabChange] = useState<"plan" | "act" | null>(null)
+	const [currentLanguage, setCurrentLanguage] = useState<string>("en")
+	const [autocompleteConfig, setAutocompleteConfig] = useState({
+		autocomplete: {
+			provider: "openai",
+			title: "autocomplete-coder",
+			apiKey: "",
+			model: "",
+			apiBase: "",
+			enable: false
+		}
+	})
+
+	useEffect(() => {
+		// 获取当前语言设置
+		vscode.postMessage({ type: "getLanguageConfig" })
+	}, [])
+
+	useEffect(() => {
+		// 监听语言配置更新
+		const listener = (event: MessageEvent) => {
+			const message = event.data
+			if (message.type === "languageConfig") {
+				setCurrentLanguage(message.language)
+				i18n.changeLanguage(message.language)
+			}
+		}
+
+		window.addEventListener("message", listener)
+		return () => window.removeEventListener("message", listener)
+	}, [i18n])
+
+	const handleLanguageChange = (e: any) => {
+		const newLanguage = e.target.value
+		setCurrentLanguage(newLanguage)
+		vscode.postMessage({
+			type: "updateLanguageConfig",
+			language: newLanguage
+		})
+	}
+
+	useEffect(() => {
+		// 请求初始配置
+		vscode.postMessage({ type: "getAutocompleteConfig" })
+
+		// 监听配置更新
+		const listener = (event: MessageEvent) => {
+			const message = event.data
+			if (message.type === "autocompleteConfig") {
+				setAutocompleteConfig(message.autocompleteConfig)
+			}
+		}
+
+		window.addEventListener("message", listener)
+		return () => window.removeEventListener("message", listener)
+	}, [])
+
+	const handleSubmit = (withoutDone: boolean = false) => {
+		const apiValidationResult = validateApiConfiguration(apiConfiguration)
+		const modelIdValidationResult = validateModelId(apiConfiguration, openRouterModels)
+
+		let apiConfigurationToSubmit = apiConfiguration
+		if (!apiValidationResult && !modelIdValidationResult) {
+			// 验证通过时才提交API配置
+		} else {
+			// 如果API配置无效则不提交
+			apiConfigurationToSubmit = undefined
+		}
+
+		// 确保autocompleteConfig变更总是提交
+		console.log('Submitting autocomplete config:', autocompleteConfig)
+		vscode.postMessage({
+			type: "updateSettings",
+			planActSeparateModelsSetting,
+			customInstructionsSetting: customInstructions,
+			telemetrySetting,
+			apiConfiguration: apiConfigurationToSubmit,
+			autocompleteConfig
+		})
+
+		if (!withoutDone) {
+			onDone()
+		}
+	}
+
+	useEffect(() => {
+		setApiErrorMessage(undefined)
+		setModelIdErrorMessage(undefined)
+	}, [apiConfiguration])
+
+	// validate as soon as the component is mounted
+	/*
+    useEffect will use stale values of variables if they are not included in the dependency array. 
+    so trying to use useEffect with a dependency array of only one value for example will use any 
+    other variables' old values. In most cases you don't want this, and should opt to use react-use 
+    hooks.
+    
+        // uses someVar and anotherVar
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [someVar])
+	If we only want to run code once on mount we can use react-use's useEffectOnce or useMount
+    */
+
+	const handleMessage = useCallback(
+		(event: MessageEvent) => {
+			const message: ExtensionMessage = event.data
+			switch (message.type) {
+				case "didUpdateSettings":
+					if (pendingTabChange) {
+						vscode.postMessage({
+							type: "togglePlanActMode",
+							chatSettings: {
+								mode: pendingTabChange,
+							},
+						})
+						setPendingTabChange(null)
+					}
+					break
+				case "scrollToSettings":
+					setTimeout(() => {
+						const elementId = message.text
+						if (elementId) {
+							const element = document.getElementById(elementId)
+							if (element) {
+								element.scrollIntoView({ behavior: "smooth" })
+
+								element.style.transition = "background-color 0.5s ease"
+								element.style.backgroundColor = "var(--vscode-textPreformat-background)"
+
+								setTimeout(() => {
+									element.style.backgroundColor = "transparent"
+								}, 1200)
+							}
+						}
+					}, 300)
+					break
+			}
+		},
+		[pendingTabChange],
+	)
+
+	useEvent("message", handleMessage)
+
+	const handleResetState = () => {
+		vscode.postMessage({ type: "resetState" })
+	}
+
+	const handleTabChange = (tab: "plan" | "act") => {
+		if (tab === chatSettings.mode) {
+			return
+		}
+		setPendingTabChange(tab)
+		handleSubmit(true)
+	}
+
+	return (
+		<div className="fixed top-0 left-0 right-0 bottom-0 pt-[10px] pr-0 pb-0 pl-5 flex flex-col overflow-hidden">
+			<div className="flex justify-between items-center mb-[13px] pr-[17px]">
+				<h3 className="text-[var(--vscode-foreground)] m-0">{t('settings.title')}</h3>
+				<VSCodeButton onClick={() => handleSubmit(false)}>{t('settings.done')}</VSCodeButton>
+			</div>
+			<div className="grow overflow-y-scroll pr-2 flex flex-col">
+				{/* Language Selection */}
+				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)]">
+					<details>
+						<summary className="cursor-pointer font-medium">{t('settings.language.title')}</summary>
+						<div className="mt-3">
+							<VSCodeDropdown 
+								value={currentLanguage || 'English'} 
+								onChange={handleLanguageChange}
+								style={{ position: "relative", zIndex: 2000 }}>
+								<VSCodeOption value="en">English</VSCodeOption>
+								<VSCodeOption value="zh-CN">简体中文</VSCodeOption>
+								<VSCodeOption value="ja">日本語</VSCodeOption>
+								<VSCodeOption value="ru">Русский</VSCodeOption>
+								<VSCodeOption value="fr">Français</VSCodeOption>
+								<VSCodeOption value="ar">العربية</VSCodeOption>
+								<VSCodeOption value="ko">한국어</VSCodeOption>
+								<VSCodeOption value="zh-TW">繁體中文</VSCodeOption>
+								<VSCodeOption value="de">Deutsch</VSCodeOption>
+								<VSCodeOption value="it">Italiano</VSCodeOption>
+								<VSCodeOption value="ms">Bahasa Melayu</VSCodeOption>
+								<VSCodeOption value="es">Español</VSCodeOption>
+							</VSCodeDropdown>
+						</div>
+					</details>
+				</div>
+
+				{/* Tabs container */}
+				{planActSeparateModelsSetting ? (
+					<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)]">
+						<div className="flex gap-[1px] mb-[10px] -mt-2 border-0 border-b border-solid border-[var(--vscode-panel-border)]">
+							<TabButton isActive={chatSettings.mode === "plan"} onClick={() => handleTabChange("plan")}>
+								{t('settings.planMode')}
+							</TabButton>
+							<TabButton isActive={chatSettings.mode === "act"} onClick={() => handleTabChange("act")}>
+								{t('settings.actMode')}
+							</TabButton>
+						</div>
+
+						{/* Content container */}
+						<div className="-mb-3">
+							<ApiOptions
+								key={chatSettings.mode}
+								showModelOptions={true}
+								apiErrorMessage={apiErrorMessage}
+								modelIdErrorMessage={modelIdErrorMessage}
+							/>
+						</div>
+					</div>
+				) : (
+					<ApiOptions
+						key={"single"}
+						showModelOptions={true}
+						apiErrorMessage={apiErrorMessage}
+						modelIdErrorMessage={modelIdErrorMessage}
+					/>
+				)}
+
+				{/* Autocomplete Settings Section */}
+				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)] [&_vscode-dropdown]:w-full [&_vscode-text-field]:w-full">
+					<details>
+						<summary className="cursor-pointer font-medium">{t('settings.autocomplete.title')}</summary>
+						<div className="mt-3 space-y-3">
+							<VSCodeDropdown
+								>
+								<VSCodeOption value="openai">OpenAI Compatible</VSCodeOption>
+							</VSCodeDropdown>
+
+							<VSCodeTextField
+								value={autocompleteConfig.autocomplete.apiBase}
+								onInput={(e: any) => setAutocompleteConfig({
+									...autocompleteConfig,
+									autocomplete: {
+										...autocompleteConfig.autocomplete,
+										apiBase: e.target.value
+									}
+								})}
+								placeholder={t('settings.autocomplete.apiBase')}>
+								{t('settings.autocomplete.apiBase')}
+							</VSCodeTextField>
+
+							<VSCodeTextField
+								value={autocompleteConfig.autocomplete.apiKey}
+								type="password"
+								onInput={(e: any) => setAutocompleteConfig({
+									...autocompleteConfig,
+									autocomplete: {
+										...autocompleteConfig.autocomplete,
+										apiKey: e.target.value
+									}
+								})}
+								placeholder={t('settings.autocomplete.apiKey')}>
+								{t('settings.autocomplete.apiKey')}
+							</VSCodeTextField>
+
+							<VSCodeTextField
+								value={autocompleteConfig.autocomplete.model}
+								onInput={(e: any) => setAutocompleteConfig({
+									...autocompleteConfig,
+									autocomplete: {
+										...autocompleteConfig.autocomplete,
+										model: e.target.value
+									}
+								})}
+								placeholder={t('settings.autocomplete.model')}>
+								{t('settings.autocomplete.model')}
+							</VSCodeTextField>
+
+							<VSCodeCheckbox
+								checked={autocompleteConfig.autocomplete.enable}
+								onChange={(e: any) => setAutocompleteConfig({
+									...autocompleteConfig,
+									autocomplete: {
+										...autocompleteConfig.autocomplete,
+										enable: e.target.checked
+									}
+								})}>
+								{t('settings.autocomplete.enable')}
+							</VSCodeCheckbox>
+						</div>
+					</details>
+				</div>
+
+				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)] [&_vscode-dropdown]:w-full [&_vscode-text-field]:w-full">
+					<details>
+						<summary className="cursor-pointer font-medium">{t('settings.other.title')}</summary>
+						<div className="mb-[5px]">
+							<VSCodeTextArea
+								value={customInstructions ?? ""}
+								className="w-full"
+								resize="vertical"
+								rows={4}
+								placeholder={'e.g. "Run unit tests at the end", "Use TypeScript with async/await", "Speak in Spanish"'}
+								onInput={(e: any) => setCustomInstructions(e.target?.value ?? "")}>
+								<span className="font-medium">{t('settings.other.customInstructions')}</span>
+							</VSCodeTextArea>
+							<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
+								{t('settings.other.customInstructionsDesc')}
+							</p>
+						</div>
+
+						<div className="mb-[5px]">
+							<VSCodeCheckbox
+								className="mb-[5px]"
+								checked={planActSeparateModelsSetting}
+								onChange={(e: any) => {
+									const checked = e.target.checked === true
+									setPlanActSeparateModelsSetting(checked)
+								}}>
+								{t('settings.other.planActSeparateModels')}
+							</VSCodeCheckbox>
+							<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
+								{t('settings.other.planActSeparateModelsDesc')}
+							</p>
+						</div>
+
+						{/* Browser Settings Section */}
+						<BrowserSettingsSection />
+
+						<div className="mt-auto pr-2 flex justify-center">
+							<SettingsButton
+								onClick={() => vscode.postMessage({ type: "openExtensionSettings" })}
+								className="mt-0 mr-0 mb-4 ml-0">
+								<i className="codicon codicon-settings-gear" />
+								{t('settings.other.advancedSettings')}
+							</SettingsButton>
+						</div>
+
+						{IS_DEV && (
+							<>
+								<div className="mt-[10px] mb-1">{t('settings.other.debug')}</div>
+								<VSCodeButton onClick={handleResetState} className="mt-[5px] w-auto">
+									{t('settings.other.resetState')}
+								</VSCodeButton>
+								<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
+									{t('settings.other.resetStateDesc')}
+								</p>
+							</>
+						)}
+
+					</details>
+				</div>
+
+				<div className="text-center text-[var(--vscode-descriptionForeground)] text-xs leading-[1.2] px-0 py-0 pr-2 pb-[15px] mt-auto">
+					<p className="break-words m-0 p-0">
+						{t('settings.feedback.text')}{" "}
+						<VSCodeLink href="https://github.com/codai-agent/codai" className="inline">
+							https://github.com/codai-agent/codai
+						</VSCodeLink>
+					</p>
+					<p className="italic mt-[10px] mb-0 p-0">{t('settings.feedback.version', { version })}</p>
+				</div>
+			</div>
+		</div>
+	)
+}
+
+export default memo(SettingsView)

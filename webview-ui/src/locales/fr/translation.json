@@ -1,0 +1,180 @@
+{
+  "settings": {
+    "title": "Paramètres",
+    "done": "Terminé",
+    "language": {
+      "title": "Paramètres de langue"
+    },
+    "autocomplete": {
+      "title": "Paramètres de saisie automatique",
+      "provider": "Fournisseur",
+      "apiBase": "URL de base",
+      "apiKey": "Clé API",
+      "model": "Modèle",
+      "enable": "Activer la saisie automatique"
+    },
+    "other": {
+      "title": "Autres paramètres",
+      "customInstructions": "Instructions personnalisées",
+      "customInstructionsDesc": "Ces instructions seront ajoutées à la fin du prompt système envoyé avec chaque requête.",
+      "planActSeparateModels": "Utiliser des modèles différents pour les modes Plan et Action",
+      "planActSeparateModelsDesc": "Lors du basculement entre les modes Plan et Action, l'API et le modèle du mode précédent sont conservés. Cela peut être utile si vous souhaitez, par exemple, utiliser un modèle puissant pour la planification et un modèle plus économique pour l'exécution.",
+      "advancedSettings": "Paramètres avancés",
+      "debug": "Débogage",
+      "resetState": "Réinitialiser l'état",
+      "resetStateDesc": "Cela réinitialisera tous les états globaux et le stockage secret dans l'extension."
+    },
+    "feedback": {
+      "text": "Si vous avez des questions ou des commentaires, veuillez ouvrir un problème sur",
+      "version": "Version {{version}}"
+    },
+    "planMode": "Mode Plan",
+    "actMode": "Mode Action",
+    "api": {
+      "provider": "Fournisseur d'API",
+      "selectModel": "Sélectionner un modèle...",
+      "model": "Modèle",
+      "baseUrl": "URL de base",
+      "apiKey": "Clé API",
+      "modelId": "ID du modèle",
+      "customBaseUrl": "Utiliser une URL de base personnalisée",
+      "customVpcEndpoint": "Utiliser un point de terminaison VPC personnalisé",
+      "crossRegionInference": "Utiliser l'inférence inter-régions",
+      "promptCaching": "Utiliser la mise en cache des prompts",
+      "awsCredentials": "Identifiants AWS",
+      "awsProfile": "Profil AWS",
+      "awsAccessKey": "Clé d'accès AWS",
+      "awsSecretKey": "Clé secrète AWS",
+      "awsSessionToken": "Jeton de session AWS",
+      "awsRegion": "Région AWS",
+      "selectRegion": "Sélectionner une région...",
+      "gcpProjectId": "ID du projet Google Cloud",
+      "gcpRegion": "Région Google Cloud",
+      "modelConfig": "Configuration du modèle",
+      "supportsImages": "Prend en charge les images",
+      "supportsComputerUse": "Prend en charge l'utilisation de l'ordinateur",
+      "enableR1Format": "Activer le format de message R1",
+      "contextWindowSize": "Taille de la fenêtre de contexte",
+      "maxOutputTokens": "Nombre maximum de tokens de sortie",
+      "inputPrice": "Prix d'entrée",
+      "outputPrice": "Prix de sortie",
+      "temperature": "Température",
+      "sortProviderRouting": "Trier le routage des fournisseurs",
+      "default": "Par défaut",
+      "price": "Prix",
+      "throughput": "Débit",
+      "latency": "Latence",
+      "reasoningEffort": "Modifier l'effort de raisonnement",
+      "low": "faible",
+      "high": "élevé"
+    }
+  },
+  "chat": {
+    "addContext": "Ajouter un contexte",
+    "addImages": "Ajouter des images",
+    "planMode": "Plan",
+    "actMode": "Action",
+    "planModeTooltip": "En mode Plan, Codai collecte des informations pour créer un plan",
+    "actModeTooltip": "En mode Action, Codai exécute la tâche immédiatement",
+    "toggleModeHint": "Basculer avec {{metaKey}}+Shift+A",
+    "send": "Envoyer",
+    "placeholder": "Entrez un message...",
+    "welcome": {
+      "title": "Bonjour, je suis Codai",
+      "description": "Grâce aux capacités de codage agentique de <1>{{claudeLink}}</1>, je peux effectuer diverses tâches. Je peux créer et modifier des fichiers, explorer des projets complexes, utiliser un navigateur et exécuter des commandes terminal (avec votre permission, bien sûr). Je peux même utiliser MCP pour créer de nouveaux outils et étendre mes propres capacités.",
+      "claudeLink": "Claude 3.7 Sonnet",
+      "claudeLinkText": "Claude 3.7 Sonnet",
+      "signupText": "Inscrivez-vous pour un compte pour commencer gratuitement, ou utilisez une clé API qui donne accès à des modèles comme Claude 3.7 Sonnet.",
+      "getStarted": "Commencer gratuitement",
+      "useOwnApiKey": "Utiliser votre propre clé API",
+      "letsGo": "C'est parti !"
+    }
+  },
+  "autoApprove": {
+    "title": "Approbation automatique :",
+    "none": "Aucune",
+    "description": "L'approbation automatique permet à Codai d'effectuer les actions suivantes sans permission. Veuillez l'utiliser avec prudence et ne l'activer que si vous comprenez les risques.",
+    "maxRequests": "Nombre maximum de requêtes :",
+    "maxRequestsDesc": "Codai exécutera automatiquement ce nombre de requêtes API avant de demander une approbation pour continuer la tâche.",
+    "enableNotifications": "Activer les notifications",
+    "notificationsDesc": "Recevez des notifications système lorsque Codai a besoin d'une approbation pour continuer ou lorsqu'une tâche est terminée.",
+    "actions": {
+      "readFiles": {
+        "label": "Lire les fichiers du projet",
+        "shortName": "Lecture (local)",
+        "description": "Permet à Codai de lire les fichiers dans votre espace de travail."
+      },
+      "readFilesExternally": {
+        "label": "Lire tous les fichiers",
+        "shortName": "Lecture (tous)",
+        "description": "Permet à Codai de lire n'importe quel fichier sur votre ordinateur."
+      },
+      "editFiles": {
+        "label": "Modifier les fichiers du projet",
+        "shortName": "Modification",
+        "description": "Permet à Codai de modifier les fichiers dans votre espace de travail."
+      },
+      "editFilesExternally": {
+        "label": "Modifier tous les fichiers",
+        "shortName": "Modification (tous)",
+        "description": "Permet à Codai de modifier n'importe quel fichier sur votre ordinateur."
+      },
+      "executeSafeCommands": {
+        "label": "Exécuter des commandes sûres",
+        "shortName": "Commandes sûres",
+        "description": "Permet à Codai d'exécuter des commandes terminal sûres. Si le modèle détermine qu'une commande pourrait être potentiellement destructrice, il demandera toujours une approbation."
+      },
+      "executeAllCommands": {
+        "label": "Exécuter toutes les commandes",
+        "shortName": "Toutes les commandes",
+        "description": "Permet à Codai d'exécuter toutes les commandes terminal. Utilisation à vos risques et périls."
+      },
+      "useBrowser": {
+        "label": "Utiliser le navigateur",
+        "shortName": "Navigateur",
+        "description": "Permet à Codai de lancer et d'interagir avec n'importe quel site web dans un navigateur."
+      },
+      "useMcp": {
+        "label": "Utiliser les serveurs MCP",
+        "shortName": "MCP",
+        "description": "Permet à Codai d'utiliser des serveurs MCP configurés qui peuvent modifier le système de fichiers ou interagir avec des API."
+      }
+    }
+  },
+  "mcp": {
+    "tabs": {
+      "marketplace": "Place de marché",
+      "addRemote": "Ajouter distant",
+      "installed": "Installé"
+    },
+    "addServer": {
+      "title": "Ajoutez un serveur MCP distant en fournissant un nom et son URL de point de terminaison. En savoir plus",
+      "serverName": "Nom du serveur",
+      "serverNamePlaceholder": "mcp-server",
+      "serverUrl": "URL du serveur",
+      "serverUrlPlaceholder": "https://example.com/mcp-server",
+      "addButton": "Ajouter le serveur",
+      "addingButton": "Ajout en cours...",
+      "connectingMessage": "Connexion au serveur... Cela peut prendre quelques secondes.",
+      "editConfig": "Modifier la configuration",
+      "errors": {
+        "nameRequired": "Nom du serveur requis",
+        "urlRequired": "URL du serveur requise",
+        "invalidUrl": "Format d'URL invalide",
+        "failedToAdd": "Impossible d'ajouter le serveur"
+      }
+    },
+    "installed": {
+      "description": "Le Model Context Protocol permet la communication avec des serveurs MCP exécutés localement qui fournissent des outils et des ressources supplémentaires pour étendre les capacités de Codai. Vous pouvez utiliser des serveurs créés par la communauté ou demander à Codai de créer de nouveaux outils adaptés à votre flux de travail (par exemple, \"Ajoutez un outil qui récupère la dernière documentation npm\").",
+      "modelContextProtocol": "Model Context Protocol",
+      "communityMadeServers": "Serveurs créés par la communauté",
+      "seeDemo": "Voir une démo ici.",
+      "configureServers": "Configurer les serveurs MCP",
+      "advancedSettings": "Paramètres MCP avancés"
+    },
+    "configuration": {
+      "title": "Serveurs MCP",
+      "done": "Terminé"
+    }
+  }
+} 
