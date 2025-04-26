@@ -137,7 +137,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 		workspacePath,
 		// Force the extension to be activated on startup
 		"--start-up-extension",
-		"beandao.codai",
+		"beandao.codai-top",
 		// Run a command on startup to open Cline
 		"--command",
 		"workbench.view.extension.beandao.codai-ActivityBar",
@@ -236,7 +236,7 @@ export async function spawnVSCode(workspacePath: string, vsixPath?: string): Pro
 				let disposable = vscode.commands.registerCommand('cline-activator.activate', async function () {
 					try {
 						// Make sure the Cline extension is activated
-						const extension = vscode.extensions.getExtension('beandao.codai');
+						const extension = vscode.extensions.getExtension('beandao.codai-top');
 						if (!extension) {
 							console.error('Cline extension not found');
 							return;

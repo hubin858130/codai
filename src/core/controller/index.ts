@@ -567,7 +567,7 @@ export class Controller {
 				const uriScheme = vscode.env.uriScheme
 
 				const authUrl = vscode.Uri.parse(
-					`https://app.cline.bot/auth?state=${encodeURIComponent(nonce)}&callback_url=${encodeURIComponent(`${uriScheme || "vscode"}://beandao.codai/auth`)}`,
+					`https://app.cline.bot/auth?state=${encodeURIComponent(nonce)}&callback_url=${encodeURIComponent(`${uriScheme || "vscode"}://beandao.codai-top/auth`)}`,
 				)
 				vscode.env.openExternal(authUrl)
 				break
@@ -730,7 +730,7 @@ export class Controller {
 				const settingsFilter = message.text || ""
 				await vscode.commands.executeCommand(
 					"workbench.action.openSettings",
-					`@ext:beandao.codai ${settingsFilter}`.trim(), // trim whitespace if no settings filter
+					`@ext:beandao.codai-top ${settingsFilter}`.trim(), // trim whitespace if no settings filter
 				)
 				break
 			}

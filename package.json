@@ -1,6 +1,6 @@
 {
-	"name": "codai",
-	"displayName": "Codai",
+	"name": "codai-top",
+	"displayName": "Codai-Top",
 	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser,autocomplete, and more with your permission every step of the way.",
 	"version": "1.0.1",
 	"icon": "assets/icons/icon.png",

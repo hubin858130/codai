@@ -137,5 +137,5 @@ export function mergeJson(
 }
 
 function getExtensionUri(): vscode.Uri {
-	return vscode.extensions.getExtension("beandao.codai")!.extensionUri
+	return vscode.extensions.getExtension("beandao.codai-top")!.extensionUri
 }

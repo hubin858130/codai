@@ -5,7 +5,15 @@
 <p align="center">
   <img src="./assets/icons/web-codai-logo.png" width="60%" />
 </p>
-
+<div align="center">
+<table>
+<tbody>
+<td align="center">
+<a href="https://marketplace.visualstudio.com/items?itemName=beandao.codai-top" target="_blank"><strong>VSCode 应用商店</strong></a>
+</td>
+</tbody>
+</table>
+</div>
 
 
 大家好，Codai（口袋）是一款AI编程的工具，这个名字取自Coding 和 AI 这两个单词。“口袋”，它既可以容纳万物，也可以提供一切帮助！
@@ -19,7 +27,7 @@
 
 ## 开始使用
 
-- 你可以直接在VScode 商店里搜索codai插件并安装使用（请稍等，正在实现中）
+- 你可以直接在VScode 商店里搜索codai-top插件并安装使用
 
 - 直接从release中下载跟你电脑操作系统和芯片匹配的插件，然后在VScode里面安装使用
 

@@ -7,7 +7,7 @@ The Cline extension exposes an API that can be used by other extensions. To use 
 3. Get access to the API with the following code:
 
     ```ts
-    const clineExtension = vscode.extensions.getExtension<ClineAPI>("beandao.codai")
+    const clineExtension = vscode.extensions.getExtension<ClineAPI>("beandao.codai-top")
 
     if (!clineExtension?.isActive) {
     	throw new Error("Cline extension is not activated")
@@ -44,11 +44,11 @@ The Cline extension exposes an API that can be used by other extensions. To use 
     }
     ```
 
-    **Note:** To ensure that the `beandao.codai` extension is activated before your extension, add it to the `extensionDependencies` in your `package.json`:
+    **Note:** To ensure that the `beandao.codai-top` extension is activated before your extension, add it to the `extensionDependencies` in your `package.json`:
 
     ```json
     "extensionDependencies": [
-        "beandao.codai"
+        "beandao.codai-top"
     ]
     ```
 

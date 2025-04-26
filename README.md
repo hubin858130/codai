@@ -5,10 +5,17 @@
 <p align="center">
   <img src="./assets/icons/web-codai-logo.png" width="60%" />
 </p>
+<div align="center">
+<table>
+<tbody>
+<td align="center">
+<a href="https://marketplace.visualstudio.com/items?itemName=beandao.codai-top" target="_blank"><strong>Download on VS Marketplace</strong></a>
+</td>
+</tbody>
+</table>
+</div>
 
-
-
-Hello! Codai (/koʊˈdaɪ/) is an AI-powered programming tool. The name is derived from the words "Coding" and "AI." And the pronunciation /koʊˈdaɪ/ translates to “pocket” in Chinese, It can hold anything and everything, and it can also provide all kinds of assistance!
+**Hello!** Codai (/koʊˈdaɪ/) is an AI-powered programming tool. The name is derived from the words "Coding" and "AI." And the pronunciation /koʊˈdaɪ/ translates to “pocket” in Chinese, It can hold anything and everything, and it can also provide all kinds of assistance!
 
 ## Key Features of Codai
 
@@ -19,7 +26,7 @@ Hello! Codai (/koʊˈdaɪ/) is an AI-powered programming tool. The name is deriv
 
 ## Getting Started
 
-- You can directly search for the Codai plugin in the VSCode marketplace and install it (coming soon).  
+- You can directly search for the Codai-top plugin in the VSCode marketplace and install it .  
 
 - Alternatively, download the plugin from the release section that matches your computer's operating system and chip, then install it in VSCode.  
 

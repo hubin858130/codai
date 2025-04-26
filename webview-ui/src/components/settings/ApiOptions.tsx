@@ -1593,7 +1593,7 @@ const ApiOptions = ({ showModelOptions, apiErrorMessage, modelIdErrorMessage, is
 }
 
 export function getOpenRouterAuthUrl(uriScheme?: string) {
-	return `https://openrouter.ai/auth?callback_url=${uriScheme || "vscode"}://beandao.codai/openrouter`
+	return `https://openrouter.ai/auth?callback_url=${uriScheme || "vscode"}://beandao.codai-top/openrouter`
 }
 
 export const formatPrice = (price: number) => {
