@@ -3,8 +3,9 @@
 
 
 <p align="center">
-  <img src="./assets/icons/web-codai-logo.png" width="100%" />
+  <img src="./assets/icons/web-codai-logo.png" width="60%" />
 </p>
+
 
 
 大家好，Codai（口袋）是一款AI编程的工具，这个名字取自Coding 和 AI 这两个单词。“口袋”，它既可以容纳万物，也可以提供一切帮助！
