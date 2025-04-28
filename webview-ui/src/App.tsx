@@ -11,6 +11,7 @@ import { FirebaseAuthProvider } from "./context/FirebaseAuthContext"
 import { vscode } from "./utils/vscode"
 import McpView from "./components/mcp/configuration/McpConfigurationView"
 import { McpViewTab } from "@shared/mcp"
+import i18n from "./i18n"
 
 const AppContent = () => {
 	const { didHydrateState, showWelcome, shouldShowAnnouncement, telemetrySetting, vscMachineId } = useExtensionState()
@@ -21,6 +22,13 @@ const AppContent = () => {
 	const [showAccount, setShowAccount] = useState(false)
 	const [showAnnouncement, setShowAnnouncement] = useState(false)
 	const [mcpTab, setMcpTab] = useState<McpViewTab | undefined>(undefined)
+
+	useEffect(() => {
+		// 请求语言配置
+		vscode.postMessage({
+			type: "getLanguageConfig",
+		})
+	}, [])
 
 	const handleMessage = useCallback((e: MessageEvent) => {
 		const message: ExtensionMessage = e.data
@@ -61,6 +69,10 @@ const AppContent = () => {
 						setShowAccount(false)
 						break
 				}
+				break
+			case "languageConfig":
+				// 更新语言
+				i18n.changeLanguage(message.language || "en")
 				break
 		}
 	}, [])

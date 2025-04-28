@@ -14,8 +14,8 @@ export interface WebviewMessage {
 		| "apiConfiguration"
 		| "webviewDidLaunch"
 		| "newTask"
+		| "condense"
 		| "askResponse"
-		| "clearTask"
 		| "didShowAnnouncement"
 		| "selectImages"
 		| "exportCurrentTask"
@@ -27,29 +27,23 @@ export interface WebviewMessage {
 		| "requestLmStudioModels"
 		| "openImage"
 		| "openInBrowser"
-		| "openFile"
+		| "createRuleFile"
 		| "openMention"
-		| "cancelTask"
+		| "showChatView"
 		| "refreshOpenRouterModels"
 		| "refreshRequestyModels"
 		| "refreshOpenAiModels"
+		| "refreshClineRules"
 		| "openMcpSettings"
 		| "restartMcpServer"
 		| "deleteMcpServer"
 		| "autoApprovalSettings"
-		| "browserSettings"
-		| "discoverBrowser"
-		| "testBrowserConnection"
-		| "browserConnectionResult"
 		| "browserRelaunchResult"
 		| "togglePlanActMode"
-		| "checkpointDiff"
-		| "checkpointRestore"
 		| "taskCompletionViewChanges"
 		| "openExtensionSettings"
 		| "requestVsCodeLmModels"
 		| "toggleToolAutoApprove"
-		| "toggleMcpServer"
 		| "getLatestState"
 		| "accountLoginClicked"
 		| "accountLogoutClicked"
@@ -64,7 +58,6 @@ export interface WebviewMessage {
 		| "fetchLatestMcpServersFromHub"
 		| "telemetrySetting"
 		| "openSettings"
-		| "updateMcpTimeout"
 		| "fetchOpenGraphData"
 		| "checkIsImageUrl"
 		| "invoke"
@@ -75,13 +68,15 @@ export interface WebviewMessage {
 		| "requestTotalTasksSize"
 		| "relaunchChromeDebugMode"
 		| "taskFeedback"
-		| "getBrowserConnectionInfo"
-		| "getDetectedChromePath"
-		| "detectedChromePath"
 		| "scrollToSettings"
 		| "getRelativePaths" // Handles single and multiple URI resolution
 		| "searchFiles"
 		| "toggleFavoriteModel"
+		| "grpc_request"
+		| "toggleClineRule"
+		| "deleteClineRule"
+
+		// | "relaunchChromeDebugMode"
 		| "getAutocompleteConfig"
 		| "autocompleteConfig"
 		| "getLanguageConfig"
@@ -107,8 +102,6 @@ export interface WebviewMessage {
 	serverUrl?: string
 	toolNames?: string[]
 	autoApprove?: boolean
-	// For autocomplete config
-	autocompleteConfig?: Partial<CodeeConfig>
 
 	// For auth
 	user?: UserInfo | null
@@ -124,6 +117,21 @@ export interface WebviewMessage {
 	query?: string
 	// For toggleFavoriteModel
 	modelId?: string
+	grpc_request?: {
+		service: string
+		method: string
+		message: any // JSON serialized protobuf message
+		request_id: string // For correlating requests and responses
+	}
+	// For cline rules
+	isGlobal?: boolean
+	rulePath?: string
+	enabled?: boolean
+	filename?: string
+
+	offset?: number
+	// For autocomplete config
+	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string
 }
 

@@ -7,7 +7,7 @@ import AddRemoteServerForm from "./tabs/add-server/AddRemoteServerForm"
 import McpMarketplaceView from "./tabs/marketplace/McpMarketplaceView"
 import InstalledServersView from "./tabs/installed/InstalledServersView"
 import { McpViewTab } from "@shared/mcp"
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next"
 
 type McpViewProps = {
 	onDone: () => void
@@ -55,8 +55,8 @@ const McpConfigurationView = ({ onDone, initialTab }: McpViewProps) => {
 					alignItems: "center",
 					padding: "10px 17px 5px 20px",
 				}}>
-				<h3 style={{ color: "var(--vscode-foreground)", margin: 0 }}>{t('mcp.configuration.title')}</h3>
-				<VSCodeButton onClick={onDone}>{t('mcp.configuration.done')}</VSCodeButton>
+				<h3 style={{ color: "var(--vscode-foreground)", margin: 0 }}>{t("mcp.configuration.title")}</h3>
+				<VSCodeButton onClick={onDone}>{t("mcp.configuration.done")}</VSCodeButton>
 			</div>
 
 			<div style={{ flex: 1, overflow: "auto" }}>

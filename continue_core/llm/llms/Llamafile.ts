@@ -1,7 +1,7 @@
-import LlamaCpp from "./LlamaCpp.js";
+import LlamaCpp from "./LlamaCpp.js"
 
 class Llamafile extends LlamaCpp {
-  static override providerName = "llamafile";
+	static override providerName = "llamafile"
 }
 
-export default Llamafile;
+export default Llamafile

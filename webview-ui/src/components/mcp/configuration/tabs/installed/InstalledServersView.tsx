@@ -17,15 +17,17 @@ const InstalledServersView = () => {
 					marginBottom: "16px",
 					marginTop: "5px",
 				}}>
-				{t('mcp.installed.description')}{" "}
+				{t("mcp.installed.description")}{" "}
 				<VSCodeLink href="https://github.com/modelcontextprotocol" style={{ display: "inline" }}>
-					{t('mcp.installed.modelContextProtocol')}
+					{t("mcp.installed.modelContextProtocol")}
 				</VSCodeLink>{" "}
+				{t("mcp.installed.useCommunityMadeServers")}{" "}
 				<VSCodeLink href="https://github.com/modelcontextprotocol/servers" style={{ display: "inline" }}>
-					{t('mcp.installed.communityMadeServers')}
+					{t("mcp.installed.communityMadeServers")}
 				</VSCodeLink>{" "}
+				{t("mcp.installed.createNewMcpServer")}{" "}
 				<VSCodeLink href="https://x.com/sdrzn/status/1867271665086074969" style={{ display: "inline" }}>
-					{t('mcp.installed.seeDemo')}
+					{t("mcp.installed.seeDemo")}
 				</VSCodeLink>
 			</div>
 
@@ -40,7 +42,7 @@ const InstalledServersView = () => {
 						vscode.postMessage({ type: "openMcpSettings" })
 					}}>
 					<span className="codicon codicon-server" style={{ marginRight: "6px" }}></span>
-					{t('mcp.installed.configureServers')}
+					{t("mcp.installed.configureServers")}
 				</VSCodeButton>
 
 				<div style={{ textAlign: "center" }}>
@@ -52,7 +54,7 @@ const InstalledServersView = () => {
 							})
 						}}
 						style={{ fontSize: "12px" }}>
-						{t('mcp.installed.advancedSettings')}
+						{t("mcp.installed.advancedSettings")}
 					</VSCodeLink>
 				</div>
 			</div>

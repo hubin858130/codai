@@ -1,4 +1,12 @@
-import { VSCodeButton, VSCodeCheckbox, VSCodeLink, VSCodeTextArea, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
+import {
+	VSCodeButton,
+	VSCodeCheckbox,
+	VSCodeLink,
+	VSCodeTextArea,
+	VSCodeDropdown,
+	VSCodeOption,
+	VSCodeTextField,
+} from "@vscode/webview-ui-toolkit/react"
 import { memo, useCallback, useEffect, useState } from "react"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { validateApiConfiguration, validateModelId } from "@/utils/validate"
@@ -31,8 +39,6 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 		chatSettings,
 		planActSeparateModelsSetting,
 		setPlanActSeparateModelsSetting,
-		// autocompleteConfig,
-		// setAutocompleteConfig,
 	} = useExtensionState()
 	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
 	const [modelIdErrorMessage, setModelIdErrorMessage] = useState<string | undefined>(undefined)
@@ -45,8 +51,8 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 			apiKey: "",
 			model: "",
 			apiBase: "",
-			enable: false
-		}
+			enable: false,
+		},
 	})
 
 	useEffect(() => {
@@ -73,7 +79,7 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 		setCurrentLanguage(newLanguage)
 		vscode.postMessage({
 			type: "updateLanguageConfig",
-			language: newLanguage
+			language: newLanguage,
 		})
 	}
 
@@ -97,23 +103,39 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 		const apiValidationResult = validateApiConfiguration(apiConfiguration)
 		const modelIdValidationResult = validateModelId(apiConfiguration, openRouterModels)
 
+		// setApiErrorMessage(apiValidationResult)
+		// setModelIdErrorMessage(modelIdValidationResult)
+
 		let apiConfigurationToSubmit = apiConfiguration
 		if (!apiValidationResult && !modelIdValidationResult) {
-			// 验证通过时才提交API配置
+			// vscode.postMessage({ type: "apiConfiguration", apiConfiguration })
+			// vscode.postMessage({
+			// 	type: "customInstructions",
+			// 	text: customInstructions,
+			// })
+			// vscode.postMessage({
+			// 	type: "telemetrySetting",
+			// 	text: telemetrySetting,
+			// })
+			// console.log("handleSubmit", withoutDone)
+			// vscode.postMessage({
+			// 	type: "separateModeSetting",
+			// 	text: separateModeSetting,
+			// })
 		} else {
-			// 如果API配置无效则不提交
+			// if the api configuration is invalid, we don't save it
 			apiConfigurationToSubmit = undefined
 		}
 
 		// 确保autocompleteConfig变更总是提交
-		console.log('Submitting autocomplete config:', autocompleteConfig)
+		console.log("Submitting autocomplete config:", autocompleteConfig)
 		vscode.postMessage({
 			type: "updateSettings",
 			planActSeparateModelsSetting,
 			customInstructionsSetting: customInstructions,
 			telemetrySetting,
 			apiConfiguration: apiConfigurationToSubmit,
-			autocompleteConfig
+			autocompleteConfig,
 		})
 
 		if (!withoutDone) {
@@ -194,17 +216,17 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 	return (
 		<div className="fixed top-0 left-0 right-0 bottom-0 pt-[10px] pr-0 pb-0 pl-5 flex flex-col overflow-hidden">
 			<div className="flex justify-between items-center mb-[13px] pr-[17px]">
-				<h3 className="text-[var(--vscode-foreground)] m-0">{t('settings.title')}</h3>
-				<VSCodeButton onClick={() => handleSubmit(false)}>{t('settings.done')}</VSCodeButton>
+				<h3 className="text-[var(--vscode-foreground)] m-0">{t("settings.title")}</h3>
+				<VSCodeButton onClick={() => handleSubmit(false)}>{t("settings.done")}</VSCodeButton>
 			</div>
 			<div className="grow overflow-y-scroll pr-2 flex flex-col">
 				{/* Language Selection */}
 				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)]">
 					<details>
-						<summary className="cursor-pointer font-medium">{t('settings.language.title')}</summary>
+						<summary className="cursor-pointer font-medium">{t("settings.language.title")}</summary>
 						<div className="mt-3">
-							<VSCodeDropdown 
-								value={currentLanguage || 'English'} 
+							<VSCodeDropdown
+								value={currentLanguage || "English"}
 								onChange={handleLanguageChange}
 								style={{ position: "relative", zIndex: 2000 }}>
 								<VSCodeOption value="en">English</VSCodeOption>
@@ -229,10 +251,10 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 					<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)]">
 						<div className="flex gap-[1px] mb-[10px] -mt-2 border-0 border-b border-solid border-[var(--vscode-panel-border)]">
 							<TabButton isActive={chatSettings.mode === "plan"} onClick={() => handleTabChange("plan")}>
-								{t('settings.planMode')}
+								{t("settings.planMode")}
 							</TabButton>
 							<TabButton isActive={chatSettings.mode === "act"} onClick={() => handleTabChange("act")}>
-								{t('settings.actMode')}
+								{t("settings.actMode")}
 							</TabButton>
 						</div>
 
@@ -258,63 +280,70 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 				{/* Autocomplete Settings Section */}
 				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)] [&_vscode-dropdown]:w-full [&_vscode-text-field]:w-full">
 					<details>
-						<summary className="cursor-pointer font-medium">{t('settings.autocomplete.title')}</summary>
+						<summary className="cursor-pointer font-medium">{t("settings.autocomplete.title")}</summary>
 						<div className="mt-3 space-y-3">
-							<VSCodeDropdown
-								>
+							<VSCodeDropdown>
 								<VSCodeOption value="openai">OpenAI Compatible</VSCodeOption>
 							</VSCodeDropdown>
 
 							<VSCodeTextField
 								value={autocompleteConfig.autocomplete.apiBase}
-								onInput={(e: any) => setAutocompleteConfig({
-									...autocompleteConfig,
-									autocomplete: {
-										...autocompleteConfig.autocomplete,
-										apiBase: e.target.value
-									}
-								})}
-								placeholder={t('settings.autocomplete.apiBase')}>
-								{t('settings.autocomplete.apiBase')}
+								onInput={(e: any) =>
+									setAutocompleteConfig({
+										...autocompleteConfig,
+										autocomplete: {
+											...autocompleteConfig.autocomplete,
+											apiBase: e.target.value,
+										},
+									})
+								}
+								placeholder={t("settings.autocomplete.apiBase")}>
+								{t("settings.autocomplete.apiBase")}
 							</VSCodeTextField>
 
 							<VSCodeTextField
 								value={autocompleteConfig.autocomplete.apiKey}
 								type="password"
-								onInput={(e: any) => setAutocompleteConfig({
-									...autocompleteConfig,
-									autocomplete: {
-										...autocompleteConfig.autocomplete,
-										apiKey: e.target.value
-									}
-								})}
-								placeholder={t('settings.autocomplete.apiKey')}>
-								{t('settings.autocomplete.apiKey')}
+								onInput={(e: any) =>
+									setAutocompleteConfig({
+										...autocompleteConfig,
+										autocomplete: {
+											...autocompleteConfig.autocomplete,
+											apiKey: e.target.value,
+										},
+									})
+								}
+								placeholder={t("settings.autocomplete.apiKey")}>
+								{t("settings.autocomplete.apiKey")}
 							</VSCodeTextField>
 
 							<VSCodeTextField
 								value={autocompleteConfig.autocomplete.model}
-								onInput={(e: any) => setAutocompleteConfig({
-									...autocompleteConfig,
-									autocomplete: {
-										...autocompleteConfig.autocomplete,
-										model: e.target.value
-									}
-								})}
-								placeholder={t('settings.autocomplete.model')}>
-								{t('settings.autocomplete.model')}
+								onInput={(e: any) =>
+									setAutocompleteConfig({
+										...autocompleteConfig,
+										autocomplete: {
+											...autocompleteConfig.autocomplete,
+											model: e.target.value,
+										},
+									})
+								}
+								placeholder={t("settings.autocomplete.model")}>
+								{t("settings.autocomplete.model")}
 							</VSCodeTextField>
 
 							<VSCodeCheckbox
 								checked={autocompleteConfig.autocomplete.enable}
-								onChange={(e: any) => setAutocompleteConfig({
-									...autocompleteConfig,
-									autocomplete: {
-										...autocompleteConfig.autocomplete,
-										enable: e.target.checked
-									}
-								})}>
-								{t('settings.autocomplete.enable')}
+								onChange={(e: any) =>
+									setAutocompleteConfig({
+										...autocompleteConfig,
+										autocomplete: {
+											...autocompleteConfig.autocomplete,
+											enable: e.target.checked,
+										},
+									})
+								}>
+								{t("settings.autocomplete.enable")}
 							</VSCodeCheckbox>
 						</div>
 					</details>
@@ -322,19 +351,21 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)] [&_vscode-dropdown]:w-full [&_vscode-text-field]:w-full">
 					<details>
-						<summary className="cursor-pointer font-medium">{t('settings.other.title')}</summary>
+						<summary className="cursor-pointer font-medium">{t("settings.other.title")}</summary>
 						<div className="mb-[5px]">
 							<VSCodeTextArea
 								value={customInstructions ?? ""}
 								className="w-full"
 								resize="vertical"
 								rows={4}
-								placeholder={'e.g. "Run unit tests at the end", "Use TypeScript with async/await", "Speak in Spanish"'}
+								placeholder={
+									'e.g. "Run unit tests at the end", "Use TypeScript with async/await", "Speak in Spanish"'
+								}
 								onInput={(e: any) => setCustomInstructions(e.target?.value ?? "")}>
-								<span className="font-medium">{t('settings.other.customInstructions')}</span>
+								<span className="font-medium">{t("settings.other.customInstructions")}</span>
 							</VSCodeTextArea>
 							<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-								{t('settings.other.customInstructionsDesc')}
+								{t("settings.other.customInstructionsDesc")}
 							</p>
 						</div>
 
@@ -346,10 +377,34 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 									const checked = e.target.checked === true
 									setPlanActSeparateModelsSetting(checked)
 								}}>
-								{t('settings.other.planActSeparateModels')}
+								{t("settings.other.planActSeparateModels")}
 							</VSCodeCheckbox>
 							<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-								{t('settings.other.planActSeparateModelsDesc')}
+								{t("settings.other.planActSeparateModelsDesc")}
+							</p>
+						</div>
+
+						<div className="mb-[5px]">
+							<VSCodeCheckbox
+								className="mb-[5px]"
+								checked={telemetrySetting === "enabled"}
+								onChange={(e: any) => {
+									const checked = e.target.checked === true
+									setTelemetrySetting(checked ? "enabled" : "disabled")
+								}}>
+								Allow anonymous error and usage reporting
+							</VSCodeCheckbox>
+							<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
+								Help improve Cline by sending anonymous usage data and error reports. No code, prompts, or
+								personal information are ever sent. See our{" "}
+								<VSCodeLink href="https://docs.cline.bot/more-info/telemetry" className="text-inherit">
+									telemetry overview
+								</VSCodeLink>{" "}
+								and{" "}
+								<VSCodeLink href="https://cline.bot/privacy" className="text-inherit">
+									privacy policy
+								</VSCodeLink>{" "}
+								for more details.
 							</p>
 						</div>
 
@@ -361,33 +416,35 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 								onClick={() => vscode.postMessage({ type: "openExtensionSettings" })}
 								className="mt-0 mr-0 mb-4 ml-0">
 								<i className="codicon codicon-settings-gear" />
-								{t('settings.other.advancedSettings')}
+								{t("settings.other.advancedSettings")}
 							</SettingsButton>
 						</div>
 
 						{IS_DEV && (
 							<>
-								<div className="mt-[10px] mb-1">{t('settings.other.debug')}</div>
-								<VSCodeButton onClick={handleResetState} className="mt-[5px] w-auto">
-									{t('settings.other.resetState')}
+								<div className="mt-[10px] mb-1">Debug</div>
+								<VSCodeButton
+									onClick={handleResetState}
+									className="mt-[5px] w-auto"
+									style={{ backgroundColor: "var(--vscode-errorForeground)", color: "black" }}>
+									{t("settings.other.resetState")}
 								</VSCodeButton>
 								<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-									{t('settings.other.resetStateDesc')}
+									{t("settings.other.resetStateDesc")}
 								</p>
 							</>
 						)}
-
 					</details>
 				</div>
 
 				<div className="text-center text-[var(--vscode-descriptionForeground)] text-xs leading-[1.2] px-0 py-0 pr-2 pb-[15px] mt-auto">
 					<p className="break-words m-0 p-0">
-						{t('settings.feedback.text')}{" "}
+						{t("settings.feedback.text")}{" "}
 						<VSCodeLink href="https://github.com/codai-agent/codai" className="inline">
 							https://github.com/codai-agent/codai
 						</VSCodeLink>
 					</p>
-					<p className="italic mt-[10px] mb-0 p-0">{t('settings.feedback.version', { version })}</p>
+					<p className="italic mt-[10px] mb-0 p-0">{t("settings.feedback.version", { version })}</p>
 				</div>
 			</div>
 		</div>

@@ -6,9 +6,10 @@ import { AutoApprovalSettings } from "./AutoApprovalSettings"
 import { BrowserSettings } from "./BrowserSettings"
 import { ChatSettings } from "./ChatSettings"
 import { HistoryItem } from "./HistoryItem"
-import { McpServer, McpMarketplaceCatalog, McpMarketplaceItem, McpDownloadResponse, McpViewTab } from "./mcp"
+import { McpServer, McpMarketplaceCatalog, McpDownloadResponse, McpViewTab } from "./mcp"
 import { TelemetrySetting } from "./TelemetrySetting"
 import type { BalanceResponse, UsageTransaction, PaymentTransaction } from "../shared/ClineAccount"
+import { ClineRulesToggles } from "./cline-rules"
 import { CodeeConfig } from "@continuedev/core/util/codaiConfigUtil"
 
 // webview will hold state
@@ -44,13 +45,11 @@ export interface ExtensionMessage {
 		| "totalTasksSize"
 		| "addToInput"
 		| "browserConnectionResult"
-		| "browserConnectionInfo"
-		| "detectedChromePath"
 		| "scrollToSettings"
 		| "browserRelaunchResult"
 		| "relativePathsResponse" // Handles single and multiple path responses
 		| "fileSearchResults"
-		| "toggleFavoriteModel"
+		| "grpc_response" // New type for gRPC responses
 		| "autocompleteConfig"
 		| "languageConfig"
 	text?: string
@@ -64,6 +63,7 @@ export interface ExtensionMessage {
 		| "accountLoginClicked"
 		| "accountLogoutClicked"
 		| "accountButtonClicked"
+		| "focusChatInput"
 	invoke?: Invoke
 	state?: ExtensionState
 	images?: string[]
@@ -113,6 +113,11 @@ export interface ExtensionMessage {
 		error?: string
 	}
 	tab?: McpViewTab
+	grpc_response?: {
+		message?: any // JSON serialized protobuf message
+		request_id: string // Same ID as the request
+		error?: string // Optional error message
+	}
 	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string
 }
@@ -147,6 +152,8 @@ export interface ExtensionState {
 	}
 	version: string
 	vscMachineId: string
+	globalClineRulesToggles: ClineRulesToggles
+	localClineRulesToggles: ClineRulesToggles
 }
 
 export interface ClineMessage {
@@ -180,6 +187,7 @@ export type ClineAsk =
 	| "browser_action_launch"
 	| "use_mcp_server"
 	| "new_task"
+	| "condense"
 
 export type ClineSay =
 	| "task"
@@ -240,12 +248,6 @@ export type BrowserActionResult = {
 	logs?: string
 	currentUrl?: string
 	currentMousePosition?: string
-}
-
-export interface BrowserConnectionInfo {
-	isConnected: boolean
-	isRemote: boolean
-	host?: string
 }
 
 export interface ClineAskUseMcpServer {

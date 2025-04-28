@@ -110,6 +110,12 @@ Codai去访问网关获取服务。
 非常感谢[Cline](https://github.com/cline/cline)工程，AI编程工具中它是第一个使用Agent智能体来解决编程问题的，无论是理念还是技术都非常非常厉害！Codai是从Cline工程fork而来的。  
 也非常感谢[Continue](https://github.com/continuedev/continue)工程，它的代码补全功能是所有开源的AI编程项目里面最出色，没有之一！Codai中的代码补全是从Continue继承来的。
 
+## 反馈问题
+
+<p align="left">
+  <img src="./assets/icons/wx.JPG" width="50%" />
+</p>
+
 ## 许可证
 
 [Apache 2.0 © 2025 CodAI](./LICENSE)

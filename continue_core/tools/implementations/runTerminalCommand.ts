@@ -1,44 +1,44 @@
-import childProcess from "node:child_process";
-import util from "node:util";
+import childProcess from "node:child_process"
+import util from "node:util"
 
-import { fileURLToPath } from "node:url";
-import { ToolImpl } from ".";
+import { fileURLToPath } from "node:url"
+import { ToolImpl } from "."
 
-const asyncExec = util.promisify(childProcess.exec);
+const asyncExec = util.promisify(childProcess.exec)
 
 export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
-  const ideInfo = await extras.ide.getIdeInfo();
+	const ideInfo = await extras.ide.getIdeInfo()
 
-  if (ideInfo.remoteName === "local" || ideInfo.remoteName === "") {
-    try {
-      const output = await asyncExec(args.command, {
-        cwd: fileURLToPath((await extras.ide.getWorkspaceDirs())[0]),
-      });
-      return [
-        {
-          name: "Terminal",
-          description: "Terminal command output",
-          content: output.stdout ?? "",
-        },
-      ];
-    } catch (error: any) {
-      return [
-        {
-          name: "Terminal",
-          description: "Terminal command output",
-          content: error.stderr || error.stdout || error.toString(),
-        },
-      ];
-    }
-  }
+	if (ideInfo.remoteName === "local" || ideInfo.remoteName === "") {
+		try {
+			const output = await asyncExec(args.command, {
+				cwd: fileURLToPath((await extras.ide.getWorkspaceDirs())[0]),
+			})
+			return [
+				{
+					name: "Terminal",
+					description: "Terminal command output",
+					content: output.stdout ?? "",
+				},
+			]
+		} catch (error: any) {
+			return [
+				{
+					name: "Terminal",
+					description: "Terminal command output",
+					content: error.stderr || error.stdout || error.toString(),
+				},
+			]
+		}
+	}
 
-  await extras.ide.runCommand(args.command);
-  return [
-    {
-      name: "Terminal",
-      description: "Terminal command output",
-      content:
-        "[Terminal output not available. This is only available in local development environments and not in SSH environments for example.]",
-    },
-  ];
-};
+	await extras.ide.runCommand(args.command)
+	return [
+		{
+			name: "Terminal",
+			description: "Terminal command output",
+			content:
+				"[Terminal output not available. This is only available in local development environments and not in SSH environments for example.]",
+		},
+	]
+}

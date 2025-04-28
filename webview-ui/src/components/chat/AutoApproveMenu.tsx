@@ -1,10 +1,12 @@
 import { VSCodeCheckbox, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import styled from "styled-components"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { AutoApprovalSettings } from "@shared/AutoApprovalSettings"
+import { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
 import { vscode } from "@/utils/vscode"
 import { getAsVar, VSC_FOREGROUND, VSC_TITLEBAR_INACTIVE_FOREGROUND, VSC_DESCRIPTION_FOREGROUND } from "@/utils/vscStyles"
+import { useClickAway } from "react-use"
 import { useTranslation } from "react-i18next"
 
 interface AutoApproveMenuProps {
@@ -80,6 +82,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 	const { autoApprovalSettings } = useExtensionState()
 	const [isExpanded, setIsExpanded] = useState(false)
 	const [isHoveringCollapsibleSection, setIsHoveringCollapsibleSection] = useState(false)
+	const menuRef = useRef<HTMLDivElement>(null)
 	const { t } = useTranslation()
 	// Careful not to use partials to mutate since spread operator only does shallow copy
 
@@ -154,24 +157,30 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 		return enabledActionsCount > 0
 	}, [enabledActions, autoApprovalSettings.actions])
 
+	// Get the full extension state to ensure we have the most up-to-date settings
+	const extensionState = useExtensionState()
+
 	const updateEnabled = useCallback(
 		(enabled: boolean) => {
+			const currentSettings = extensionState.autoApprovalSettings
 			vscode.postMessage({
 				type: "autoApprovalSettings",
 				autoApprovalSettings: {
-					...autoApprovalSettings,
+					...currentSettings,
+					version: (currentSettings.version ?? 1) + 1,
 					enabled,
 				},
 			})
 		},
-		[autoApprovalSettings],
+		[extensionState.autoApprovalSettings],
 	)
 
 	const updateAction = useCallback(
 		(actionId: keyof AutoApprovalSettings["actions"], value: boolean) => {
+			const currentSettings = extensionState.autoApprovalSettings
 			// Calculate what the new actions state will be
 			const newActions = {
-				...autoApprovalSettings.actions,
+				...currentSettings.actions,
 				[actionId]: value,
 			}
 
@@ -181,44 +190,57 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 			vscode.postMessage({
 				type: "autoApprovalSettings",
 				autoApprovalSettings: {
-					...autoApprovalSettings,
+					...currentSettings,
+					version: (currentSettings.version ?? 1) + 1,
 					actions: newActions,
 					// If no actions will be enabled, ensure the main toggle is off
-					enabled: willHaveEnabledActions ? autoApprovalSettings.enabled : false,
+					enabled: willHaveEnabledActions ? currentSettings.enabled : false,
 				},
 			})
 		},
-		[autoApprovalSettings],
+		[extensionState.autoApprovalSettings],
 	)
 
 	const updateMaxRequests = useCallback(
 		(maxRequests: number) => {
+			const currentSettings = extensionState.autoApprovalSettings
 			vscode.postMessage({
 				type: "autoApprovalSettings",
 				autoApprovalSettings: {
-					...autoApprovalSettings,
+					...currentSettings,
+					version: (currentSettings.version ?? 1) + 1,
 					maxRequests,
 				},
 			})
 		},
-		[autoApprovalSettings],
+		[extensionState.autoApprovalSettings],
 	)
 
 	const updateNotifications = useCallback(
 		(enableNotifications: boolean) => {
+			const currentSettings = extensionState.autoApprovalSettings
 			vscode.postMessage({
 				type: "autoApprovalSettings",
 				autoApprovalSettings: {
-					...autoApprovalSettings,
+					...currentSettings,
+					version: (currentSettings.version ?? 1) + 1,
 					enableNotifications,
 				},
 			})
 		},
-		[autoApprovalSettings],
+		[extensionState.autoApprovalSettings],
 	)
+
+	// Handle clicks outside the menu to close it
+	useClickAway(menuRef, () => {
+		if (isExpanded) {
+			setIsExpanded(false)
+		}
+	})
 
 	return (
 		<div
+			ref={menuRef}
 			style={{
 				padding: "0 15px",
 				userSelect: "none",
@@ -226,6 +248,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 					? `0.5px solid color-mix(in srgb, ${getAsVar(VSC_TITLEBAR_INACTIVE_FOREGROUND)} 20%, transparent)`
 					: "none",
 				overflowY: "auto",
+				backgroundColor: isExpanded ? CODE_BLOCK_BG_COLOR : "transparent",
 				...style,
 			}}>
 			<div
@@ -257,9 +280,16 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 					}}
 					checked={hasEnabledActions && autoApprovalSettings.enabled}
 					disabled={!hasEnabledActions}
+					// onChange={(e) => {
+					// 	const checked = (e.target as HTMLInputElement).checked
+					// 	updateEnabled(checked)
+					// }}
 					onClick={(e) => {
+						/*
+						vscode web toolkit bug: when changing the value of a vscodecheckbox programmatically, it will call its onChange with stale state. This led to updateEnabled being called with an old version of autoApprovalSettings, effectively undoing the state change that was triggered by the last action being unchecked. A simple workaround is to just not use onChange and instead use onClick. We are lucky this is a checkbox and the newvalue is simply opposite of current state.
+						*/
 						if (!hasEnabledActions) return
-						e.stopPropagation()
+						e.stopPropagation() // stops click from bubbling up to the parent, in this case stopping the expanding/collapsing
 						updateEnabled(!autoApprovalSettings.enabled)
 					}}
 				/>
@@ -267,6 +297,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 					isHovered={isHoveringCollapsibleSection}
 					style={{ cursor: "pointer" }}
 					onClick={() => {
+						// to prevent this from counteracting parent
 						if (hasEnabledActions) {
 							setIsExpanded((prev) => !prev)
 						}
@@ -276,7 +307,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 							color: getAsVar(VSC_FOREGROUND),
 							whiteSpace: "nowrap",
 						}}>
-						{t('autoApprove.title')}
+						{t("autoApprove.title")}
 					</span>
 					<span
 						style={{
@@ -284,7 +315,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 							overflow: "hidden",
 							textOverflow: "ellipsis",
 						}}>
-						{!hasEnabledActions ? t('autoApprove.none') : enabledActionsList}
+						{!hasEnabledActions ? t("autoApprove.none") : enabledActionsList}
 					</span>
 					<span
 						className={`codicon codicon-chevron-${isExpanded ? "down" : "right"}`}
@@ -303,9 +334,10 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 							color: getAsVar(VSC_DESCRIPTION_FOREGROUND),
 							fontSize: "12px",
 						}}>
-						{t('autoApprove.description')}
+						{t("autoApprove.description")}
 					</div>
 					{ACTION_METADATA.map((action) => {
+						// Handle readFilesExternally, editFilesExternally, and executeAllCommands as animated sub-options
 						if (
 							action.id === "executeAllCommands" ||
 							action.id === "editFilesExternally" ||
@@ -386,11 +418,13 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 							marginBottom: "8px",
 							color: getAsVar(VSC_FOREGROUND),
 						}}>
-						<span style={{ flexShrink: 1, minWidth: 0 }}>{t('autoApprove.maxRequests')}</span>
+						<span style={{ flexShrink: 1, minWidth: 0 }}>{t("autoApprove.maxRequests")}</span>
 						<VSCodeTextField
+							// placeholder={DEFAULT_AUTO_APPROVAL_SETTINGS.maxRequests.toString()}
 							value={autoApprovalSettings.maxRequests.toString()}
 							onInput={(e) => {
 								const input = e.target as HTMLInputElement
+								// Remove any non-numeric characters
 								input.value = input.value.replace(/[^0-9]/g, "")
 								const value = parseInt(input.value)
 								if (!isNaN(value) && value > 0) {
@@ -398,6 +432,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 								}
 							}}
 							onKeyDown={(e) => {
+								// Prevent non-numeric keys (except for backspace, delete, arrows)
 								if (!/^\d$/.test(e.key) && !["Backspace", "Delete", "ArrowLeft", "ArrowRight"].includes(e.key)) {
 									e.preventDefault()
 								}
@@ -411,7 +446,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 							fontSize: "12px",
 							marginBottom: "10px",
 						}}>
-						{t('autoApprove.maxRequestsDesc')}
+						{t("autoApprove.maxRequestsDesc")}
 					</div>
 					<div style={{ margin: "6px 0" }}>
 						<VSCodeCheckbox
@@ -420,7 +455,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 								const checked = (e.target as HTMLInputElement).checked
 								updateNotifications(checked)
 							}}>
-							{t('autoApprove.enableNotifications')}
+							{t("autoApprove.enableNotifications")}
 						</VSCodeCheckbox>
 						<div
 							style={{
@@ -428,7 +463,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 								color: getAsVar(VSC_DESCRIPTION_FOREGROUND),
 								fontSize: "12px",
 							}}>
-							{t('autoApprove.notificationsDesc')}
+							{t("autoApprove.notificationsDesc")}
 						</div>
 					</div>
 				</div>

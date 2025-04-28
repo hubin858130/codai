@@ -1,180 +1,197 @@
 {
-  "settings": {
-    "title": "Tetapan",
-    "done": "Selesai",
-    "language": {
-      "title": "Tetapan Bahasa"
-    },
-    "autocomplete": {
-      "title": "Tetapan Pelengkap Automatik",
-      "provider": "Pembekal",
-      "apiBase": "URL Asas",
-      "apiKey": "Kunci API",
-      "model": "Model",
-      "enable": "Dayakan Pelengkap Automatik"
-    },
-    "other": {
-      "title": "Tetapan Lain",
-      "customInstructions": "Arahan Tersuai",
-      "customInstructionsDesc": "Arahan ini akan ditambah pada akhir prompt sistem yang dihantar dengan setiap permintaan.",
-      "planActSeparateModels": "Gunakan model berbeza untuk mod Rancang dan Tindak",
-      "planActSeparateModelsDesc": "Apabila beralih antara mod Rancang dan Tindak, API dan model yang digunakan dalam mod sebelumnya dikekalkan. Ini boleh berguna jika anda ingin, sebagai contoh, menggunakan model berkuasa untuk perancangan dan model yang lebih murah untuk pelaksanaan.",
-      "advancedSettings": "Tetapan Lanjutan",
-      "debug": "Nyahpepijat",
-      "resetState": "Tetapkan Semula Keadaan",
-      "resetStateDesc": "Ini akan menetapkan semula semua keadaan global dan storan rahsia dalam sambungan."
-    },
-    "feedback": {
-      "text": "Jika anda mempunyai sebarang soalan atau maklum balas, sila buka isu di",
-      "version": "Versi {{version}}"
-    },
-    "planMode": "Mod Rancang",
-    "actMode": "Mod Tindak",
-    "api": {
-      "provider": "Pembekal API",
-      "selectModel": "Pilih model...",
-      "model": "Model",
-      "baseUrl": "URL Asas",
-      "apiKey": "Kunci API",
-      "modelId": "ID Model",
-      "customBaseUrl": "Gunakan URL Asas Tersuai",
-      "customVpcEndpoint": "Gunakan Titik Akhir VPC Tersuai",
-      "crossRegionInference": "Gunakan Inferens Rentas Wilayah",
-      "promptCaching": "Gunakan Cache Prompt",
-      "awsCredentials": "Kredensial AWS",
-      "awsProfile": "Profil AWS",
-      "awsAccessKey": "Kunci Akses AWS",
-      "awsSecretKey": "Kunci Rahsia AWS",
-      "awsSessionToken": "Token Sesi AWS",
-      "awsRegion": "Wilayah AWS",
-      "selectRegion": "Pilih wilayah...",
-      "gcpProjectId": "ID Projek Google Cloud",
-      "gcpRegion": "Wilayah Google Cloud",
-      "modelConfig": "Konfigurasi Model",
-      "supportsImages": "Menyokong Imej",
-      "supportsComputerUse": "Menyokong Penggunaan Komputer",
-      "enableR1Format": "Dayakan Format Mesej R1",
-      "contextWindowSize": "Saiz Tetingkap Konteks",
-      "maxOutputTokens": "Bilangan Token Output Maksimum",
-      "inputPrice": "Harga Input",
-      "outputPrice": "Harga Output",
-      "temperature": "Suhu",
-      "sortProviderRouting": "Susun Routing Pembekal",
-      "default": "Lalai",
-      "price": "Harga",
-      "throughput": "Kelajuan",
-      "latency": "Kependaman",
-      "reasoningEffort": "Ubah Usaha Penaakulan",
-      "low": "rendah",
-      "high": "tinggi"
-    }
-  },
-  "chat": {
-    "addContext": "Tambah Konteks",
-    "addImages": "Tambah Imej",
-    "planMode": "Rancang",
-    "actMode": "Tindak",
-    "planModeTooltip": "Dalam mod Rancang, Codai mengumpul maklumat untuk membuat rancangan",
-    "actModeTooltip": "Dalam mod Tindak, Codai melaksanakan tugas dengan segera",
-    "toggleModeHint": "Tukar dengan {{metaKey}}+Shift+A",
-    "send": "Hantar",
-    "placeholder": "Masukkan mesej...",
-    "welcome": {
-      "title": "Hai, saya Codai",
-      "description": "Terima kasih kepada keupayaan pengekodan agen <1>{{claudeLink}}</1>, saya boleh melakukan pelbagai tugas. Saya boleh mencipta dan mengedit fail, meneroka projek kompleks, menggunakan pelayar dan melaksanakan arahan terminal (dengan kebenaran anda, tentu saja). Saya juga boleh menggunakan MCP untuk mencipta alat baru dan mengembangkan keupayaan saya.",
-      "claudeLink": "Claude 3.7 Sonnet",
-      "claudeLinkText": "Claude 3.7 Sonnet",
-      "signupText": "Daftar untuk akaun untuk bermula secara percuma, atau gunakan kunci API yang memberikan akses kepada model seperti Claude 3.7 Sonnet.",
-      "getStarted": "Mula Percuma",
-      "useOwnApiKey": "Gunakan Kunci API Anda Sendiri",
-      "letsGo": "Mari Mula!"
-    }
-  },
-  "autoApprove": {
-    "title": "Kelulusan Automatik:",
-    "none": "Tiada",
-    "description": "Kelulusan automatik membolehkan Codai melaksanakan tindakan berikut tanpa kebenaran. Sila gunakan dengan berhati-hati dan dayakan hanya jika anda memahami risikonya.",
-    "maxRequests": "Bilangan Permintaan Maksimum:",
-    "maxRequestsDesc": "Codai akan secara automatik melaksanakan bilangan permintaan API ini sebelum meminta kelulusan untuk meneruskan.",
-    "enableNotifications": "Dayakan Pemberitahuan",
-    "notificationsDesc": "Terima pemberitahuan sistem apabila Codai memerlukan kelulusan untuk meneruskan atau apabila tugas selesai.",
-    "actions": {
-      "readFiles": {
-        "label": "Baca Fail Projek",
-        "shortName": "Baca (Tempatan)",
-        "description": "Membolehkan Codai membaca fail dalam ruang kerja anda."
-      },
-      "readFilesExternally": {
-        "label": "Baca Semua Fail",
-        "shortName": "Baca (Semua)",
-        "description": "Membolehkan Codai membaca sebarang fail pada komputer anda."
-      },
-      "editFiles": {
-        "label": "Edit Fail Projek",
-        "shortName": "Edit",
-        "description": "Membolehkan Codai mengubah fail dalam ruang kerja anda."
-      },
-      "editFilesExternally": {
-        "label": "Edit Semua Fail",
-        "shortName": "Edit (Semua)",
-        "description": "Membolehkan Codai mengubah sebarang fail pada komputer anda."
-      },
-      "executeSafeCommands": {
-        "label": "Laksanakan Arahan Selamat",
-        "shortName": "Arahan Selamat",
-        "description": "Membolehkan Codai melaksanakan arahan terminal yang selamat. Jika model menentukan bahawa arahan mungkin berpotensi merosakkan, ia akan sentiasa meminta kelulusan."
-      },
-      "executeAllCommands": {
-        "label": "Laksanakan Semua Arahan",
-        "shortName": "Semua Arahan",
-        "description": "Membolehkan Codai melaksanakan semua arahan terminal. Gunakan atas risiko anda sendiri."
-      },
-      "useBrowser": {
-        "label": "Gunakan Pelayar",
-        "shortName": "Pelayar",
-        "description": "Membolehkan Codai melancarkan dan berinteraksi dengan sebarang laman web dalam pelayar."
-      },
-      "useMcp": {
-        "label": "Gunakan Pelayan MCP",
-        "shortName": "MCP",
-        "description": "Membolehkan Codai menggunakan pelayan MCP yang dikonfigurasi yang boleh mengubah sistem fail atau berinteraksi dengan API."
-      }
-    }
-  },
-  "mcp": {
-    "tabs": {
-      "marketplace": "Pasar",
-      "addRemote": "Tambah Jauh",
-      "installed": "Dipasang"
-    },
-    "addServer": {
-      "title": "Tambah pelayan MCP jauh dengan menyediakan nama dan URL titik akhirnya. Ketahui lebih lanjut",
-      "serverName": "Nama Pelayan",
-      "serverNamePlaceholder": "mcp-server",
-      "serverUrl": "URL Pelayan",
-      "serverUrlPlaceholder": "https://example.com/mcp-server",
-      "addButton": "Tambah Pelayan",
-      "addingButton": "Menambah...",
-      "connectingMessage": "Menyambung ke pelayan... Ini mungkin mengambil masa beberapa saat.",
-      "editConfig": "Edit Konfigurasi",
-      "errors": {
-        "nameRequired": "Nama pelayan diperlukan",
-        "urlRequired": "URL pelayan diperlukan",
-        "invalidUrl": "Format URL tidak sah",
-        "failedToAdd": "Gagal menambah pelayan"
-      }
-    },
-    "installed": {
-      "description": "Protokol Konteks Model membolehkan komunikasi dengan pelayan MCP yang berjalan secara tempatan yang menyediakan alat dan sumber tambahan untuk mengembangkan keupayaan Codai. Anda boleh menggunakan pelayan yang dibuat oleh komuniti atau meminta Codai untuk mencipta alat baru yang disesuaikan dengan aliran kerja anda (contohnya, \"Tambah alat yang mendapatkan dokumentasi npm terkini\").",
-      "modelContextProtocol": "Protokol Konteks Model",
-      "communityMadeServers": "Pelayan Dibuat oleh Komuniti",
-      "seeDemo": "Lihat demo di sini.",
-      "configureServers": "Konfigurasi Pelayan MCP",
-      "advancedSettings": "Tetapan MCP Lanjutan"
-    },
-    "configuration": {
-      "title": "Pelayan MCP",
-      "done": "Selesai"
-    }
-  }
-} 
+	"settings": {
+		"title": "Tetapan",
+		"done": "Selesai",
+		"language": {
+			"title": "Tetapan Bahasa"
+		},
+		"autocomplete": {
+			"title": "Tetapan Pelengkap Automatik",
+			"provider": "Pembekal",
+			"apiBase": "URL Asas",
+			"apiKey": "Kunci API",
+			"model": "Model",
+			"enable": "Dayakan Pelengkap Automatik"
+		},
+		"other": {
+			"title": "Tetapan Lain",
+			"customInstructions": "Arahan Tersuai",
+			"customInstructionsDesc": "Arahan ini akan ditambah pada akhir prompt sistem yang dihantar dengan setiap permintaan.",
+			"planActSeparateModels": "Gunakan model berbeza untuk mod Rancang dan Tindak",
+			"planActSeparateModelsDesc": "Apabila beralih antara mod Rancang dan Tindak, API dan model yang digunakan dalam mod sebelumnya dikekalkan. Ini boleh berguna jika anda ingin, sebagai contoh, menggunakan model berkuasa untuk perancangan dan model yang lebih murah untuk pelaksanaan.",
+			"advancedSettings": "Tetapan Lanjutan",
+			"debug": "Nyahpepijat",
+			"resetState": "Tetapkan Semula Keadaan",
+			"resetStateDesc": "Ini akan menetapkan semula semua keadaan global dan storan rahsia dalam sambungan."
+		},
+		"feedback": {
+			"text": "Jika anda mempunyai sebarang soalan atau maklum balas, sila buka isu di",
+			"version": "Versi {{version}}"
+		},
+		"planMode": "Mod Rancang",
+		"actMode": "Mod Tindak",
+		"api": {
+			"provider": "Pembekal API",
+			"selectModel": "Pilih model...",
+			"model": "Model",
+			"baseUrl": "URL Asas",
+			"apiKey": "Kunci API",
+			"modelId": "ID Model",
+			"customBaseUrl": "Gunakan URL Asas Tersuai",
+			"customVpcEndpoint": "Gunakan Titik Akhir VPC Tersuai",
+			"crossRegionInference": "Gunakan Inferens Rentas Wilayah",
+			"promptCaching": "Gunakan Cache Prompt",
+			"awsCredentials": "Kredensial AWS",
+			"awsProfile": "Profil AWS",
+			"awsAccessKey": "Kunci Akses AWS",
+			"awsSecretKey": "Kunci Rahsia AWS",
+			"awsSessionToken": "Token Sesi AWS",
+			"awsRegion": "Wilayah AWS",
+			"selectRegion": "Pilih wilayah...",
+			"gcpProjectId": "ID Projek Google Cloud",
+			"gcpRegion": "Wilayah Google Cloud",
+			"modelConfig": "Konfigurasi Model",
+			"supportsImages": "Menyokong Imej",
+			"supportsComputerUse": "Menyokong Penggunaan Komputer",
+			"enableR1Format": "Dayakan Format Mesej R1",
+			"contextWindowSize": "Saiz Tetingkap Konteks",
+			"maxOutputTokens": "Bilangan Token Output Maksimum",
+			"inputPrice": "Harga Input",
+			"outputPrice": "Harga Output",
+			"temperature": "Suhu",
+			"sortProviderRouting": "Susun Routing Pembekal",
+			"default": "Lalai",
+			"price": "Harga",
+			"throughput": "Kelajuan",
+			"latency": "Kependaman",
+			"reasoningEffort": "Ubah Usaha Penaakulan",
+			"low": "rendah",
+			"high": "tinggi"
+		}
+	},
+	"chat": {
+		"addContext": "Tambah Konteks",
+		"addImages": "Tambah Imej",
+		"planMode": "Rancang",
+		"actMode": "Tindak",
+		"planModeTooltip": "Dalam mod Rancang, Codai mengumpul maklumat untuk membuat rancangan",
+		"actModeTooltip": "Dalam mod Tindak, Codai melaksanakan tugas dengan segera",
+		"toggleModeHint": "Tukar dengan {{metaKey}}+Shift+A",
+		"send": "Hantar",
+		"placeholder": "Masukkan mesej...",
+		"welcome": {
+			"title": "Hai, saya Codai",
+			"description": "Terima kasih kepada keupayaan pengekodan agen <1>{{claudeLink}}</1>, saya boleh melakukan pelbagai tugas. Saya boleh mencipta dan mengedit fail, meneroka projek kompleks, menggunakan pelayar dan melaksanakan arahan terminal (dengan kebenaran anda, tentu saja). Saya juga boleh menggunakan MCP untuk mencipta alat baru dan mengembangkan keupayaan saya.",
+			"claudeLink": "Claude 3.7 Sonnet",
+			"claudeLinkText": "Claude 3.7 Sonnet",
+			"signupText": "Daftar untuk akaun untuk bermula secara percuma, atau gunakan kunci API yang memberikan akses kepada model seperti Claude 3.7 Sonnet.",
+			"getStarted": "Mula Percuma",
+			"useOwnApiKey": "Gunakan Kunci API Anda Sendiri",
+			"letsGo": "Mari Mula!"
+		}
+	},
+	"autoApprove": {
+		"title": "Kelulusan Automatik:",
+		"none": "Tiada",
+		"description": "Kelulusan automatik membolehkan Codai melaksanakan tindakan berikut tanpa kebenaran. Sila gunakan dengan berhati-hati dan dayakan hanya jika anda memahami risikonya.",
+		"maxRequests": "Bilangan Permintaan Maksimum:",
+		"maxRequestsDesc": "Codai akan secara automatik melaksanakan bilangan permintaan API ini sebelum meminta kelulusan untuk meneruskan.",
+		"enableNotifications": "Dayakan Pemberitahuan",
+		"notificationsDesc": "Terima pemberitahuan sistem apabila Codai memerlukan kelulusan untuk meneruskan atau apabila tugas selesai.",
+		"actions": {
+			"readFiles": {
+				"label": "Baca Fail Projek",
+				"shortName": "Baca (Tempatan)",
+				"description": "Membolehkan Codai membaca fail dalam ruang kerja anda."
+			},
+			"readFilesExternally": {
+				"label": "Baca Semua Fail",
+				"shortName": "Baca (Semua)",
+				"description": "Membolehkan Codai membaca sebarang fail pada komputer anda."
+			},
+			"editFiles": {
+				"label": "Edit Fail Projek",
+				"shortName": "Edit",
+				"description": "Membolehkan Codai mengubah fail dalam ruang kerja anda."
+			},
+			"editFilesExternally": {
+				"label": "Edit Semua Fail",
+				"shortName": "Edit (Semua)",
+				"description": "Membolehkan Codai mengubah sebarang fail pada komputer anda."
+			},
+			"executeSafeCommands": {
+				"label": "Laksanakan Arahan Selamat",
+				"shortName": "Arahan Selamat",
+				"description": "Membolehkan Codai melaksanakan arahan terminal yang selamat. Jika model menentukan bahawa arahan mungkin berpotensi merosakkan, ia akan sentiasa meminta kelulusan."
+			},
+			"executeAllCommands": {
+				"label": "Laksanakan Semua Arahan",
+				"shortName": "Semua Arahan",
+				"description": "Membolehkan Codai melaksanakan semua arahan terminal. Gunakan atas risiko anda sendiri."
+			},
+			"useBrowser": {
+				"label": "Gunakan Pelayar",
+				"shortName": "Pelayar",
+				"description": "Membolehkan Codai melancarkan dan berinteraksi dengan sebarang laman web dalam pelayar."
+			},
+			"useMcp": {
+				"label": "Gunakan Pelayan MCP",
+				"shortName": "MCP",
+				"description": "Membolehkan Codai menggunakan pelayan MCP yang dikonfigurasi yang boleh mengubah sistem fail atau berinteraksi dengan API."
+			}
+		}
+	},
+	"mcp": {
+		"tabs": {
+			"marketplace": "Pasar",
+			"addRemote": "Tambah Jauh",
+			"installed": "Dipasang"
+		},
+		"addServer": {
+			"title": "Tambah pelayan MCP jauh dengan menyediakan nama dan URL titik akhirnya. Ketahui lebih lanjut",
+			"serverName": "Nama Pelayan",
+			"serverNamePlaceholder": "mcp-server",
+			"serverUrl": "URL Pelayan",
+			"serverUrlPlaceholder": "https://example.com/mcp-server",
+			"addButton": "Tambah Pelayan",
+			"addingButton": "Menambah...",
+			"connectingMessage": "Menyambung ke pelayan... Ini mungkin mengambil masa beberapa saat.",
+			"editConfig": "Edit Konfigurasi",
+			"errors": {
+				"nameRequired": "Nama pelayan diperlukan",
+				"urlRequired": "URL pelayan diperlukan",
+				"invalidUrl": "Format URL tidak sah",
+				"failedToAdd": "Gagal menambah pelayan"
+			}
+		},
+		"installed": {
+			"description": "Protokol Konteks Model",
+			"modelContextProtocol": "Protokol Konteks Model",
+			"communityMadeServers": "Pelayan yang dibuat oleh komuniti",
+			"seeDemo": "Lihat demo",
+			"configureServers": "Konfigurasi pelayan MCP",
+			"advancedSettings": "Tetapan lanjutan MCP",
+			"nomcpServers": "Tiada pelayan MCP dipasang",
+			"useCommunityMadeServers": "Benarkan interaksi dengan pelayan MCP yang berjalan secara tempatan yang menyediakan alat dan sumber tambahan untuk mengembangkan keupayaan Codai.",
+			"createNewMcpServer": "Atau anda boleh meminta Codai untuk mencipta alat baru untuk aliran kerja anda (contohnya, \"tambah alat untuk mendapatkan dokumentasi npm terkini\")."
+		},
+		"configuration": {
+			"title": "Pelayan MCP",
+			"done": "Selesai"
+		}
+	},
+	"CodaiRules": {
+		"manageRules": "Urus Peraturan Codai",
+		"CodaiRules": "Peraturan Codai",
+		"globalRules": "Peraturan Global",
+		"workspaceRules": "Peraturan Ruang Kerja",
+		"noRulesFound": "Tiada peraturan dijumpai",
+		"editRuleFile": "Edit Fail Peraturan",
+		"deleteRuleFile": "Padam Fail Peraturan",
+		"newRuleFile": "Fail Peraturan Baru...",
+		"createRuleFile": "Cipta Fail Peraturan",
+		"newRuleFileButton": "Fail Peraturan Baru",
+		"ruleNamePlaceholder": "nama peraturan (.md, .txt, atau tanpa sambungan)",
+		"invalidExtension": "Hanya .md, .txt atau tanpa sambungan fail dibenarkan"
+	}
+}
