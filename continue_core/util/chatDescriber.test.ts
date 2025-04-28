@@ -1,91 +1,87 @@
-import { LLMFullCompletionOptions } from "..";
-import { testLLM } from "../test/fixtures";
-import { ChatDescriber } from "./chatDescriber";
+import { LLMFullCompletionOptions } from ".."
+import { testLLM } from "../test/fixtures"
+import { ChatDescriber } from "./chatDescriber"
 
 describe("ChatDescriber", () => {
-  beforeEach(() => {
-    // Reset the prompt to the initial value before each test
-    ChatDescriber.prompt =
-      "Given the following... please reply with a short summary that is 4-12 words in length, you should summarize what the user is asking for OR what the user is trying to accomplish. You should only respond with the summary, no additional text or explanation, you don't need ending punctuation.\n\n";
-  });
+	beforeEach(() => {
+		// Reset the prompt to the initial value before each test
+		ChatDescriber.prompt =
+			"Given the following... please reply with a short summary that is 4-12 words in length, you should summarize what the user is asking for OR what the user is trying to accomplish. You should only respond with the summary, no additional text or explanation, you don't need ending punctuation.\n\n"
+	})
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+	afterEach(() => {
+		jest.restoreAllMocks()
+	})
 
-  describe("describe method", () => {
-    it("should return undefined if ChatDescriber.prompt is undefined", async () => {
-      ChatDescriber.prompt = undefined;
+	describe("describe method", () => {
+		it("should return undefined if ChatDescriber.prompt is undefined", async () => {
+			ChatDescriber.prompt = undefined
 
-      const result = await ChatDescriber.describe(testLLM, {}, "Test message");
+			const result = await ChatDescriber.describe(testLLM, {}, "Test message")
 
-      expect(result).toBeUndefined();
-    });
+			expect(result).toBeUndefined()
+		})
 
-    it("should return undefined if message is empty after cleaning", async () => {
-      const message = "   ";
+		it("should return undefined if message is empty after cleaning", async () => {
+			const message = "   "
 
-      const result = await ChatDescriber.describe(testLLM, {}, message);
+			const result = await ChatDescriber.describe(testLLM, {}, message)
 
-      expect(result).toBeUndefined();
-    });
+			expect(result).toBeUndefined()
+		})
 
-    it("should set completionOptions.maxTokens to 12", async () => {
-      const message = "Test message";
-      const completionOptions: LLMFullCompletionOptions = { temperature: 0.7 };
+		it("should set completionOptions.maxTokens to 12", async () => {
+			const message = "Test message"
+			const completionOptions: LLMFullCompletionOptions = { temperature: 0.7 }
 
-      testLLM.chat = jest.fn().mockResolvedValue({ content: "Test response" });
+			testLLM.chat = jest.fn().mockResolvedValue({ content: "Test response" })
 
-      await ChatDescriber.describe(testLLM, completionOptions, message);
+			await ChatDescriber.describe(testLLM, completionOptions, message)
 
-      expect(completionOptions.maxTokens).toBe(ChatDescriber.maxTokens);
-    });
+			expect(completionOptions.maxTokens).toBe(ChatDescriber.maxTokens)
+		})
 
-    it("should call model.chat with correct parameters", async () => {
-      const message = "Test message";
-      const cleanedMessage = "Test message";
-      const expectedPrompt = ChatDescriber.prompt + cleanedMessage;
-      const completionOptions: LLMFullCompletionOptions = {};
+		it("should call model.chat with correct parameters", async () => {
+			const message = "Test message"
+			const cleanedMessage = "Test message"
+			const expectedPrompt = ChatDescriber.prompt + cleanedMessage
+			const completionOptions: LLMFullCompletionOptions = {}
 
-      testLLM.chat = jest.fn().mockResolvedValue({ content: "Test response" });
+			testLLM.chat = jest.fn().mockResolvedValue({ content: "Test response" })
 
-      await ChatDescriber.describe(testLLM, completionOptions, message);
+			await ChatDescriber.describe(testLLM, completionOptions, message)
 
-      expect(testLLM.chat).toHaveBeenCalledWith(
-        [
-          {
-            role: "user",
-            content: expectedPrompt,
-          },
-        ],
-        expect.any(AbortSignal),
-        completionOptions,
-      );
-    });
+			expect(testLLM.chat).toHaveBeenCalledWith(
+				[
+					{
+						role: "user",
+						content: expectedPrompt,
+					},
+				],
+				expect.any(AbortSignal),
+				completionOptions,
+			)
+		})
 
-    it("should return processed content from the model response", async () => {
-      const message = "Test message";
-      const modelResponseContent = "Model response content";
-      const expectedResult = "Model response content";
+		it("should return processed content from the model response", async () => {
+			const message = "Test message"
+			const modelResponseContent = "Model response content"
+			const expectedResult = "Model response content"
 
-      testLLM.chat = jest
-        .fn()
-        .mockResolvedValue({ content: modelResponseContent });
+			testLLM.chat = jest.fn().mockResolvedValue({ content: modelResponseContent })
 
-      const result = await ChatDescriber.describe(testLLM, {}, message);
+			const result = await ChatDescriber.describe(testLLM, {}, message)
 
-      expect(result).toBe(expectedResult);
-    });
+			expect(result).toBe(expectedResult)
+		})
 
-    it("should propagate error if model.chat throws an error", async () => {
-      const message = "Test message";
-      const completionOptions: LLMFullCompletionOptions = {};
+		it("should propagate error if model.chat throws an error", async () => {
+			const message = "Test message"
+			const completionOptions: LLMFullCompletionOptions = {}
 
-      testLLM.chat = jest.fn().mockRejectedValue(new Error("Chat error"));
+			testLLM.chat = jest.fn().mockRejectedValue(new Error("Chat error"))
 
-      await expect(
-        ChatDescriber.describe(testLLM, completionOptions, message),
-      ).rejects.toThrow("Chat error");
-    });
-  });
-});
+			await expect(ChatDescriber.describe(testLLM, completionOptions, message)).rejects.toThrow("Chat error")
+		})
+	})
+})

@@ -5,6 +5,7 @@ import { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
 import ServersToggleList from "@/components/mcp/configuration/tabs/installed/ServersToggleList"
 import { vscode } from "@/utils/vscode"
 import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
+import Tooltip from "@/components/common/Tooltip"
 
 const ServersToggleModal: React.FC = () => {
 	const { mcpServers } = useExtensionState()
@@ -41,18 +42,20 @@ const ServersToggleModal: React.FC = () => {
 	return (
 		<div ref={modalRef}>
 			<div ref={buttonRef} className="inline-flex min-w-0 max-w-full">
-				<VSCodeButton
-					appearance="icon"
-					aria-label="MCP Servers"
-					onClick={() => setIsVisible(!isVisible)}
-					style={{ padding: "0px 0px", height: "20px" }}>
-					<div className="flex items-center gap-1 text-xs whitespace-nowrap min-w-0 w-full">
-						<span
-							className="codicon codicon-server flex items-center"
-							style={{ fontSize: "12.5px", marginBottom: 1 }}
-						/>
-					</div>
-				</VSCodeButton>
+				<Tooltip tipText="Manage MCP Servers">
+					<VSCodeButton
+						appearance="icon"
+						aria-label="MCP Servers"
+						onClick={() => setIsVisible(!isVisible)}
+						style={{ padding: "0px 0px", height: "20px" }}>
+						<div className="flex items-center gap-1 text-xs whitespace-nowrap min-w-0 w-full">
+							<span
+								className="codicon codicon-server flex items-center"
+								style={{ fontSize: "12.5px", marginBottom: 1 }}
+							/>
+						</div>
+					</VSCodeButton>
+				</Tooltip>
 			</div>
 
 			{isVisible && (
@@ -74,7 +77,7 @@ const ServersToggleModal: React.FC = () => {
 					/>
 
 					<div className="flex justify-between items-center mb-2.5">
-						<div className="m-0">MCP Servers</div>
+						<div className="m-0 text-base font-semibold">MCP Servers</div>
 						<VSCodeButton
 							appearance="icon"
 							onClick={() => {

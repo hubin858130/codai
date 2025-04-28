@@ -30,29 +30,25 @@ const WelcomeView = memo(() => {
 	return (
 		<div className="fixed inset-0 p-0 flex flex-col">
 			<div className="h-full px-5 overflow-auto">
-				<h2>{t('chat.welcome.title')}</h2>
-				<div className="flex justify-center my-5">
-					{/* <ClineLogoWhite className="size-16" /> */}
-				</div>
+				<h2>{t("chat.welcome.title")}</h2>
+				<div className="flex justify-center my-5">{/* <ClineLogoWhite className="size-16" /> */}</div>
 				<p>
 					<Trans
 						i18nKey="chat.welcome.description"
 						components={{
 							claudeLink: (
 								<VSCodeLink href="https://www.anthropic.com/claude/sonnet" className="inline">
-									{t('chat.welcome.claudeLinkText')}
+									{t("chat.welcome.claudeLinkText")}
 								</VSCodeLink>
 							),
 						}}
 						values={{
-							claudeLink: t('chat.welcome.claudeLinkText')
+							claudeLink: t("chat.welcome.claudeLinkText"),
 						}}
 					/>
 				</p>
 
-				<p className="text-[var(--vscode-descriptionForeground)]">
-					{t('chat.welcome.signupText')}
-				</p>
+				<p className="text-[var(--vscode-descriptionForeground)]">{t("chat.welcome.signupText")}</p>
 
 				{/* <VSCodeButton appearance="primary" onClick={handleLogin} className="w-full mt-1">
 					{t('chat.welcome.getStarted')}
@@ -63,7 +59,7 @@ const WelcomeView = memo(() => {
 						appearance="secondary"
 						onClick={() => setShowApiOptions(!showApiOptions)}
 						className="mt-2.5 w-full">
-						{t('chat.welcome.useOwnApiKey')}
+						{t("chat.welcome.useOwnApiKey")}
 					</VSCodeButton>
 				)}
 
@@ -72,7 +68,7 @@ const WelcomeView = memo(() => {
 						<div>
 							<ApiOptions showModelOptions={false} />
 							<VSCodeButton onClick={handleSubmit} disabled={disableLetsGoButton} className="mt-0.75">
-								{t('chat.welcome.letsGo')}
+								{t("chat.welcome.letsGo")}
 							</VSCodeButton>
 						</div>
 					)}

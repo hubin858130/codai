@@ -4,14 +4,14 @@
  * @param {number} sampling_rate The sampling rate to use when decoding the audio.
  * @returns {Promise<Float32Array>} The decoded audio as a `Float32Array`.
  */
-export function read_audio(url: string | URL, sampling_rate: number): Promise<Float32Array>;
+export function read_audio(url: string | URL, sampling_rate: number): Promise<Float32Array>
 /**
  * Generates a Hanning window of length M.
  *
  * @param {number} M The length of the Hanning window to generate.
  * @returns {Float64Array} The generated Hanning window.
  */
-export function hanning(M: number): Float64Array;
+export function hanning(M: number): Float64Array
 /**
  * Creates a frequency bin conversion matrix used to obtain a mel spectrogram. This is called a *mel filter bank*, and
  * various implementation exist, which differ in the number of filters, the shape of the filters, the way the filters
@@ -29,7 +29,16 @@ export function hanning(M: number): Float64Array;
  * @returns {number[][]} Triangular filter bank matrix, which is a 2D array of shape (`num_frequency_bins`, `num_mel_filters`).
  * This is a projection matrix to go from a spectrogram to a mel spectrogram.
  */
-export function mel_filter_bank(num_frequency_bins: number, num_mel_filters: number, min_frequency: number, max_frequency: number, sampling_rate: number, norm?: string, mel_scale?: string, triangularize_in_mel_space?: boolean): number[][];
+export function mel_filter_bank(
+	num_frequency_bins: number,
+	num_mel_filters: number,
+	min_frequency: number,
+	max_frequency: number,
+	sampling_rate: number,
+	norm?: string,
+	mel_scale?: string,
+	triangularize_in_mel_space?: boolean,
+): number[][]
 /**
  * Calculates a spectrogram over one waveform using the Short-Time Fourier Transform.
  *
@@ -81,27 +90,50 @@ export function mel_filter_bank(num_frequency_bins: number, num_mel_filters: num
  * @param {boolean} [options.transpose=false] If `true`, the returned spectrogram will have shape `(num_frames, num_frequency_bins/num_mel_filters)`. If `false`, the returned spectrogram will have shape `(num_frequency_bins/num_mel_filters, num_frames)`.
  * @returns {{data: Float32Array, dims: number[]}} Spectrogram of shape `(num_frequency_bins, length)` (regular spectrogram) or shape `(num_mel_filters, length)` (mel spectrogram).
  */
-export function spectrogram(waveform: Float32Array | Float64Array, window: Float32Array | Float64Array, frame_length: number, hop_length: number, { fft_length, power, center, pad_mode, onesided, preemphasis, mel_filters, mel_floor, log_mel, reference, min_value, db_range, remove_dc_offset, max_num_frames, do_pad, transpose, }?: {
-    fft_length?: number;
-    power?: number;
-    center?: boolean;
-    pad_mode?: string;
-    onesided?: boolean;
-    preemphasis?: number;
-    mel_filters?: number[][];
-    mel_floor?: number;
-    log_mel?: string;
-    reference?: number;
-    min_value?: number;
-    db_range?: number;
-    remove_dc_offset?: boolean;
-    max_num_frames?: number;
-    do_pad?: boolean;
-    transpose?: boolean;
-}): {
-    data: Float32Array;
-    dims: number[];
-};
+export function spectrogram(
+	waveform: Float32Array | Float64Array,
+	window: Float32Array | Float64Array,
+	frame_length: number,
+	hop_length: number,
+	{
+		fft_length,
+		power,
+		center,
+		pad_mode,
+		onesided,
+		preemphasis,
+		mel_filters,
+		mel_floor,
+		log_mel,
+		reference,
+		min_value,
+		db_range,
+		remove_dc_offset,
+		max_num_frames,
+		do_pad,
+		transpose,
+	}?: {
+		fft_length?: number
+		power?: number
+		center?: boolean
+		pad_mode?: string
+		onesided?: boolean
+		preemphasis?: number
+		mel_filters?: number[][]
+		mel_floor?: number
+		log_mel?: string
+		reference?: number
+		min_value?: number
+		db_range?: number
+		remove_dc_offset?: boolean
+		max_num_frames?: number
+		do_pad?: boolean
+		transpose?: boolean
+	},
+): {
+	data: Float32Array
+	dims: number[]
+}
 /**
  * Returns an array containing the specified window.
  * @param {number} window_length The length of the window in samples.
@@ -113,9 +145,17 @@ export function spectrogram(waveform: Float32Array | Float64Array, window: Float
  * @param {boolean} [options.center=true] Whether to center the window inside the FFT buffer. Only used when `frame_length` is provided.
  * @returns {Float64Array} The window of shape `(window_length,)` or `(frame_length,)`.
  */
-export function window_function(window_length: number, name: string, { periodic, frame_length, center, }?: {
-    periodic?: boolean;
-    frame_length?: number;
-    center?: boolean;
-}): Float64Array;
+export function window_function(
+	window_length: number,
+	name: string,
+	{
+		periodic,
+		frame_length,
+		center,
+	}?: {
+		periodic?: boolean
+		frame_length?: number
+		center?: boolean
+	},
+): Float64Array
 //# sourceMappingURL=audio.d.ts.map

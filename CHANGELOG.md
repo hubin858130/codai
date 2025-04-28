@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.2]
+
+-   Fixed some bugs
+-   Managing Rules with the Toggleable Popover
+
 ## [1.0.1]
 
 -   First version

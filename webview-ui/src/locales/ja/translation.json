@@ -1,180 +1,197 @@
 {
-  "settings": {
-    "title": "設定",
-    "done": "完了",
-    "language": {
-      "title": "言語設定"
-    },
-    "autocomplete": {
-      "title": "オートコンプリート設定",
-      "provider": "プロバイダー",
-      "apiBase": "ベースURL",
-      "apiKey": "APIキー",
-      "model": "モデル",
-      "enable": "オートコンプリートを有効化"
-    },
-    "other": {
-      "title": "その他の設定",
-      "customInstructions": "カスタム指示",
-      "customInstructionsDesc": "これらの指示は、すべてのリクエストに送信されるシステムプロンプトの末尾に追加されます。",
-      "planActSeparateModels": "計画モードと実行モードで異なるモデルを使用",
-      "planActSeparateModelsDesc": "計画モードと実行モードを切り替えると、前のモードで使用したAPIとモデルが保持されます。これは、例えば、強力な推論モデルを使用して計画を立て、より安価なコーディングモデルで実行する場合に役立ちます。",
-      "advancedSettings": "詳細設定",
-      "debug": "デバッグ",
-      "resetState": "状態をリセット",
-      "resetStateDesc": "これにより、拡張機能内のすべてのグローバル状態とシークレットストレージがリセットされます。"
-    },
-    "feedback": {
-      "text": "ご質問やフィードバックがありましたら、以下のURLでissueを開いてください",
-      "version": "バージョン {{version}}"
-    },
-    "planMode": "計画モード",
-    "actMode": "実行モード",
-    "api": {
-      "provider": "APIプロバイダー",
-      "selectModel": "モデルを選択...",
-      "model": "モデル",
-      "baseUrl": "ベースURL",
-      "apiKey": "APIキー",
-      "modelId": "モデルID",
-      "customBaseUrl": "カスタムベースURLを使用",
-      "customVpcEndpoint": "カスタムVPCエンドポイントを使用",
-      "crossRegionInference": "クロスリージョン推論を使用",
-      "promptCaching": "プロンプトキャッシュを使用",
-      "awsCredentials": "AWS認証情報",
-      "awsProfile": "AWSプロファイル",
-      "awsAccessKey": "AWSアクセスキー",
-      "awsSecretKey": "AWSシークレットキー",
-      "awsSessionToken": "AWSセッショントークン",
-      "awsRegion": "AWSリージョン",
-      "selectRegion": "リージョンを選択...",
-      "gcpProjectId": "Google CloudプロジェクトID",
-      "gcpRegion": "Google Cloudリージョン",
-      "modelConfig": "モデル設定",
-      "supportsImages": "画像をサポート",
-      "supportsComputerUse": "コンピュータ使用をサポート",
-      "enableR1Format": "R1メッセージ形式を有効化",
-      "contextWindowSize": "コンテキストウィンドウサイズ",
-      "maxOutputTokens": "最大出力トークン数",
-      "inputPrice": "入力価格",
-      "outputPrice": "出力価格",
-      "temperature": "温度",
-      "sortProviderRouting": "プロバイダールーティングをソート",
-      "default": "デフォルト",
-      "price": "価格",
-      "throughput": "スループット",
-      "latency": "レイテンシー",
-      "reasoningEffort": "推論の努力度を変更",
-      "low": "低",
-      "high": "高"
-    }
-  },
-  "chat": {
-    "addContext": "コンテキストを追加",
-    "addImages": "画像を追加",
-    "planMode": "計画",
-    "actMode": "実行",
-    "planModeTooltip": "計画モードでは、Codaiは情報を収集して計画を立てます",
-    "actModeTooltip": "実行モードでは、Codaiはすぐにタスクを完了します",
-    "toggleModeHint": "{{metaKey}}+Shift+Aで切り替え",
-    "send": "送信",
-    "placeholder": "メッセージを入力...",
-    "welcome": {
-      "title": "こんにちは、私はCodaiです",
-      "description": "<1>{{claudeLink}}</1>のエージェントコーディング能力のおかげで、さまざまなタスクを処理できます。ファイルの作成と編集、複雑なプロジェクトの探索、ブラウザの使用、ターミナルコマンドの実行（もちろん、あなたの許可が必要です）が可能です。MCPを使用して新しいツールを作成し、自分の能力を拡張することもできます。",
-      "claudeLink": "Claude 3.7 Sonnet",
-      "claudeLinkText": "Claude 3.7 Sonnet",
-      "signupText": "無料で始めるにはアカウントに登録するか、Claude 3.7 SonnetなどのモデルにアクセスできるAPIキーを使用してください。",
-      "getStarted": "無料で始める",
-      "useOwnApiKey": "自分のAPIキーを使用",
-      "letsGo": "始めましょう！"
-    }
-  },
-  "autoApprove": {
-    "title": "自動承認：",
-    "none": "なし",
-    "description": "自動承認により、Codaiは以下のアクションを許可なく実行できます。リスクを理解している場合のみ有効にしてください。",
-    "maxRequests": "最大リクエスト数：",
-    "maxRequestsDesc": "Codaiは、タスクの続行を承認する前に、この数のAPIリクエストを自動的に行います。",
-    "enableNotifications": "通知を有効化",
-    "notificationsDesc": "Codaiが続行の承認を必要とする場合やタスクが完了した場合にシステム通知を受け取ります。",
-    "actions": {
-      "readFiles": {
-        "label": "プロジェクトファイルを読み取り",
-        "shortName": "読み取り（ローカル）",
-        "description": "Codaiがワークスペース内のファイルを読み取ることを許可します。"
-      },
-      "readFilesExternally": {
-        "label": "すべてのファイルを読み取り",
-        "shortName": "読み取り（すべて）",
-        "description": "Codaiがコンピュータ上の任意のファイルを読み取ることを許可します。"
-      },
-      "editFiles": {
-        "label": "プロジェクトファイルを編集",
-        "shortName": "編集",
-        "description": "Codaiがワークスペース内のファイルを変更することを許可します。"
-      },
-      "editFilesExternally": {
-        "label": "すべてのファイルを編集",
-        "shortName": "編集（すべて）",
-        "description": "Codaiがコンピュータ上の任意のファイルを変更することを許可します。"
-      },
-      "executeSafeCommands": {
-        "label": "安全なコマンドを実行",
-        "shortName": "安全なコマンド",
-        "description": "Codaiが安全なターミナルコマンドを実行することを許可します。モデルがコマンドが破壊的であると判断した場合、承認が必要です。"
-      },
-      "executeAllCommands": {
-        "label": "すべてのコマンドを実行",
-        "shortName": "すべてのコマンド",
-        "description": "Codaiがすべてのターミナルコマンドを実行することを許可します。自己責任で使用してください。"
-      },
-      "useBrowser": {
-        "label": "ブラウザを使用",
-        "shortName": "ブラウザ",
-        "description": "Codaiがブラウザで任意のウェブサイトを起動して操作することを許可します。"
-      },
-      "useMcp": {
-        "label": "MCPサーバーを使用",
-        "shortName": "MCP",
-        "description": "Codaiがファイルシステムを変更したりAPIと対話したりする可能性のある設定済みMCPサーバーを使用することを許可します。"
-      }
-    }
-  },
-  "mcp": {
-    "tabs": {
-      "marketplace": "マーケットプレイス",
-      "addRemote": "リモートを追加",
-      "installed": "インストール済み"
-    },
-    "addServer": {
-      "title": "名前とURLエンドポイントを提供してリモートMCPサーバーを追加します。詳細はこちら",
-      "serverName": "サーバー名",
-      "serverNamePlaceholder": "mcp-server",
-      "serverUrl": "サーバーURL",
-      "serverUrlPlaceholder": "https://example.com/mcp-server",
-      "addButton": "サーバーを追加",
-      "addingButton": "追加中...",
-      "connectingMessage": "サーバーに接続中...これには数秒かかる場合があります。",
-      "editConfig": "設定を編集",
-      "errors": {
-        "nameRequired": "サーバー名が必要です",
-        "urlRequired": "サーバーURLが必要です",
-        "invalidUrl": "無効なURL形式です",
-        "failedToAdd": "サーバーの追加に失敗しました"
-      }
-    },
-    "installed": {
-      "description": "モデルコンテキストプロトコル（Model Context Protocol）により、Codaiの機能を拡張する追加のツールとリソースを提供するローカルで実行中のMCPサーバーと通信できます。コミュニティ製のサーバーを使用するか、Codaiにワークフローに特化した新しいツールを作成させることができます（例：「最新のnpmドキュメントを取得するツールを追加」）。",
-      "modelContextProtocol": "モデルコンテキストプロトコル",
-      "communityMadeServers": "コミュニティ製サーバー",
-      "seeDemo": "デモを見る",
-      "configureServers": "MCPサーバーを設定",
-      "advancedSettings": "詳細MCP設定"
-    },
-    "configuration": {
-      "title": "MCP サーバー",
-      "done": "完了"
-    }
-  }
-} 
+	"settings": {
+		"title": "設定",
+		"done": "完了",
+		"language": {
+			"title": "言語設定"
+		},
+		"autocomplete": {
+			"title": "オートコンプリート設定",
+			"provider": "プロバイダー",
+			"apiBase": "ベースURL",
+			"apiKey": "APIキー",
+			"model": "モデル",
+			"enable": "オートコンプリートを有効化"
+		},
+		"other": {
+			"title": "その他の設定",
+			"customInstructions": "カスタム指示",
+			"customInstructionsDesc": "これらの指示は、すべてのリクエストに送信されるシステムプロンプトの末尾に追加されます。",
+			"planActSeparateModels": "計画モードと実行モードで異なるモデルを使用",
+			"planActSeparateModelsDesc": "計画モードと実行モードを切り替えると、前のモードで使用したAPIとモデルが保持されます。これは、例えば、強力な推論モデルを使用して計画を立て、より安価なコーディングモデルで実行する場合に役立ちます。",
+			"advancedSettings": "詳細設定",
+			"debug": "デバッグ",
+			"resetState": "状態をリセット",
+			"resetStateDesc": "これにより、拡張機能内のすべてのグローバル状態とシークレットストレージがリセットされます。"
+		},
+		"feedback": {
+			"text": "ご質問やフィードバックがありましたら、以下のURLでissueを開いてください",
+			"version": "バージョン {{version}}"
+		},
+		"planMode": "計画モード",
+		"actMode": "実行モード",
+		"api": {
+			"provider": "APIプロバイダー",
+			"selectModel": "モデルを選択...",
+			"model": "モデル",
+			"baseUrl": "ベースURL",
+			"apiKey": "APIキー",
+			"modelId": "モデルID",
+			"customBaseUrl": "カスタムベースURLを使用",
+			"customVpcEndpoint": "カスタムVPCエンドポイントを使用",
+			"crossRegionInference": "クロスリージョン推論を使用",
+			"promptCaching": "プロンプトキャッシュを使用",
+			"awsCredentials": "AWS認証情報",
+			"awsProfile": "AWSプロファイル",
+			"awsAccessKey": "AWSアクセスキー",
+			"awsSecretKey": "AWSシークレットキー",
+			"awsSessionToken": "AWSセッショントークン",
+			"awsRegion": "AWSリージョン",
+			"selectRegion": "リージョンを選択...",
+			"gcpProjectId": "Google CloudプロジェクトID",
+			"gcpRegion": "Google Cloudリージョン",
+			"modelConfig": "モデル設定",
+			"supportsImages": "画像をサポート",
+			"supportsComputerUse": "コンピュータ使用をサポート",
+			"enableR1Format": "R1メッセージ形式を有効化",
+			"contextWindowSize": "コンテキストウィンドウサイズ",
+			"maxOutputTokens": "最大出力トークン数",
+			"inputPrice": "入力価格",
+			"outputPrice": "出力価格",
+			"temperature": "温度",
+			"sortProviderRouting": "プロバイダールーティングをソート",
+			"default": "デフォルト",
+			"price": "価格",
+			"throughput": "スループット",
+			"latency": "レイテンシー",
+			"reasoningEffort": "推論の努力度を変更",
+			"low": "低",
+			"high": "高"
+		}
+	},
+	"chat": {
+		"addContext": "コンテキストを追加",
+		"addImages": "画像を追加",
+		"planMode": "計画",
+		"actMode": "実行",
+		"planModeTooltip": "計画モードでは、Codaiは情報を収集して計画を立てます",
+		"actModeTooltip": "実行モードでは、Codaiはすぐにタスクを完了します",
+		"toggleModeHint": "{{metaKey}}+Shift+Aで切り替え",
+		"send": "送信",
+		"placeholder": "メッセージを入力...",
+		"welcome": {
+			"title": "こんにちは、私はCodaiです",
+			"description": "<1>{{claudeLink}}</1>のエージェントコーディング能力のおかげで、さまざまなタスクを処理できます。ファイルの作成と編集、複雑なプロジェクトの探索、ブラウザの使用、ターミナルコマンドの実行（もちろん、あなたの許可が必要です）が可能です。MCPを使用して新しいツールを作成し、自分の能力を拡張することもできます。",
+			"claudeLink": "Claude 3.7 Sonnet",
+			"claudeLinkText": "Claude 3.7 Sonnet",
+			"signupText": "無料で始めるにはアカウントに登録するか、Claude 3.7 SonnetなどのモデルにアクセスできるAPIキーを使用してください。",
+			"getStarted": "無料で始める",
+			"useOwnApiKey": "自分のAPIキーを使用",
+			"letsGo": "始めましょう！"
+		}
+	},
+	"autoApprove": {
+		"title": "自動承認：",
+		"none": "なし",
+		"description": "自動承認により、Codaiは以下のアクションを許可なく実行できます。リスクを理解している場合のみ有効にしてください。",
+		"maxRequests": "最大リクエスト数：",
+		"maxRequestsDesc": "Codaiは、タスクの続行を承認する前に、この数のAPIリクエストを自動的に行います。",
+		"enableNotifications": "通知を有効化",
+		"notificationsDesc": "Codaiが続行の承認を必要とする場合やタスクが完了した場合にシステム通知を受け取ります。",
+		"actions": {
+			"readFiles": {
+				"label": "プロジェクトファイルを読み取り",
+				"shortName": "読み取り（ローカル）",
+				"description": "Codaiがワークスペース内のファイルを読み取ることを許可します。"
+			},
+			"readFilesExternally": {
+				"label": "すべてのファイルを読み取り",
+				"shortName": "読み取り（すべて）",
+				"description": "Codaiがコンピュータ上の任意のファイルを読み取ることを許可します。"
+			},
+			"editFiles": {
+				"label": "プロジェクトファイルを編集",
+				"shortName": "編集",
+				"description": "Codaiがワークスペース内のファイルを変更することを許可します。"
+			},
+			"editFilesExternally": {
+				"label": "すべてのファイルを編集",
+				"shortName": "編集（すべて）",
+				"description": "Codaiがコンピュータ上の任意のファイルを変更することを許可します。"
+			},
+			"executeSafeCommands": {
+				"label": "安全なコマンドを実行",
+				"shortName": "安全なコマンド",
+				"description": "Codaiが安全なターミナルコマンドを実行することを許可します。モデルがコマンドが破壊的であると判断した場合、承認が必要です。"
+			},
+			"executeAllCommands": {
+				"label": "すべてのコマンドを実行",
+				"shortName": "すべてのコマンド",
+				"description": "Codaiがすべてのターミナルコマンドを実行することを許可します。自己責任で使用してください。"
+			},
+			"useBrowser": {
+				"label": "ブラウザを使用",
+				"shortName": "ブラウザ",
+				"description": "Codaiがブラウザで任意のウェブサイトを起動して操作することを許可します。"
+			},
+			"useMcp": {
+				"label": "MCPサーバーを使用",
+				"shortName": "MCP",
+				"description": "Codaiがファイルシステムを変更したりAPIと対話したりする可能性のある設定済みMCPサーバーを使用することを許可します。"
+			}
+		}
+	},
+	"mcp": {
+		"tabs": {
+			"marketplace": "マーケットプレイス",
+			"addRemote": "リモートを追加",
+			"installed": "インストール済み"
+		},
+		"addServer": {
+			"title": "名前とURLエンドポイントを提供してリモートMCPサーバーを追加します。詳細はこちら",
+			"serverName": "サーバー名",
+			"serverNamePlaceholder": "mcp-server",
+			"serverUrl": "サーバーURL",
+			"serverUrlPlaceholder": "https://example.com/mcp-server",
+			"addButton": "サーバーを追加",
+			"addingButton": "追加中...",
+			"connectingMessage": "サーバーに接続中...これには数秒かかる場合があります。",
+			"editConfig": "設定を編集",
+			"errors": {
+				"nameRequired": "サーバー名が必要です",
+				"urlRequired": "サーバーURLが必要です",
+				"invalidUrl": "無効なURL形式です",
+				"failedToAdd": "サーバーの追加に失敗しました"
+			}
+		},
+		"installed": {
+			"description": "モデルコンテキストプロトコル",
+			"modelContextProtocol": "モデルコンテキストプロトコル",
+			"communityMadeServers": "コミュニティ作成のサーバー",
+			"seeDemo": "デモを見る",
+			"configureServers": "MCPサーバーの設定",
+			"advancedSettings": "MCP詳細設定",
+			"nomcpServers": "MCPサーバーがインストールされていません",
+			"useCommunityMadeServers": "Codaiの機能を拡張するための追加ツールやリソースを提供するローカルで実行されるMCPサーバーと通信できます。",
+			"createNewMcpServer": "または、Codaiに新しいツールを作成するよう依頼することもできます（例：「最新のnpmドキュメントを取得するツールを追加してください」）。"
+		},
+		"configuration": {
+			"title": "MCP サーバー",
+			"done": "完了"
+		}
+	},
+	"CodaiRules": {
+		"manageRules": "Codaiルールの管理",
+		"CodaiRules": "Codaiルール",
+		"globalRules": "グローバルルール",
+		"workspaceRules": "ワークスペースルール",
+		"noRulesFound": "ルールが見つかりません",
+		"editRuleFile": "ルールファイルを編集",
+		"deleteRuleFile": "ルールファイルを削除",
+		"newRuleFile": "新しいルールファイル...",
+		"createRuleFile": "ルールファイルを作成",
+		"newRuleFileButton": "新しいルールファイル",
+		"ruleNamePlaceholder": "ルール名 (.md, .txt, または拡張子なし)",
+		"invalidExtension": ".md, .txt, または拡張子なしのみ許可されています"
+	}
+}

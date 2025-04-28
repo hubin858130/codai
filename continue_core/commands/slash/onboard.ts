@@ -1,133 +1,113 @@
-import ignore from "ignore";
+import ignore from "ignore"
 
-import type { FileType, IDE, SlashCommand } from "../..";
-import {
-  DEFAULT_IGNORE,
-  getGlobalContinueIgArray,
-  gitIgArrayFromFile,
-} from "../../indexing/ignore";
-import { renderChatMessage } from "../../util/messageContent";
-import {
-  findUriInDirs,
-  getUriPathBasename,
-  joinPathsToUri,
-} from "../../util/uri";
+import type { FileType, IDE, SlashCommand } from "../.."
+import { DEFAULT_IGNORE, getGlobalContinueIgArray, gitIgArrayFromFile } from "../../indexing/ignore"
+import { renderChatMessage } from "../../util/messageContent"
+import { findUriInDirs, getUriPathBasename, joinPathsToUri } from "../../util/uri"
 
 const LANGUAGE_DEP_MGMT_FILENAMES = [
-  "package.json", // JavaScript (Node.js)
-  "requirements.txt", // Python
-  "Gemfile", // Ruby
-  "pom.xml", // Java (Maven)
-  "build.gradle", // Java (Gradle)
-  "composer.json", // PHP
-  "Cargo.toml", // Rust
-  "go.mod", // Go
-  "packages.config", // C# (.NET)
-  "*.csproj", // C# (.NET Core)
-  "pubspec.yaml", // Dart
-  "Project.toml", // Julia
-  "mix.exs", // Elixir
-  "rebar.config", // Erlang
-  "shard.yml", // Crystal
-  "Package.swift", // Swift
-  "dependencies.gradle", // Kotlin (when using Gradle)
-  "Podfile", // Objective-C/Swift (CocoaPods)
-  "*.cabal", // Haskell
-  "dub.json", // D
-];
+	"package.json", // JavaScript (Node.js)
+	"requirements.txt", // Python
+	"Gemfile", // Ruby
+	"pom.xml", // Java (Maven)
+	"build.gradle", // Java (Gradle)
+	"composer.json", // PHP
+	"Cargo.toml", // Rust
+	"go.mod", // Go
+	"packages.config", // C# (.NET)
+	"*.csproj", // C# (.NET Core)
+	"pubspec.yaml", // Dart
+	"Project.toml", // Julia
+	"mix.exs", // Elixir
+	"rebar.config", // Erlang
+	"shard.yml", // Crystal
+	"Package.swift", // Swift
+	"dependencies.gradle", // Kotlin (when using Gradle)
+	"Podfile", // Objective-C/Swift (CocoaPods)
+	"*.cabal", // Haskell
+	"dub.json", // D
+]
 
-const MAX_EXPLORE_DEPTH = 2;
+const MAX_EXPLORE_DEPTH = 2
 
 const OnboardSlashCommand: SlashCommand = {
-  name: "onboard",
-  description: "Familiarize yourself with the codebase",
-  run: async function* ({ llm, ide }) {
-    const [workspaceDir] = await ide.getWorkspaceDirs();
+	name: "onboard",
+	description: "Familiarize yourself with the codebase",
+	run: async function* ({ llm, ide }) {
+		const [workspaceDir] = await ide.getWorkspaceDirs()
 
-    const context = await gatherProjectContext(workspaceDir, ide);
-    const prompt = createOnboardingPrompt(context);
+		const context = await gatherProjectContext(workspaceDir, ide)
+		const prompt = createOnboardingPrompt(context)
 
-    for await (const chunk of llm.streamChat(
-      [{ role: "user", content: prompt }],
-      new AbortController().signal,
-    )) {
-      yield renderChatMessage(chunk);
-    }
-  },
-};
-
-async function getEntriesFilteredByIgnore(dir: string, ide: IDE) {
-  const ig = ignore().add(DEFAULT_IGNORE).add(getGlobalContinueIgArray());
-  const entries = await ide.listDir(dir);
-
-  const ignoreUri = joinPathsToUri(dir, ".gitignore");
-  const fileExists = await ide.fileExists(ignoreUri);
-
-  if (fileExists) {
-    const gitIgnore = await ide.readFile(ignoreUri);
-    const igPatterns = gitIgArrayFromFile(gitIgnore);
-
-    ig.add(igPatterns);
-  }
-
-  const workspaceDirs = await ide.getWorkspaceDirs();
-
-  const withRelativePaths = entries
-    .filter(
-      (entry) =>
-        entry[1] === (1 as FileType.File) ||
-        entry[1] === (2 as FileType.Directory),
-    )
-    .map((entry) => {
-      const { relativePathOrBasename } = findUriInDirs(entry[0], workspaceDirs);
-      return {
-        uri: entry[0],
-        type: entry[1],
-        basename: getUriPathBasename(entry[0]),
-        relativePath:
-          relativePathOrBasename +
-          (entry[1] === (2 as FileType.Directory) ? "/" : ""),
-      };
-    });
-
-  return withRelativePaths.filter((entry) => !ig.ignores(entry.relativePath));
+		for await (const chunk of llm.streamChat([{ role: "user", content: prompt }], new AbortController().signal)) {
+			yield renderChatMessage(chunk)
+		}
+	},
 }
 
-async function gatherProjectContext(
-  workspaceDir: string,
-  ide: IDE,
-): Promise<string> {
-  let context = "";
-  async function exploreDirectory(dir: string, currentDepth: number = 0) {
-    if (currentDepth > MAX_EXPLORE_DEPTH) {
-      return;
-    }
+async function getEntriesFilteredByIgnore(dir: string, ide: IDE) {
+	const ig = ignore().add(DEFAULT_IGNORE).add(getGlobalContinueIgArray())
+	const entries = await ide.listDir(dir)
 
-    const entries = await getEntriesFilteredByIgnore(dir, ide);
+	const ignoreUri = joinPathsToUri(dir, ".gitignore")
+	const fileExists = await ide.fileExists(ignoreUri)
 
-    for (const entry of entries) {
-      if (entry.type === (2 as FileType.Directory)) {
-        context += `\nFolder: ${entry.relativePath}\n`;
-        await exploreDirectory(entry.uri, currentDepth + 1);
-      } else {
-        if (entry.basename.toLowerCase() === "readme.md") {
-          const content = await ide.readFile(entry.uri);
-          context += `README for ${entry.relativePath}:\n${content}\n\n`;
-        } else if (LANGUAGE_DEP_MGMT_FILENAMES.includes(entry.basename)) {
-          const content = await ide.readFile(entry.uri);
-          context += `${entry.basename} for ${entry.relativePath}:\n${content}\n\n`;
-        }
-      }
-    }
-  }
+	if (fileExists) {
+		const gitIgnore = await ide.readFile(ignoreUri)
+		const igPatterns = gitIgArrayFromFile(gitIgnore)
 
-  await exploreDirectory(workspaceDir);
+		ig.add(igPatterns)
+	}
 
-  return context;
+	const workspaceDirs = await ide.getWorkspaceDirs()
+
+	const withRelativePaths = entries
+		.filter((entry) => entry[1] === (1 as FileType.File) || entry[1] === (2 as FileType.Directory))
+		.map((entry) => {
+			const { relativePathOrBasename } = findUriInDirs(entry[0], workspaceDirs)
+			return {
+				uri: entry[0],
+				type: entry[1],
+				basename: getUriPathBasename(entry[0]),
+				relativePath: relativePathOrBasename + (entry[1] === (2 as FileType.Directory) ? "/" : ""),
+			}
+		})
+
+	return withRelativePaths.filter((entry) => !ig.ignores(entry.relativePath))
+}
+
+async function gatherProjectContext(workspaceDir: string, ide: IDE): Promise<string> {
+	let context = ""
+	async function exploreDirectory(dir: string, currentDepth: number = 0) {
+		if (currentDepth > MAX_EXPLORE_DEPTH) {
+			return
+		}
+
+		const entries = await getEntriesFilteredByIgnore(dir, ide)
+
+		for (const entry of entries) {
+			if (entry.type === (2 as FileType.Directory)) {
+				context += `\nFolder: ${entry.relativePath}\n`
+				await exploreDirectory(entry.uri, currentDepth + 1)
+			} else {
+				if (entry.basename.toLowerCase() === "readme.md") {
+					const content = await ide.readFile(entry.uri)
+					context += `README for ${entry.relativePath}:\n${content}\n\n`
+				} else if (LANGUAGE_DEP_MGMT_FILENAMES.includes(entry.basename)) {
+					const content = await ide.readFile(entry.uri)
+					context += `${entry.basename} for ${entry.relativePath}:\n${content}\n\n`
+				}
+			}
+		}
+	}
+
+	await exploreDirectory(workspaceDir)
+
+	return context
 }
 
 function createOnboardingPrompt(context: string): string {
-  return `
+	return `
     As a helpful AI assistant, your task is to onboard a new developer to this project.
     Use the following context about the project structure, READMEs, and dependency files to create a comprehensive overview:
 
@@ -163,7 +143,7 @@ function createOnboardingPrompt(context: string): string {
     ## Additional Insights
     - The project is using a monorepo structure.
     - The project uses TypeScript for type checking.
-  `;
+  `
 }
 
-export default OnboardSlashCommand;
+export default OnboardSlashCommand

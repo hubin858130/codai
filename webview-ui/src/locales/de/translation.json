@@ -1,180 +1,197 @@
 {
-  "settings": {
-    "title": "Einstellungen",
-    "done": "Fertig",
-    "language": {
-      "title": "Spracheinstellungen"
-    },
-    "autocomplete": {
-      "title": "Autovervollständigungseinstellungen",
-      "provider": "Anbieter",
-      "apiBase": "Basis-URL",
-      "apiKey": "API-Schlüssel",
-      "model": "Modell",
-      "enable": "Autovervollständigung aktivieren"
-    },
-    "other": {
-      "title": "Weitere Einstellungen",
-      "customInstructions": "Benutzerdefinierte Anweisungen",
-      "customInstructionsDesc": "Diese Anweisungen werden am Ende des Systemprompts hinzugefügt, der mit jeder Anfrage gesendet wird.",
-      "planActSeparateModels": "Verschiedene Modelle für Plan- und Aktionsmodus verwenden",
-      "planActSeparateModelsDesc": "Beim Wechsel zwischen Plan- und Aktionsmodus bleiben die API und das Modell des vorherigen Modus erhalten. Dies kann nützlich sein, wenn Sie beispielsweise ein leistungsstarkes Modell für die Planung und ein kostengünstigeres Modell für die Ausführung verwenden.",
-      "advancedSettings": "Erweiterte Einstellungen",
-      "debug": "Debuggen",
-      "resetState": "Status zurücksetzen",
-      "resetStateDesc": "Dadurch werden alle globalen Zustände und geheimen Speicher in der Erweiterung zurückgesetzt."
-    },
-    "feedback": {
-      "text": "Wenn Sie Fragen oder Feedback haben, öffnen Sie bitte ein Issue unter",
-      "version": "Version {{version}}"
-    },
-    "planMode": "Planmodus",
-    "actMode": "Aktionsmodus",
-    "api": {
-      "provider": "API-Anbieter",
-      "selectModel": "Modell auswählen...",
-      "model": "Modell",
-      "baseUrl": "Basis-URL",
-      "apiKey": "API-Schlüssel",
-      "modelId": "Modell-ID",
-      "customBaseUrl": "Benutzerdefinierte Basis-URL verwenden",
-      "customVpcEndpoint": "Benutzerdefinierten VPC-Endpunkt verwenden",
-      "crossRegionInference": "Regionsübergreifende Inferenz verwenden",
-      "promptCaching": "Prompt-Caching verwenden",
-      "awsCredentials": "AWS-Anmeldeinformationen",
-      "awsProfile": "AWS-Profil",
-      "awsAccessKey": "AWS-Zugriffsschlüssel",
-      "awsSecretKey": "AWS-Geheimschlüssel",
-      "awsSessionToken": "AWS-Sitzungstoken",
-      "awsRegion": "AWS-Region",
-      "selectRegion": "Region auswählen...",
-      "gcpProjectId": "Google Cloud-Projekt-ID",
-      "gcpRegion": "Google Cloud-Region",
-      "modelConfig": "Modellkonfiguration",
-      "supportsImages": "Unterstützt Bilder",
-      "supportsComputerUse": "Unterstützt Computerverwendung",
-      "enableR1Format": "R1-Nachrichtenformat aktivieren",
-      "contextWindowSize": "Kontextfenstergröße",
-      "maxOutputTokens": "Maximale Ausgabetokens",
-      "inputPrice": "Eingabepreis",
-      "outputPrice": "Ausgabepreis",
-      "temperature": "Temperatur",
-      "sortProviderRouting": "Anbieter-Routing sortieren",
-      "default": "Standard",
-      "price": "Preis",
-      "throughput": "Durchsatz",
-      "latency": "Latenz",
-      "reasoningEffort": "Argumentationsaufwand ändern",
-      "low": "niedrig",
-      "high": "hoch"
-    }
-  },
-  "chat": {
-    "addContext": "Kontext hinzufügen",
-    "addImages": "Bilder hinzufügen",
-    "planMode": "Plan",
-    "actMode": "Aktion",
-    "planModeTooltip": "Im Planmodus sammelt Codai Informationen, um einen Plan zu erstellen",
-    "actModeTooltip": "Im Aktionsmodus führt Codai die Aufgabe sofort aus",
-    "toggleModeHint": "Mit {{metaKey}}+Shift+A umschalten",
-    "send": "Senden",
-    "placeholder": "Nachricht eingeben...",
-    "welcome": {
-      "title": "Hallo, ich bin Codai",
-      "description": "Dank der agentenbasierten Codierfähigkeiten von <1>{{claudeLink}}</1> kann ich verschiedene Aufgaben ausführen. Ich kann Dateien erstellen und bearbeiten, komplexe Projekte erkunden, einen Browser verwenden und Terminalbefehle ausführen (natürlich mit Ihrer Erlaubnis). Ich kann sogar MCP verwenden, um neue Tools zu erstellen und meine eigenen Fähigkeiten zu erweitern.",
-      "claudeLink": "Claude 3.7 Sonnet",
-      "claudeLinkText": "Claude 3.7 Sonnet",
-      "signupText": "Registrieren Sie sich für ein Konto, um kostenlos zu beginnen, oder verwenden Sie einen API-Schlüssel, der Zugriff auf Modelle wie Claude 3.7 Sonnet bietet.",
-      "getStarted": "Kostenlos beginnen",
-      "useOwnApiKey": "Eigenen API-Schlüssel verwenden",
-      "letsGo": "Los geht's!"
-    }
-  },
-  "autoApprove": {
-    "title": "Automatische Genehmigung:",
-    "none": "Keine",
-    "description": "Die automatische Genehmigung ermöglicht es Codai, die folgenden Aktionen ohne Erlaubnis auszuführen. Bitte verwenden Sie dies mit Vorsicht und aktivieren Sie es nur, wenn Sie die Risiken verstehen.",
-    "maxRequests": "Maximale Anfragen:",
-    "maxRequestsDesc": "Codai führt automatisch diese Anzahl von API-Anfragen aus, bevor er eine Genehmigung zur Fortsetzung der Aufgabe anfordert.",
-    "enableNotifications": "Benachrichtigungen aktivieren",
-    "notificationsDesc": "Erhalten Sie Systembenachrichtigungen, wenn Codai eine Genehmigung zur Fortsetzung benötigt oder wenn eine Aufgabe abgeschlossen ist.",
-    "actions": {
-      "readFiles": {
-        "label": "Projektdateien lesen",
-        "shortName": "Lesen (lokal)",
-        "description": "Ermöglicht Codai, Dateien in Ihrem Arbeitsbereich zu lesen."
-      },
-      "readFilesExternally": {
-        "label": "Alle Dateien lesen",
-        "shortName": "Lesen (alle)",
-        "description": "Ermöglicht Codai, beliebige Dateien auf Ihrem Computer zu lesen."
-      },
-      "editFiles": {
-        "label": "Projektdateien bearbeiten",
-        "shortName": "Bearbeiten",
-        "description": "Ermöglicht Codai, Dateien in Ihrem Arbeitsbereich zu ändern."
-      },
-      "editFilesExternally": {
-        "label": "Alle Dateien bearbeiten",
-        "shortName": "Bearbeiten (alle)",
-        "description": "Ermöglicht Codai, beliebige Dateien auf Ihrem Computer zu ändern."
-      },
-      "executeSafeCommands": {
-        "label": "Sichere Befehle ausführen",
-        "shortName": "Sichere Befehle",
-        "description": "Ermöglicht Codai, sichere Terminalbefehle auszuführen. Wenn das Modell feststellt, dass ein Befehl potenziell zerstörerisch sein könnte, wird es weiterhin eine Genehmigung anfordern."
-      },
-      "executeAllCommands": {
-        "label": "Alle Befehle ausführen",
-        "shortName": "Alle Befehle",
-        "description": "Ermöglicht Codai, alle Terminalbefehle auszuführen. Verwendung auf eigene Gefahr."
-      },
-      "useBrowser": {
-        "label": "Browser verwenden",
-        "shortName": "Browser",
-        "description": "Ermöglicht Codai, beliebige Websites in einem Browser zu starten und mit ihnen zu interagieren."
-      },
-      "useMcp": {
-        "label": "MCP-Server verwenden",
-        "shortName": "MCP",
-        "description": "Ermöglicht Codai, konfigurierte MCP-Server zu verwenden, die das Dateisystem ändern oder mit APIs interagieren können."
-      }
-    }
-  },
-  "mcp": {
-    "tabs": {
-      "marketplace": "Marktplatz",
-      "addRemote": "Remote hinzufügen",
-      "installed": "Installiert"
-    },
-    "addServer": {
-      "title": "Fügen Sie einen Remote-MCP-Server hinzu, indem Sie einen Namen und seine Endpunkt-URL angeben. Mehr erfahren",
-      "serverName": "Servername",
-      "serverNamePlaceholder": "mcp-server",
-      "serverUrl": "Server-URL",
-      "serverUrlPlaceholder": "https://example.com/mcp-server",
-      "addButton": "Server hinzufügen",
-      "addingButton": "Wird hinzugefügt...",
-      "connectingMessage": "Verbindung zum Server wird hergestellt... Dies kann einige Sekunden dauern.",
-      "editConfig": "Konfiguration bearbeiten",
-      "errors": {
-        "nameRequired": "Servername erforderlich",
-        "urlRequired": "Server-URL erforderlich",
-        "invalidUrl": "Ungültiges URL-Format",
-        "failedToAdd": "Server konnte nicht hinzugefügt werden"
-      }
-    },
-    "installed": {
-      "description": "Das Model Context Protocol ermöglicht die Kommunikation mit lokal ausgeführten MCP-Servern, die zusätzliche Tools und Ressourcen bereitstellen, um die Fähigkeiten von Codai zu erweitern. Sie können Community-erstellte Server verwenden oder Codai bitten, neue Tools zu erstellen, die auf Ihren Workflow zugeschnitten sind (z.B. \"Fügen Sie ein Tool hinzu, das die neueste npm-Dokumentation abruft\").",
-      "modelContextProtocol": "Model Context Protocol",
-      "communityMadeServers": "Community-erstellte Server",
-      "seeDemo": "Hier eine Demo ansehen.",
-      "configureServers": "MCP-Server konfigurieren",
-      "advancedSettings": "Erweiterte MCP-Einstellungen"
-    },
-    "configuration": {
-      "title": "MCP-Server",
-      "done": "Fertig"
-    }
-  }
-} 
+	"settings": {
+		"title": "Einstellungen",
+		"done": "Fertig",
+		"language": {
+			"title": "Spracheinstellungen"
+		},
+		"autocomplete": {
+			"title": "Autovervollständigungseinstellungen",
+			"provider": "Anbieter",
+			"apiBase": "Basis-URL",
+			"apiKey": "API-Schlüssel",
+			"model": "Modell",
+			"enable": "Autovervollständigung aktivieren"
+		},
+		"other": {
+			"title": "Weitere Einstellungen",
+			"customInstructions": "Benutzerdefinierte Anweisungen",
+			"customInstructionsDesc": "Diese Anweisungen werden am Ende des Systemprompts hinzugefügt, der mit jeder Anfrage gesendet wird.",
+			"planActSeparateModels": "Verschiedene Modelle für Plan- und Aktionsmodus verwenden",
+			"planActSeparateModelsDesc": "Beim Wechsel zwischen Plan- und Aktionsmodus bleiben die API und das Modell des vorherigen Modus erhalten. Dies kann nützlich sein, wenn Sie beispielsweise ein leistungsstarkes Modell für die Planung und ein kostengünstigeres Modell für die Ausführung verwenden.",
+			"advancedSettings": "Erweiterte Einstellungen",
+			"debug": "Debuggen",
+			"resetState": "Status zurücksetzen",
+			"resetStateDesc": "Dadurch werden alle globalen Zustände und geheimen Speicher in der Erweiterung zurückgesetzt."
+		},
+		"feedback": {
+			"text": "Wenn Sie Fragen oder Feedback haben, öffnen Sie bitte ein Issue unter",
+			"version": "Version {{version}}"
+		},
+		"planMode": "Planmodus",
+		"actMode": "Aktionsmodus",
+		"api": {
+			"provider": "API-Anbieter",
+			"selectModel": "Modell auswählen...",
+			"model": "Modell",
+			"baseUrl": "Basis-URL",
+			"apiKey": "API-Schlüssel",
+			"modelId": "Modell-ID",
+			"customBaseUrl": "Benutzerdefinierte Basis-URL verwenden",
+			"customVpcEndpoint": "Benutzerdefinierten VPC-Endpunkt verwenden",
+			"crossRegionInference": "Regionsübergreifende Inferenz verwenden",
+			"promptCaching": "Prompt-Caching verwenden",
+			"awsCredentials": "AWS-Anmeldeinformationen",
+			"awsProfile": "AWS-Profil",
+			"awsAccessKey": "AWS-Zugriffsschlüssel",
+			"awsSecretKey": "AWS-Geheimschlüssel",
+			"awsSessionToken": "AWS-Sitzungstoken",
+			"awsRegion": "AWS-Region",
+			"selectRegion": "Region auswählen...",
+			"gcpProjectId": "Google Cloud-Projekt-ID",
+			"gcpRegion": "Google Cloud-Region",
+			"modelConfig": "Modellkonfiguration",
+			"supportsImages": "Unterstützt Bilder",
+			"supportsComputerUse": "Unterstützt Computerverwendung",
+			"enableR1Format": "R1-Nachrichtenformat aktivieren",
+			"contextWindowSize": "Kontextfenstergröße",
+			"maxOutputTokens": "Maximale Ausgabetokens",
+			"inputPrice": "Eingabepreis",
+			"outputPrice": "Ausgabepreis",
+			"temperature": "Temperatur",
+			"sortProviderRouting": "Anbieter-Routing sortieren",
+			"default": "Standard",
+			"price": "Preis",
+			"throughput": "Durchsatz",
+			"latency": "Latenz",
+			"reasoningEffort": "Argumentationsaufwand ändern",
+			"low": "niedrig",
+			"high": "hoch"
+		}
+	},
+	"chat": {
+		"addContext": "Kontext hinzufügen",
+		"addImages": "Bilder hinzufügen",
+		"planMode": "Plan",
+		"actMode": "Aktion",
+		"planModeTooltip": "Im Planmodus sammelt Codai Informationen, um einen Plan zu erstellen",
+		"actModeTooltip": "Im Aktionsmodus führt Codai die Aufgabe sofort aus",
+		"toggleModeHint": "Mit {{metaKey}}+Shift+A umschalten",
+		"send": "Senden",
+		"placeholder": "Nachricht eingeben...",
+		"welcome": {
+			"title": "Hallo, ich bin Codai",
+			"description": "Dank der agentenbasierten Codierfähigkeiten von <1>{{claudeLink}}</1> kann ich verschiedene Aufgaben ausführen. Ich kann Dateien erstellen und bearbeiten, komplexe Projekte erkunden, einen Browser verwenden und Terminalbefehle ausführen (natürlich mit Ihrer Erlaubnis). Ich kann sogar MCP verwenden, um neue Tools zu erstellen und meine eigenen Fähigkeiten zu erweitern.",
+			"claudeLink": "Claude 3.7 Sonnet",
+			"claudeLinkText": "Claude 3.7 Sonnet",
+			"signupText": "Registrieren Sie sich für ein Konto, um kostenlos zu beginnen, oder verwenden Sie einen API-Schlüssel, der Zugriff auf Modelle wie Claude 3.7 Sonnet bietet.",
+			"getStarted": "Kostenlos beginnen",
+			"useOwnApiKey": "Eigenen API-Schlüssel verwenden",
+			"letsGo": "Los geht's!"
+		}
+	},
+	"autoApprove": {
+		"title": "Automatische Genehmigung:",
+		"none": "Keine",
+		"description": "Die automatische Genehmigung ermöglicht es Codai, die folgenden Aktionen ohne Erlaubnis auszuführen. Bitte verwenden Sie dies mit Vorsicht und aktivieren Sie es nur, wenn Sie die Risiken verstehen.",
+		"maxRequests": "Maximale Anfragen:",
+		"maxRequestsDesc": "Codai führt automatisch diese Anzahl von API-Anfragen aus, bevor er eine Genehmigung zur Fortsetzung der Aufgabe anfordert.",
+		"enableNotifications": "Benachrichtigungen aktivieren",
+		"notificationsDesc": "Erhalten Sie Systembenachrichtigungen, wenn Codai eine Genehmigung zur Fortsetzung benötigt oder wenn eine Aufgabe abgeschlossen ist.",
+		"actions": {
+			"readFiles": {
+				"label": "Projektdateien lesen",
+				"shortName": "Lesen (lokal)",
+				"description": "Ermöglicht Codai, Dateien in Ihrem Arbeitsbereich zu lesen."
+			},
+			"readFilesExternally": {
+				"label": "Alle Dateien lesen",
+				"shortName": "Lesen (alle)",
+				"description": "Ermöglicht Codai, beliebige Dateien auf Ihrem Computer zu lesen."
+			},
+			"editFiles": {
+				"label": "Projektdateien bearbeiten",
+				"shortName": "Bearbeiten",
+				"description": "Ermöglicht Codai, Dateien in Ihrem Arbeitsbereich zu ändern."
+			},
+			"editFilesExternally": {
+				"label": "Alle Dateien bearbeiten",
+				"shortName": "Bearbeiten (alle)",
+				"description": "Ermöglicht Codai, beliebige Dateien auf Ihrem Computer zu ändern."
+			},
+			"executeSafeCommands": {
+				"label": "Sichere Befehle ausführen",
+				"shortName": "Sichere Befehle",
+				"description": "Ermöglicht Codai, sichere Terminalbefehle auszuführen. Wenn das Modell feststellt, dass ein Befehl potenziell zerstörerisch sein könnte, wird es weiterhin eine Genehmigung anfordern."
+			},
+			"executeAllCommands": {
+				"label": "Alle Befehle ausführen",
+				"shortName": "Alle Befehle",
+				"description": "Ermöglicht Codai, alle Terminalbefehle auszuführen. Verwendung auf eigene Gefahr."
+			},
+			"useBrowser": {
+				"label": "Browser verwenden",
+				"shortName": "Browser",
+				"description": "Ermöglicht Codai, beliebige Websites in einem Browser zu starten und mit ihnen zu interagieren."
+			},
+			"useMcp": {
+				"label": "MCP-Server verwenden",
+				"shortName": "MCP",
+				"description": "Ermöglicht Codai, konfigurierte MCP-Server zu verwenden, die das Dateisystem ändern oder mit APIs interagieren können."
+			}
+		}
+	},
+	"mcp": {
+		"tabs": {
+			"marketplace": "Marktplatz",
+			"addRemote": "Remote hinzufügen",
+			"installed": "Installiert"
+		},
+		"addServer": {
+			"title": "Fügen Sie einen Remote-MCP-Server hinzu, indem Sie einen Namen und seine Endpunkt-URL angeben. Mehr erfahren",
+			"serverName": "Servername",
+			"serverNamePlaceholder": "mcp-server",
+			"serverUrl": "Server-URL",
+			"serverUrlPlaceholder": "https://example.com/mcp-server",
+			"addButton": "Server hinzufügen",
+			"addingButton": "Wird hinzugefügt...",
+			"connectingMessage": "Verbindung zum Server wird hergestellt... Dies kann einige Sekunden dauern.",
+			"editConfig": "Konfiguration bearbeiten",
+			"errors": {
+				"nameRequired": "Servername erforderlich",
+				"urlRequired": "Server-URL erforderlich",
+				"invalidUrl": "Ungültiges URL-Format",
+				"failedToAdd": "Server konnte nicht hinzugefügt werden"
+			}
+		},
+		"installed": {
+			"description": "Modell-Kontext-Protokoll",
+			"modelContextProtocol": "Modell-Kontext-Protokoll",
+			"communityMadeServers": "Community-erstellte Server",
+			"seeDemo": "Demo hier ansehen",
+			"configureServers": "MCP-Server konfigurieren",
+			"advancedSettings": "Erweiterte MCP-Einstellungen",
+			"nomcpServers": "Keine MCP-Server installiert",
+			"useCommunityMadeServers": "Ermöglicht die Kommunikation mit lokal laufenden MCP-Servern, die zusätzliche Tools und Ressourcen zur Erweiterung der Codai-Funktionalität bereitstellen.",
+			"createNewMcpServer": "Oder Sie können Codai bitten, neue Tools für Ihren Workflow zu erstellen (z.B. \"Füge ein Tool hinzu, das die neueste npm-Dokumentation abruft\")."
+		},
+		"configuration": {
+			"title": "MCP-Server",
+			"done": "Fertig"
+		}
+	},
+	"CodaiRules": {
+		"manageRules": "Codai-Regeln verwalten",
+		"CodaiRules": "Codai-Regeln",
+		"globalRules": "Globale Regeln",
+		"workspaceRules": "Arbeitsbereichsregeln",
+		"noRulesFound": "Keine Regeln gefunden",
+		"editRuleFile": "Regeldatei bearbeiten",
+		"deleteRuleFile": "Regeldatei löschen",
+		"newRuleFile": "Neue Regeldatei...",
+		"createRuleFile": "Regeldatei erstellen",
+		"newRuleFileButton": "Neue Regeldatei",
+		"ruleNamePlaceholder": "Regelname (.md, .txt oder ohne Erweiterung)",
+		"invalidExtension": "Nur .md, .txt oder keine Dateierweiterung erlaubt"
+	}
+}

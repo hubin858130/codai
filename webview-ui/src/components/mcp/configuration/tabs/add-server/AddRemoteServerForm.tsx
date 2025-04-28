@@ -37,7 +37,7 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 				} else {
 					// Handle error
 					setIsSubmitting(false)
-					setError(message.addRemoteServerResult.error || t('mcp.addServer.errors.failedToAdd'))
+					setError(message.addRemoteServerResult.error || t("mcp.addServer.errors.failedToAdd"))
 					setShowConnectingMessage(false)
 				}
 			}
@@ -51,19 +51,19 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 		e.preventDefault()
 
 		if (!serverName.trim()) {
-			setError(t('mcp.addServer.errors.nameRequired'))
+			setError(t("mcp.addServer.errors.nameRequired"))
 			return
 		}
 
 		if (!serverUrl.trim()) {
-			setError(t('mcp.addServer.errors.urlRequired'))
+			setError(t("mcp.addServer.errors.urlRequired"))
 			return
 		}
 
 		try {
 			new URL(serverUrl)
 		} catch (err) {
-			setError(t('mcp.addServer.errors.invalidUrl'))
+			setError(t("mcp.addServer.errors.invalidUrl"))
 			return
 		}
 
@@ -83,9 +83,9 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 	return (
 		<div className="p-4 px-5">
 			<div className="text-[var(--vscode-foreground)] mb-2">
-				{t('mcp.addServer.title')}{" "}
+				{t("mcp.addServer.title")}{" "}
 				<VSCodeLink href={LINKS.DOCUMENTATION.REMOTE_MCP_SERVER_DOCS} style={{ display: "inline" }}>
-					{t('mcp.addServer.here')}
+					{t("mcp.addServer.here")}
 				</VSCodeLink>
 			</div>
 
@@ -99,8 +99,8 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 						}}
 						disabled={isSubmitting}
 						className="w-full"
-						placeholder={t('mcp.addServer.serverNamePlaceholder')}>
-						{t('mcp.addServer.serverName')}
+						placeholder={t("mcp.addServer.serverNamePlaceholder")}>
+						{t("mcp.addServer.serverName")}
 					</VSCodeTextField>
 				</div>
 
@@ -112,9 +112,9 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 							setError("")
 						}}
 						disabled={isSubmitting}
-						placeholder={t('mcp.addServer.serverUrlPlaceholder')}
+						placeholder={t("mcp.addServer.serverUrlPlaceholder")}
 						className="w-full mr-4">
-						{t('mcp.addServer.serverUrl')}
+						{t("mcp.addServer.serverUrl")}
 					</VSCodeTextField>
 				</div>
 
@@ -122,12 +122,12 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 
 				<div className="flex items-center mt-3 w-full">
 					<VSCodeButton type="submit" disabled={isSubmitting} className="w-full">
-						{isSubmitting ? t('mcp.addServer.addingButton') : t('mcp.addServer.addButton')}
+						{isSubmitting ? t("mcp.addServer.addingButton") : t("mcp.addServer.addButton")}
 					</VSCodeButton>
 
 					{showConnectingMessage && (
 						<div className="ml-3 text-[var(--vscode-notificationsInfoIcon-foreground)] text-sm">
-							{t('mcp.addServer.connectingMessage')}
+							{t("mcp.addServer.connectingMessage")}
 						</div>
 					)}
 				</div>
@@ -138,7 +138,7 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 					onClick={() => {
 						vscode.postMessage({ type: "openMcpSettings" })
 					}}>
-					{t('mcp.addServer.editConfig')}
+					{t("mcp.addServer.editConfig")}
 				</VSCodeButton>
 			</form>
 		</div>
