@@ -15,6 +15,15 @@ import {
 	shouldShowContextMenu,
 	SearchResult,
 } from "@/utils/context-mentions"
+import {
+	SlashCommand,
+	slashCommandDeleteRegex,
+	shouldShowSlashCommandsMenu,
+	getMatchingSlashCommands,
+	insertSlashCommand,
+	removeSlashCommand,
+	validateSlashCommand,
+} from "@/utils/slash-commands"
 import { useMetaKeyDetection, useShortcut } from "@/utils/hooks"
 import { validateApiConfiguration, validateModelId } from "@/utils/validate"
 import { vscode } from "@/utils/vscode"
@@ -24,8 +33,10 @@ import Tooltip from "@/components/common/Tooltip"
 import ApiOptions, { normalizeApiConfiguration } from "@/components/settings/ApiOptions"
 import { MAX_IMAGES_PER_MESSAGE } from "@/components/chat/ChatView"
 import ContextMenu from "@/components/chat/ContextMenu"
+import SlashCommandMenu from "@/components/chat/SlashCommandMenu"
 import { ChatSettings } from "@shared/ChatSettings"
 import ServersToggleModal from "./ServersToggleModal"
+import ClineRulesToggleModal from "../cline-rules/ClineRulesToggleModal"
 import { useTranslation } from "react-i18next"
 
 interface ChatTextAreaProps {
@@ -230,6 +241,11 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		const [isTextAreaFocused, setIsTextAreaFocused] = useState(false)
 		const [gitCommits, setGitCommits] = useState<GitCommit[]>([])
 
+		const [showSlashCommandsMenu, setShowSlashCommandsMenu] = useState(false)
+		const [selectedSlashCommandsIndex, setSelectedSlashCommandsIndex] = useState(0)
+		const [slashCommandsQuery, setSlashCommandsQuery] = useState("")
+		const slashCommandsMenuContainerRef = useRef<HTMLDivElement>(null)
+
 		const [thumbnailsHeight, setThumbnailsHeight] = useState(0)
 		const [textAreaBaseHeight, setTextAreaBaseHeight] = useState<number | undefined>(undefined)
 		const [showContextMenu, setShowContextMenu] = useState(false)
@@ -241,6 +257,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		const [selectedMenuIndex, setSelectedMenuIndex] = useState(-1)
 		const [selectedType, setSelectedType] = useState<ContextMenuOptionType | null>(null)
 		const [justDeletedSpaceAfterMention, setJustDeletedSpaceAfterMention] = useState(false)
+		const [justDeletedSpaceAfterSlashCommand, setJustDeletedSpaceAfterSlashCommand] = useState(false)
 		const [intendedCursorPosition, setIntendedCursorPosition] = useState<number | null>(null)
 		const contextMenuContainerRef = useRef<HTMLDivElement>(null)
 		const [showModelSelector, setShowModelSelector] = useState(false)
@@ -390,8 +407,62 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			[setInputValue, cursorPosition],
 		)
 
+		const handleSlashCommandsSelect = useCallback(
+			(command: SlashCommand) => {
+				setShowSlashCommandsMenu(false)
+
+				if (textAreaRef.current) {
+					const { newValue, commandIndex } = insertSlashCommand(textAreaRef.current.value, command.name)
+					const newCursorPosition = newValue.indexOf(" ", commandIndex + 1 + command.name.length) + 1
+
+					setInputValue(newValue)
+					setCursorPosition(newCursorPosition)
+					setIntendedCursorPosition(newCursorPosition)
+
+					setTimeout(() => {
+						if (textAreaRef.current) {
+							textAreaRef.current.blur()
+							textAreaRef.current.focus()
+						}
+					}, 0)
+				}
+			},
+			[setInputValue],
+		)
+
 		const handleKeyDown = useCallback(
 			(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+				if (showSlashCommandsMenu) {
+					if (event.key === "Escape") {
+						setShowSlashCommandsMenu(false)
+						return
+					}
+
+					if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+						event.preventDefault()
+						setSelectedSlashCommandsIndex((prevIndex) => {
+							const direction = event.key === "ArrowUp" ? -1 : 1
+							const commands = getMatchingSlashCommands(slashCommandsQuery)
+
+							if (commands.length === 0) {
+								return prevIndex
+							}
+
+							const newIndex = (prevIndex + direction + commands.length) % commands.length
+							return newIndex
+						})
+						return
+					}
+
+					if ((event.key === "Enter" || event.key === "Tab") && selectedSlashCommandsIndex !== -1) {
+						event.preventDefault()
+						const commands = getMatchingSlashCommands(slashCommandsQuery)
+						if (commands.length > 0) {
+							handleSlashCommandsSelect(commands[selectedSlashCommandsIndex])
+						}
+						return
+					}
+				}
 				if (showContextMenu) {
 					if (event.key === "Escape") {
 						// event.preventDefault()
@@ -459,13 +530,14 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						charBeforeCursor === " " || charBeforeCursor === "\n" || charBeforeCursor === "\r\n"
 					const charAfterIsWhitespace =
 						charAfterCursor === " " || charAfterCursor === "\n" || charAfterCursor === "\r\n"
-					// checks if char before cursor is whitespace after a mention
+
+					// Check if we're right after a space that follows a mention or slash command
 					if (
 						charBeforeIsWhitespace &&
-						inputValue.slice(0, cursorPosition - 1).match(new RegExp(mentionRegex.source + "$")) // "$" is added to ensure the match occurs at the end of the string
+						inputValue.slice(0, cursorPosition - 1).match(new RegExp(mentionRegex.source + "$"))
 					) {
+						// File mention handling
 						const newCursorPosition = cursorPosition - 1
-						// if mention is followed by another word, then instead of deleting the space separating them we just move the cursor to the end of the mention
 						if (!charAfterIsWhitespace) {
 							event.preventDefault()
 							textAreaRef.current?.setSelectionRange(newCursorPosition, newCursorPosition)
@@ -473,17 +545,44 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						}
 						setCursorPosition(newCursorPosition)
 						setJustDeletedSpaceAfterMention(true)
-					} else if (justDeletedSpaceAfterMention) {
+						setJustDeletedSpaceAfterSlashCommand(false)
+					} else if (charBeforeIsWhitespace && inputValue.slice(0, cursorPosition - 1).match(slashCommandDeleteRegex)) {
+						// New slash command handling
+						const newCursorPosition = cursorPosition - 1
+						if (!charAfterIsWhitespace) {
+							event.preventDefault()
+							textAreaRef.current?.setSelectionRange(newCursorPosition, newCursorPosition)
+							setCursorPosition(newCursorPosition)
+						}
+						setCursorPosition(newCursorPosition)
+						setJustDeletedSpaceAfterSlashCommand(true)
+						setJustDeletedSpaceAfterMention(false)
+					}
+					// Handle the second backspace press for mentions or slash commands
+					else if (justDeletedSpaceAfterMention) {
 						const { newText, newPosition } = removeMention(inputValue, cursorPosition)
 						if (newText !== inputValue) {
 							event.preventDefault()
 							setInputValue(newText)
-							setIntendedCursorPosition(newPosition) // Store the new cursor position in state
+							setIntendedCursorPosition(newPosition)
 						}
 						setJustDeletedSpaceAfterMention(false)
 						setShowContextMenu(false)
-					} else {
+					} else if (justDeletedSpaceAfterSlashCommand) {
+						// New slash command deletion
+						const { newText, newPosition } = removeSlashCommand(inputValue, cursorPosition)
+						if (newText !== inputValue) {
+							event.preventDefault()
+							setInputValue(newText)
+							setIntendedCursorPosition(newPosition)
+						}
+						setJustDeletedSpaceAfterSlashCommand(false)
+						setShowSlashCommandsMenu(false)
+					}
+					// Default case - reset flags if none of the above apply
+					else {
 						setJustDeletedSpaceAfterMention(false)
+						setJustDeletedSpaceAfterSlashCommand(false)
 					}
 				}
 			},
@@ -500,6 +599,10 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 				justDeletedSpaceAfterMention,
 				queryItems,
 				fileSearchResults,
+				showSlashCommandsMenu,
+				selectedSlashCommandsIndex,
+				slashCommandsQuery,
+				handleSlashCommandsSelect,
 			],
 		)
 
@@ -543,9 +646,28 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 				const newCursorPosition = e.target.selectionStart
 				setInputValue(newValue)
 				setCursorPosition(newCursorPosition)
-				const showMenu = shouldShowContextMenu(newValue, newCursorPosition)
+				let showMenu = shouldShowContextMenu(newValue, newCursorPosition)
+				const showSlashCommandsMenu = shouldShowSlashCommandsMenu(newValue, newCursorPosition)
 
+				// we do not allow both menus to be shown at the same time
+				// the slash commands menu has precedence bc its a narrower component
+				if (showSlashCommandsMenu) {
+					showMenu = false
+				}
+
+				setShowSlashCommandsMenu(showSlashCommandsMenu)
 				setShowContextMenu(showMenu)
+
+				if (showSlashCommandsMenu) {
+					const slashIndex = newValue.indexOf("/")
+					const query = newValue.slice(slashIndex + 1, newCursorPosition)
+					setSlashCommandsQuery(query)
+					setSelectedSlashCommandsIndex(0)
+				} else {
+					setSlashCommandsQuery("")
+					setSelectedSlashCommandsIndex(0)
+				}
+
 				if (showMenu) {
 					const lastAtIndex = newValue.lastIndexOf("@", newCursorPosition - 1)
 					const query = newValue.slice(lastAtIndex + 1, newCursorPosition)
@@ -592,6 +714,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			// Only hide the context menu if the user didn't click on it
 			if (!isMouseDownOnMenu) {
 				setShowContextMenu(false)
+				setShowSlashCommandsMenu(false)
 			}
 			setIsTextAreaFocused(false)
 		}, [isMouseDownOnMenu])
@@ -683,13 +806,35 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		const updateHighlights = useCallback(() => {
 			if (!textAreaRef.current || !highlightLayerRef.current) return
 
-			const text = textAreaRef.current.value
+			let processedText = textAreaRef.current.value
 
-			highlightLayerRef.current.innerHTML = text
+			processedText = processedText
 				.replace(/\n$/, "\n\n")
 				.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c] || c)
+				// highlight @mentions
 				.replace(mentionRegexGlobal, '<mark class="mention-context-textarea-highlight">$&</mark>')
 
+			// check for highlighting /slash-commands
+			if (/^\s*\//.test(processedText)) {
+				const slashIndex = processedText.indexOf("/")
+
+				// end of command is end of text or first whitespace
+				const spaceIndex = processedText.indexOf(" ", slashIndex)
+				const endIndex = spaceIndex > -1 ? spaceIndex : processedText.length
+
+				// extract and validate the exact command text
+				const commandText = processedText.substring(slashIndex + 1, endIndex)
+				const isValidCommand = validateSlashCommand(commandText)
+
+				if (isValidCommand) {
+					const fullCommand = processedText.substring(slashIndex, endIndex) // includes slash
+
+					const highlighted = `<mark class="mention-context-textarea-highlight">${fullCommand}</mark>`
+					processedText = processedText.substring(0, slashIndex) + highlighted + processedText.substring(endIndex)
+				}
+			}
+
+			highlightLayerRef.current.innerHTML = processedText
 			highlightLayerRef.current.scrollTop = textAreaRef.current.scrollTop
 			highlightLayerRef.current.scrollLeft = textAreaRef.current.scrollLeft
 		}, [])
@@ -1013,6 +1158,18 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					}}
 					onDrop={onDrop}
 					onDragOver={onDragOver}>
+					{showSlashCommandsMenu && (
+						<div ref={slashCommandsMenuContainerRef}>
+							<SlashCommandMenu
+								onSelect={handleSlashCommandsSelect}
+								selectedIndex={selectedSlashCommandsIndex}
+								setSelectedIndex={setSelectedSlashCommandsIndex}
+								onMouseDown={handleMenuMouseDown}
+								query={slashCommandsQuery}
+							/>
+						</div>
+					)}
+
 					{showContextMenu && (
 						<div ref={contextMenuContainerRef}>
 							<ContextMenu
@@ -1095,8 +1252,8 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							}
 							onHeightChange?.(height)
 						}}
-						placeholder={t('chat.placeholder')}
-						minRows={2}//huqb
+						placeholder={t("chat.placeholder")}
+						minRows={2} //huqb
 						maxRows={10}
 						autoFocus={true}
 						style={{
@@ -1156,7 +1313,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							display: "flex",
 							alignItems: "flex-center",
 							height: textAreaBaseHeight || 31,
-							bottom: 9.5, // should be 10 but doesnt look good on mac
+							bottom: 9.5, // should be 10 but doesn't look good on mac
 							zIndex: 2,
 						}}>
 						<div
@@ -1187,7 +1344,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 									}
 								}}
 								style={{ fontSize: 15 }}
-								title={t('chat.send')}
+								title={t("chat.send")} //huqb
 							></div>
 						</div>
 					</div>
@@ -1195,48 +1352,53 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 
 				<ControlsContainer>
 					<ButtonGroup>
-						<VSCodeButton
-							data-testid="context-button"
-							appearance="icon"
-							aria-label={t('chat.addContext')}
-							disabled={textAreaDisabled}
-							onClick={handleContextButtonClick}
-							style={{ padding: "0px 0px", height: "20px" }}>
-							<ButtonContainer>
-								<span className="flex items-center" style={{ fontSize: "13px", marginBottom: 1 }}>
-									@
-								</span>
-								{/* {showButtonText && <span style={{ fontSize: "10px" }}>Context</span>} */}
-							</ButtonContainer>
-						</VSCodeButton>
+						<Tooltip tipText="Add Context" style={{ left: 0 }}>
+							<VSCodeButton
+								data-testid="context-button"
+								appearance="icon"
+								aria-label={t("chat.addContext")}
+								disabled={textAreaDisabled}
+								onClick={handleContextButtonClick}
+								style={{ padding: "0px 0px", height: "20px" }}>
+								<ButtonContainer>
+									<span className="flex items-center" style={{ fontSize: "13px", marginBottom: 1 }}>
+										@
+									</span>
+									{/* {showButtonText && <span style={{ fontSize: "10px" }}>Context</span>} */}
+								</ButtonContainer>
+							</VSCodeButton>
+						</Tooltip>
 
-						<VSCodeButton
-							data-testid="images-button"
-							appearance="icon"
-							aria-label={t('chat.addImages')}
-							disabled={shouldDisableImages}
-							onClick={() => {
-								if (!shouldDisableImages) {
-									onSelectImages()
-								}
-							}}
-							style={{ padding: "0px 0px", height: "20px" }}>
-							<ButtonContainer>
-								<span
-									className="codicon codicon-device-camera flex items-center"
-									style={{ fontSize: "14px", marginBottom: -3 }}
-								/>
-								{/* {showButtonText && <span style={{ fontSize: "10px" }}>Images</span>} */}
-							</ButtonContainer>
-						</VSCodeButton>
+						<Tooltip tipText="Add Images">
+							<VSCodeButton
+								data-testid="images-button"
+								appearance="icon"
+								aria-label={t("chat.addImages")}
+								disabled={shouldDisableImages}
+								onClick={() => {
+									if (!shouldDisableImages) {
+										onSelectImages()
+									}
+								}}
+								style={{ padding: "0px 0px", height: "20px" }}>
+								<ButtonContainer>
+									<span
+										className="codicon codicon-device-camera flex items-center"
+										style={{ fontSize: "14px", marginBottom: -3 }}
+									/>
+									{/* {showButtonText && <span style={{ fontSize: "10px" }}>Images</span>} */}
+								</ButtonContainer>
+							</VSCodeButton>
+						</Tooltip>
 						<ServersToggleModal />
-
+						<ClineRulesToggleModal />
 						<ModelContainer ref={modelSelectorRef}>
 							<ModelButtonWrapper ref={buttonRef}>
 								<ModelDisplayButton
 									role="button"
 									isActive={showModelSelector}
 									disabled={false}
+									title="Select Model / API Provider"
 									onClick={handleModelButtonClick}
 									// onKeyDown={(e) => {
 									// 	if (e.key === "Enter" || e.key === " ") {
@@ -1260,6 +1422,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 										apiErrorMessage={undefined}
 										modelIdErrorMessage={undefined}
 										isPopup={true}
+										saveImmediately={true} // Ensure popup saves immediately
 									/>
 								</ModelSelectorTooltip>
 							)}
@@ -1268,21 +1431,21 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					<Tooltip
 						style={{ zIndex: 1000 }}
 						visible={shownTooltipMode !== null}
-						tipText={shownTooltipMode === "act" ? t('chat.actModeTooltip') : t('chat.planModeTooltip')}
-						hintText={t('chat.toggleModeHint', { metaKey: metaKeyChar })}>
+						tipText={shownTooltipMode === "act" ? t("chat.actModeTooltip") : t("chat.planModeTooltip")}
+						hintText={t("chat.toggleModeHint", { metaKey: metaKeyChar })}>
 						<SwitchContainer data-testid="mode-switch" disabled={false} onClick={onModeToggle}>
 							<Slider isAct={chatSettings.mode === "act"} isPlan={chatSettings.mode === "plan"} />
 							<SwitchOption
 								isActive={chatSettings.mode === "plan"}
 								onMouseOver={() => setShownTooltipMode("plan")}
 								onMouseLeave={() => setShownTooltipMode(null)}>
-								{t('chat.planMode')}
+								{t("chat.planMode")}
 							</SwitchOption>
 							<SwitchOption
 								isActive={chatSettings.mode === "act"}
 								onMouseOver={() => setShownTooltipMode("act")}
 								onMouseLeave={() => setShownTooltipMode(null)}>
-								{t('chat.actMode')}
+								{t("chat.actMode")}
 							</SwitchOption>
 						</SwitchContainer>
 					</Tooltip>

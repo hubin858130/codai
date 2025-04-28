@@ -1,66 +1,57 @@
-import { ILLM } from "../..";
-import {
-  filterLeadingNewline,
-  stopAtLines,
-} from "../../autocomplete/filtering/streamTransforms/lineStream";
-import { streamLines } from "../../diff/util";
-import { dedent } from "../../util";
+import { ILLM } from "../.."
+import { filterLeadingNewline, stopAtLines } from "../../autocomplete/filtering/streamTransforms/lineStream"
+import { streamLines } from "../../diff/util"
+import { dedent } from "../../util"
 
-export const BUFFER_LINES_BELOW = 3;
+export const BUFFER_LINES_BELOW = 3
 
-const MATCH_LINES_ABOVE = 1;
-export function getReplacementByMatching(
-  oldCode: string,
-  linesBefore: string[],
-  linesAfter: string[],
-): string | undefined {
-  const oldLines = oldCode.split("\n");
-  const linesToMatchAbove = MATCH_LINES_ABOVE;
-  const linesToMatchBelow = Math.min(BUFFER_LINES_BELOW, linesAfter.length);
+const MATCH_LINES_ABOVE = 1
+export function getReplacementByMatching(oldCode: string, linesBefore: string[], linesAfter: string[]): string | undefined {
+	const oldLines = oldCode.split("\n")
+	const linesToMatchAbove = MATCH_LINES_ABOVE
+	const linesToMatchBelow = Math.min(BUFFER_LINES_BELOW, linesAfter.length)
 
-  // Get surrounding lines around the gap
-  const beforeContext = linesBefore.slice(-linesToMatchAbove).join("\n");
-  const afterContext = linesAfter.slice(0, linesToMatchBelow).join("\n");
+	// Get surrounding lines around the gap
+	const beforeContext = linesBefore.slice(-linesToMatchAbove).join("\n")
+	const afterContext = linesAfter.slice(0, linesToMatchBelow).join("\n")
 
-  // Find the start index in the old code
-  const startIndex = oldLines.findIndex((line, index) => {
-    const chunk = oldLines.slice(index, index + linesToMatchAbove).join("\n");
-    return chunk === beforeContext;
-  });
+	// Find the start index in the old code
+	const startIndex = oldLines.findIndex((line, index) => {
+		const chunk = oldLines.slice(index, index + linesToMatchAbove).join("\n")
+		return chunk === beforeContext
+	})
 
-  if (startIndex === -1) {
-    return undefined; // Couldn't find matching start
-  }
+	if (startIndex === -1) {
+		return undefined // Couldn't find matching start
+	}
 
-  // Find the end index in the old code
-  const endIndex = oldLines.findIndex((line, index) => {
-    if (index <= startIndex + linesToMatchBelow) {
-      return false;
-    }
-    const chunk = oldLines.slice(index, index + linesToMatchBelow).join("\n");
-    return chunk === afterContext;
-  });
+	// Find the end index in the old code
+	const endIndex = oldLines.findIndex((line, index) => {
+		if (index <= startIndex + linesToMatchBelow) {
+			return false
+		}
+		const chunk = oldLines.slice(index, index + linesToMatchBelow).join("\n")
+		return chunk === afterContext
+	})
 
-  if (endIndex === -1) {
-    return undefined; // Couldn't find matching end
-  }
+	if (endIndex === -1) {
+		return undefined // Couldn't find matching end
+	}
 
-  // Extract the replacement code
-  const replacement = oldLines
-    .slice(startIndex + linesToMatchAbove, endIndex)
-    .join("\n");
+	// Extract the replacement code
+	const replacement = oldLines.slice(startIndex + linesToMatchAbove, endIndex).join("\n")
 
-  return replacement;
+	return replacement
 }
 
-const REPLACE_HERE = "// REPLACE HERE //";
+const REPLACE_HERE = "// REPLACE HERE //"
 export async function* getReplacementWithLlm(
-  oldCode: string,
-  linesBefore: string[],
-  linesAfter: string[],
-  llm: ILLM,
+	oldCode: string,
+	linesBefore: string[],
+	linesAfter: string[],
+	llm: ILLM,
 ): AsyncGenerator<string> {
-  const userPrompt = dedent`
+	const userPrompt = dedent`
     ORIGINAL CODE:
     \`\`\`
     ${oldCode}
@@ -76,23 +67,26 @@ export async function* getReplacementWithLlm(
     Above is an original version of a file, followed by a newer version that is in the process of being written. The new version contains a section which is exactly the same as in the original code, and has been marked with "${REPLACE_HERE}". Your task is to give the exact snippet of code from the original code that should replace "${REPLACE_HERE}" in the new version.
 
     Your output should be a single code block. We will paste the contents of that code block directly into the new version, so make sure that it has correct indentation.
-  `;
+  `
 
-  const assistantPrompt = dedent`
+	const assistantPrompt = dedent`
     Here is the snippet of code that will replace "${REPLACE_HERE}" in the new version:
     \`\`\`
-  `;
+  `
 
-  const completion = await llm.streamChat([
-    { role: "user", content: userPrompt },
-    { role: "assistant", content: assistantPrompt },
-  ], new AbortController().signal);
+	const completion = await llm.streamChat(
+		[
+			{ role: "user", content: userPrompt },
+			{ role: "assistant", content: assistantPrompt },
+		],
+		new AbortController().signal,
+	)
 
-  let lines = streamLines(completion);
-  lines = filterLeadingNewline(lines);
-  lines = stopAtLines(lines, () => {}, ["```"]);
+	let lines = streamLines(completion)
+	lines = filterLeadingNewline(lines)
+	lines = stopAtLines(lines, () => {}, ["```"])
 
-  for await (const line of lines) {
-    yield line;
-  }
+	for await (const line of lines) {
+		yield line
+	}
 }

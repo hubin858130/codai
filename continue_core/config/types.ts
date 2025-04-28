@@ -1301,6 +1301,6 @@ declare global {
 }
 
 export {};
-`;
+`
 
-export default Types;
+export default Types

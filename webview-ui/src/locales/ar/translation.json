@@ -1,180 +1,197 @@
 {
-  "settings": {
-    "title": "الإعدادات",
-    "done": "تم",
-    "language": {
-      "title": "إعدادات اللغة"
-    },
-    "autocomplete": {
-      "title": "إعدادات الإكمال التلقائي",
-      "provider": "المزود",
-      "apiBase": "رابط API الأساسي",
-      "apiKey": "مفتاح API",
-      "model": "النموذج",
-      "enable": "تفعيل الإكمال التلقائي"
-    },
-    "other": {
-      "title": "إعدادات أخرى",
-      "customInstructions": "تعليمات مخصصة",
-      "customInstructionsDesc": "سيتم إضافة هذه التعليمات في نهاية طلب النظام المرسل مع كل طلب.",
-      "planActSeparateModels": "استخدام نماذج مختلفة لوضعي التخطيط والتنفيذ",
-      "planActSeparateModelsDesc": "عند التبديل بين وضعي التخطيط والتنفيذ، يتم الاحتفاظ بـ API والنموذج المستخدم في الوضع السابق. يمكن أن يكون هذا مفيدًا إذا كنت ترغب، على سبيل المثال، في استخدام نموذج قوي للتخطيط ونموذج أكثر اقتصادًا للتنفيذ.",
-      "advancedSettings": "إعدادات متقدمة",
-      "debug": "تصحيح الأخطاء",
-      "resetState": "إعادة تعيين الحالة",
-      "resetStateDesc": "سيؤدي هذا إلى إعادة تعيين جميع الحالات العامة والتخزين السري في الامتداد."
-    },
-    "feedback": {
-      "text": "إذا كان لديك أي أسئلة أو تعليقات، يرجى فتح مشكلة في",
-      "version": "الإصدار {{version}}"
-    },
-    "planMode": "وضع التخطيط",
-    "actMode": "وضع التنفيذ",
-    "api": {
-      "provider": "مزود API",
-      "selectModel": "اختر نموذجًا...",
-      "model": "النموذج",
-      "baseUrl": "رابط API الأساسي",
-      "apiKey": "مفتاح API",
-      "modelId": "معرف النموذج",
-      "customBaseUrl": "استخدام رابط API أساسي مخصص",
-      "customVpcEndpoint": "استخدام نقطة نهاية VPC مخصصة",
-      "crossRegionInference": "استخدام الاستدلال عبر المناطق",
-      "promptCaching": "استخدام تخزين الطلبات المؤقت",
-      "awsCredentials": "بيانات اعتماد AWS",
-      "awsProfile": "ملف تعريف AWS",
-      "awsAccessKey": "مفتاح الوصول AWS",
-      "awsSecretKey": "المفتاح السري AWS",
-      "awsSessionToken": "رمز جلسة AWS",
-      "awsRegion": "منطقة AWS",
-      "selectRegion": "اختر المنطقة...",
-      "gcpProjectId": "معرف مشروع Google Cloud",
-      "gcpRegion": "منطقة Google Cloud",
-      "modelConfig": "إعدادات النموذج",
-      "supportsImages": "يدعم الصور",
-      "supportsComputerUse": "يدعم استخدام الكمبيوتر",
-      "enableR1Format": "تفعيل تنسيق الرسالة R1",
-      "contextWindowSize": "حجم نافذة السياق",
-      "maxOutputTokens": "الحد الأقصى لعدد الرموز المخرجة",
-      "inputPrice": "سعر الإدخال",
-      "outputPrice": "سعر الإخراج",
-      "temperature": "درجة الحرارة",
-      "sortProviderRouting": "ترتيب توجيه المزود",
-      "default": "افتراضي",
-      "price": "السعر",
-      "throughput": "الإنتاجية",
-      "latency": "زمن الاستجابة",
-      "reasoningEffort": "تغيير جهد التفكير",
-      "low": "منخفض",
-      "high": "مرتفع"
-    }
-  },
-  "chat": {
-    "addContext": "إضافة سياق",
-    "addImages": "إضافة صور",
-    "planMode": "تخطيط",
-    "actMode": "تنفيذ",
-    "planModeTooltip": "في وضع التخطيط، يقوم Codai بجمع المعلومات لوضع خطة",
-    "actModeTooltip": "في وضع التنفيذ، يقوم Codai بتنفيذ المهام على الفور",
-    "toggleModeHint": "التبديل باستخدام {{metaKey}}+Shift+A",
-    "send": "إرسال",
-    "placeholder": "اكتب رسالة...",
-    "welcome": {
-      "title": "مرحبًا، أنا Codai",
-      "description": "بفضل قدرات الترميز الذكية لـ <1>{{claudeLink}}</1>، يمكنني القيام بجميع أنواع المهام. يمكنني إنشاء وتعديل الملفات، واستكشاف المشاريع المعقدة، واستخدام المتصفح وتنفيذ أوامر الطرفية (بإذنك، بالطبع). يمكنني أيضًا استخدام MCP لإنشاء أدوات جديدة وتوسيع قدراتي.",
-      "claudeLink": "Claude 3.7 Sonnet",
-      "claudeLinkText": "Claude 3.7 Sonnet",
-      "signupText": "سجل للحصول على حساب وابدأ مجانًا، أو استخدم مفتاح API يوفر الوصول إلى نماذج مثل Claude 3.7 Sonnet.",
-      "getStarted": "ابدأ مجانًا",
-      "useOwnApiKey": "استخدم مفتاح API الخاص بك",
-      "letsGo": "هيا بنا!"
-    }
-  },
-  "autoApprove": {
-    "title": "الموافقة التلقائية:",
-    "none": "لا شيء",
-    "description": "تسمح الموافقة التلقائية لـ Codai بتنفيذ الإجراءات التالية دون إذن. استخدمها بحذر وقم بتمكينها فقط إذا كنت تفهم المخاطر.",
-    "maxRequests": "الحد الأقصى لعدد الطلبات:",
-    "maxRequestsDesc": "سيقوم Codai بتنفيذ هذا العدد من طلبات API تلقائيًا قبل طلب الموافقة للمتابعة.",
-    "enableNotifications": "تفعيل الإشعارات",
-    "notificationsDesc": "تلقي إشعارات النظام عندما يحتاج Codai إلى موافقة للمتابعة أو عند اكتمال المهمة.",
-    "actions": {
-      "readFiles": {
-        "label": "قراءة ملفات المشروع",
-        "shortName": "قراءة (محلي)",
-        "description": "يسمح لـ Codai بقراءة الملفات في مساحة عملك."
-      },
-      "readFilesExternally": {
-        "label": "قراءة جميع الملفات",
-        "shortName": "قراءة (الكل)",
-        "description": "يسمح لـ Codai بقراءة أي ملف على جهاز الكمبيوتر الخاص بك."
-      },
-      "editFiles": {
-        "label": "تعديل ملفات المشروع",
-        "shortName": "تعديل",
-        "description": "يسمح لـ Codai بتعديل الملفات في مساحة عملك."
-      },
-      "editFilesExternally": {
-        "label": "تعديل جميع الملفات",
-        "shortName": "تعديل (الكل)",
-        "description": "يسمح لـ Codai بتعديل أي ملف على جهاز الكمبيوتر الخاص بك."
-      },
-      "executeSafeCommands": {
-        "label": "تنفيذ الأوامر الآمنة",
-        "shortName": "أوامر آمنة",
-        "description": "يسمح لـ Codai بتنفيذ أوامر طرفية آمنة. إذا قرر النموذج أن الأمر قد يكون ضارًا محتملاً، فسيطلب دائمًا الموافقة."
-      },
-      "executeAllCommands": {
-        "label": "تنفيذ جميع الأوامر",
-        "shortName": "جميع الأوامر",
-        "description": "يسمح لـ Codai بتنفيذ جميع أوامر الطرفية. استخدمه على مسؤوليتك الخاصة."
-      },
-      "useBrowser": {
-        "label": "استخدام المتصفح",
-        "shortName": "متصفح",
-        "description": "يسمح لـ Codai ببدء والتفاعل مع أي موقع ويب في المتصفح."
-      },
-      "useMcp": {
-        "label": "استخدام خادم MCP",
-        "shortName": "MCP",
-        "description": "يسمح لـ Codai باستخدام خوادم MCP المكونة التي يمكنها تعديل نظام الملفات أو التفاعل مع API."
-      }
-    }
-  },
-  "mcp": {
-    "tabs": {
-      "marketplace": "السوق",
-      "addRemote": "إضافة عن بعد",
-      "installed": "مثبت"
-    },
-    "addServer": {
-      "title": "أضف خادم MCP عن بعد من خلال توفير اسم ونقطة نهاية URL. تعلم المزيد",
-      "serverName": "اسم الخادم",
-      "serverNamePlaceholder": "mcp-server",
-      "serverUrl": "رابط الخادم",
-      "serverUrlPlaceholder": "https://example.com/mcp-server",
-      "addButton": "إضافة خادم",
-      "addingButton": "جاري الإضافة...",
-      "connectingMessage": "جاري الاتصال بالخادم... قد يستغرق هذا بضع ثوانٍ.",
-      "editConfig": "تعديل التكوين",
-      "errors": {
-        "nameRequired": "اسم الخادم مطلوب",
-        "urlRequired": "رابط الخادم مطلوب",
-        "invalidUrl": "تنسيق رابط غير صالح",
-        "failedToAdd": "فشل في إضافة الخادم"
-      }
-    },
-    "installed": {
-      "description": "يسمح بروتوكول سياق النموذج بالتواصل مع خوادم MCP التي تعمل محليًا وتوفر أدوات وموارد إضافية لتوسيع قدرات Codai. يمكنك استخدام الخوادم التي أنشأها المجتمع أو طلب من Codai إنشاء أدوات مخصصة جديدة لسير عملك (على سبيل المثال، \"إضافة أداة تحصل على أحدث وثائق npm\").",
-      "modelContextProtocol": "بروتوكول سياق النموذج",
-      "communityMadeServers": "خوادم من صنع المجتمع",
-      "seeDemo": "شاهد عرضًا توضيحيًا هنا.",
-      "configureServers": "تكوين خوادم MCP",
-      "advancedSettings": "إعدادات MCP المتقدمة"
-    },
-    "configuration": {
-      "title": "خوادم MCP",
-      "done": "تم"
-    }
-  }
-} 
+	"settings": {
+		"title": "الإعدادات",
+		"done": "تم",
+		"language": {
+			"title": "إعدادات اللغة"
+		},
+		"autocomplete": {
+			"title": "إعدادات الإكمال التلقائي",
+			"provider": "المزود",
+			"apiBase": "رابط API الأساسي",
+			"apiKey": "مفتاح API",
+			"model": "النموذج",
+			"enable": "تفعيل الإكمال التلقائي"
+		},
+		"other": {
+			"title": "إعدادات أخرى",
+			"customInstructions": "تعليمات مخصصة",
+			"customInstructionsDesc": "سيتم إضافة هذه التعليمات في نهاية طلب النظام المرسل مع كل طلب.",
+			"planActSeparateModels": "استخدام نماذج مختلفة لوضعي التخطيط والتنفيذ",
+			"planActSeparateModelsDesc": "عند التبديل بين وضعي التخطيط والتنفيذ، يتم الاحتفاظ بـ API والنموذج المستخدم في الوضع السابق. يمكن أن يكون هذا مفيدًا إذا كنت ترغب، على سبيل المثال، في استخدام نموذج قوي للتخطيط ونموذج أكثر اقتصادًا للتنفيذ.",
+			"advancedSettings": "إعدادات متقدمة",
+			"debug": "تصحيح الأخطاء",
+			"resetState": "إعادة تعيين الحالة",
+			"resetStateDesc": "سيؤدي هذا إلى إعادة تعيين جميع الحالات العامة والتخزين السري في الامتداد."
+		},
+		"feedback": {
+			"text": "إذا كان لديك أي أسئلة أو تعليقات، يرجى فتح مشكلة في",
+			"version": "الإصدار {{version}}"
+		},
+		"planMode": "وضع التخطيط",
+		"actMode": "وضع التنفيذ",
+		"api": {
+			"provider": "مزود API",
+			"selectModel": "اختر نموذجًا...",
+			"model": "النموذج",
+			"baseUrl": "رابط API الأساسي",
+			"apiKey": "مفتاح API",
+			"modelId": "معرف النموذج",
+			"customBaseUrl": "استخدام رابط API أساسي مخصص",
+			"customVpcEndpoint": "استخدام نقطة نهاية VPC مخصصة",
+			"crossRegionInference": "استخدام الاستدلال عبر المناطق",
+			"promptCaching": "استخدام تخزين الطلبات المؤقت",
+			"awsCredentials": "بيانات اعتماد AWS",
+			"awsProfile": "ملف تعريف AWS",
+			"awsAccessKey": "مفتاح الوصول AWS",
+			"awsSecretKey": "المفتاح السري AWS",
+			"awsSessionToken": "رمز جلسة AWS",
+			"awsRegion": "منطقة AWS",
+			"selectRegion": "اختر المنطقة...",
+			"gcpProjectId": "معرف مشروع Google Cloud",
+			"gcpRegion": "منطقة Google Cloud",
+			"modelConfig": "إعدادات النموذج",
+			"supportsImages": "يدعم الصور",
+			"supportsComputerUse": "يدعم استخدام الكمبيوتر",
+			"enableR1Format": "تفعيل تنسيق الرسالة R1",
+			"contextWindowSize": "حجم نافذة السياق",
+			"maxOutputTokens": "الحد الأقصى لعدد الرموز المخرجة",
+			"inputPrice": "سعر الإدخال",
+			"outputPrice": "سعر الإخراج",
+			"temperature": "درجة الحرارة",
+			"sortProviderRouting": "ترتيب توجيه المزود",
+			"default": "افتراضي",
+			"price": "السعر",
+			"throughput": "الإنتاجية",
+			"latency": "زمن الاستجابة",
+			"reasoningEffort": "تغيير جهد التفكير",
+			"low": "منخفض",
+			"high": "مرتفع"
+		}
+	},
+	"chat": {
+		"addContext": "إضافة سياق",
+		"addImages": "إضافة صور",
+		"planMode": "تخطيط",
+		"actMode": "تنفيذ",
+		"planModeTooltip": "في وضع التخطيط، يقوم Codai بجمع المعلومات لوضع خطة",
+		"actModeTooltip": "في وضع التنفيذ، يقوم Codai بتنفيذ المهام على الفور",
+		"toggleModeHint": "التبديل باستخدام {{metaKey}}+Shift+A",
+		"send": "إرسال",
+		"placeholder": "اكتب رسالة...",
+		"welcome": {
+			"title": "مرحبًا، أنا Codai",
+			"description": "بفضل قدرات الترميز الذكية لـ <1>{{claudeLink}}</1>، يمكنني القيام بجميع أنواع المهام. يمكنني إنشاء وتعديل الملفات، واستكشاف المشاريع المعقدة، واستخدام المتصفح وتنفيذ أوامر الطرفية (بإذنك، بالطبع). يمكنني أيضًا استخدام MCP لإنشاء أدوات جديدة وتوسيع قدراتي.",
+			"claudeLink": "Claude 3.7 Sonnet",
+			"claudeLinkText": "Claude 3.7 Sonnet",
+			"signupText": "سجل للحصول على حساب وابدأ مجانًا، أو استخدم مفتاح API يوفر الوصول إلى نماذج مثل Claude 3.7 Sonnet.",
+			"getStarted": "ابدأ مجانًا",
+			"useOwnApiKey": "استخدم مفتاح API الخاص بك",
+			"letsGo": "هيا بنا!"
+		}
+	},
+	"autoApprove": {
+		"title": "الموافقة التلقائية:",
+		"none": "لا شيء",
+		"description": "تسمح الموافقة التلقائية لـ Codai بتنفيذ الإجراءات التالية دون إذن. استخدمها بحذر وقم بتمكينها فقط إذا كنت تفهم المخاطر.",
+		"maxRequests": "الحد الأقصى لعدد الطلبات:",
+		"maxRequestsDesc": "سيقوم Codai بتنفيذ هذا العدد من طلبات API تلقائيًا قبل طلب الموافقة للمتابعة.",
+		"enableNotifications": "تفعيل الإشعارات",
+		"notificationsDesc": "تلقي إشعارات النظام عندما يحتاج Codai إلى موافقة للمتابعة أو عند اكتمال المهمة.",
+		"actions": {
+			"readFiles": {
+				"label": "قراءة ملفات المشروع",
+				"shortName": "قراءة (محلي)",
+				"description": "يسمح لـ Codai بقراءة الملفات في مساحة عملك."
+			},
+			"readFilesExternally": {
+				"label": "قراءة جميع الملفات",
+				"shortName": "قراءة (الكل)",
+				"description": "يسمح لـ Codai بقراءة أي ملف على جهاز الكمبيوتر الخاص بك."
+			},
+			"editFiles": {
+				"label": "تعديل ملفات المشروع",
+				"shortName": "تعديل",
+				"description": "يسمح لـ Codai بتعديل الملفات في مساحة عملك."
+			},
+			"editFilesExternally": {
+				"label": "تعديل جميع الملفات",
+				"shortName": "تعديل (الكل)",
+				"description": "يسمح لـ Codai بتعديل أي ملف على جهاز الكمبيوتر الخاص بك."
+			},
+			"executeSafeCommands": {
+				"label": "تنفيذ الأوامر الآمنة",
+				"shortName": "أوامر آمنة",
+				"description": "يسمح لـ Codai بتنفيذ أوامر طرفية آمنة. إذا قرر النموذج أن الأمر قد يكون ضارًا محتملاً، فسيطلب دائمًا الموافقة."
+			},
+			"executeAllCommands": {
+				"label": "تنفيذ جميع الأوامر",
+				"shortName": "جميع الأوامر",
+				"description": "يسمح لـ Codai بتنفيذ جميع أوامر الطرفية. استخدمه على مسؤوليتك الخاصة."
+			},
+			"useBrowser": {
+				"label": "استخدام المتصفح",
+				"shortName": "متصفح",
+				"description": "يسمح لـ Codai ببدء والتفاعل مع أي موقع ويب في المتصفح."
+			},
+			"useMcp": {
+				"label": "استخدام خادم MCP",
+				"shortName": "MCP",
+				"description": "يسمح لـ Codai باستخدام خوادم MCP المكونة التي يمكنها تعديل نظام الملفات أو التفاعل مع API."
+			}
+		}
+	},
+	"mcp": {
+		"tabs": {
+			"marketplace": "السوق",
+			"addRemote": "إضافة عن بعد",
+			"installed": "مثبت"
+		},
+		"addServer": {
+			"title": "أضف خادم MCP عن بعد من خلال توفير اسم ونقطة نهاية URL. تعلم المزيد",
+			"serverName": "اسم الخادم",
+			"serverNamePlaceholder": "mcp-server",
+			"serverUrl": "رابط الخادم",
+			"serverUrlPlaceholder": "https://example.com/mcp-server",
+			"addButton": "إضافة خادم",
+			"addingButton": "جاري الإضافة...",
+			"connectingMessage": "جاري الاتصال بالخادم... قد يستغرق هذا بضع ثوانٍ.",
+			"editConfig": "تعديل التكوين",
+			"errors": {
+				"nameRequired": "اسم الخادم مطلوب",
+				"urlRequired": "رابط الخادم مطلوب",
+				"invalidUrl": "تنسيق رابط غير صالح",
+				"failedToAdd": "فشل في إضافة الخادم"
+			}
+		},
+		"installed": {
+			"description": "بروتوكول سياق النموذج",
+			"modelContextProtocol": "بروتوكول سياق النموذج",
+			"communityMadeServers": "خوادم من صنع المجتمع",
+			"seeDemo": "شاهد عرضًا توضيحيًا هنا.",
+			"configureServers": "تكوين خوادم MCP",
+			"advancedSettings": "إعدادات MCP المتقدمة",
+			"nomcpServers": "لا توجد خوادم MCP مثبتة",
+			"useCommunityMadeServers": "يتيح التواصل مع خوادم MCP المحلية التي توفر أدوات وموارد إضافية لتعزيز قدرات Codai. يمكنك استخدام",
+			"createNewMcpServer": "أو طلب من Codai إنشاء أدوات جديدة مخصصة لسير عملك (مثل \"إضافة أداة للحصول على أحدث وثائق npm\")."
+		},
+		"configuration": {
+			"title": "خوادم MCP",
+			"done": "تم"
+		}
+	},
+	"CodaiRules": {
+		"manageRules": "إدارة قواعد Codai",
+		"CodaiRules": "قواعد Codai",
+		"globalRules": "القواعد العامة",
+		"workspaceRules": "قواعد مساحة العمل",
+		"noRulesFound": "لم يتم العثور على قواعد",
+		"editRuleFile": "تعديل ملف القاعدة",
+		"deleteRuleFile": "حذف ملف القاعدة",
+		"newRuleFile": "ملف قاعدة جديد...",
+		"createRuleFile": "إنشاء ملف قاعدة",
+		"newRuleFileButton": "ملف قاعدة جديد",
+		"ruleNamePlaceholder": "اسم القاعدة (.md، .txt، أو بدون امتداد)",
+		"invalidExtension": "يُسمح فقط بامتدادات .md، .txt، أو بدون امتداد ملف"
+	}
+}

@@ -1,8 +1,8 @@
-import { PromptTemplateFunction } from "../../..";
-import { dedent } from "../../../util";
+import { PromptTemplateFunction } from "../../.."
+import { dedent } from "../../../util"
 
 const gptInsertionEditPrompt: PromptTemplateFunction = (_, otherData) => {
-  return dedent`
+	return dedent`
     \`\`\`${otherData.language}
     ${otherData.prefix}[BLANK]${otherData.codeToEdit}${otherData.suffix}
     \`\`\`
@@ -11,11 +11,11 @@ const gptInsertionEditPrompt: PromptTemplateFunction = (_, otherData) => {
 
     "${otherData.userInput}"
 
-    Please generate this code. Your output will be only the code that should replace the "[BLANK]", without repeating any of the prefix or suffix, without any natural language explanation, and without messing up indentation. Here is the code that will replace the "[BLANK]":`;
-};
+    Please generate this code. Your output will be only the code that should replace the "[BLANK]", without repeating any of the prefix or suffix, without any natural language explanation, and without messing up indentation. Here is the code that will replace the "[BLANK]":`
+}
 
 const gptFullFileEditPrompt: PromptTemplateFunction = (_, otherData) => {
-  return dedent`
+	return dedent`
     \`\`\`${otherData.language}
     ${otherData.codeToEdit}
     \`\`\`
@@ -24,40 +24,35 @@ const gptFullFileEditPrompt: PromptTemplateFunction = (_, otherData) => {
 
     ${otherData.userInput}
 
-    You should rewrite the entire file without any natural language explanation. DO NOT surround the code in a code block and DO NOT explain yourself.`;
-};
+    You should rewrite the entire file without any natural language explanation. DO NOT surround the code in a code block and DO NOT explain yourself.`
+}
 
 export const gptEditPrompt: PromptTemplateFunction = (history, otherData) => {
-  if (otherData?.codeToEdit?.trim().length === 0) {
-    return gptInsertionEditPrompt(history, otherData);
-  } else if (
-    otherData?.prefix?.trim().length === 0 &&
-    otherData?.suffix?.trim().length === 0
-  ) {
-    return gptFullFileEditPrompt(history, otherData);
-  }
+	if (otherData?.codeToEdit?.trim().length === 0) {
+		return gptInsertionEditPrompt(history, otherData)
+	} else if (otherData?.prefix?.trim().length === 0 && otherData?.suffix?.trim().length === 0) {
+		return gptFullFileEditPrompt(history, otherData)
+	}
 
-  const paragraphs = [
-    "The user has requested a section of code in a file to be rewritten.",
-  ];
+	const paragraphs = ["The user has requested a section of code in a file to be rewritten."]
 
-  if (otherData.prefix?.trim().length > 0) {
-    paragraphs.push(dedent`
+	if (otherData.prefix?.trim().length > 0) {
+		paragraphs.push(dedent`
         This is the prefix of the file:
         \`\`\`${otherData.language}
         ${otherData.prefix}
-        \`\`\``);
-  }
+        \`\`\``)
+	}
 
-  if (otherData.suffix?.trim().length > 0) {
-    paragraphs.push(dedent`
+	if (otherData.suffix?.trim().length > 0) {
+		paragraphs.push(dedent`
         This is the suffix of the file:
         \`\`\`${otherData.language}
         ${otherData.suffix}
-        \`\`\``);
-  }
+        \`\`\``)
+	}
 
-  paragraphs.push(dedent`
+	paragraphs.push(dedent`
         This is the code to rewrite:
         \`\`\`${otherData.language}
         ${otherData.codeToEdit}
@@ -65,7 +60,7 @@ export const gptEditPrompt: PromptTemplateFunction = (history, otherData) => {
 
         The user's request is: "${otherData.userInput}"
 
-        Here is the rewritten code:`);
+        Here is the rewritten code:`)
 
-  return paragraphs.join("\n\n");
-};
+	return paragraphs.join("\n\n")
+}
