@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.3]
+
+-   Fixed the issue of plugins not loading caused by ES decorators somethimes
+-   Update logo icon
+
 ## [1.0.2]
 
 -   Fixed some bugs

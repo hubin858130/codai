@@ -17,8 +17,14 @@ export class AnthropicHandler implements ApiHandler {
 		})
 	}
 
-	@withRetry()
+	// 移除装饰器，直接实现方法
 	async *createMessage(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream {
+		const descriptor = { value: this._createMessageImpl }
+		const wrappedDescriptor = withRetry()(this, "createMessage", descriptor)
+		yield* await wrappedDescriptor.value.apply(this, [systemPrompt, messages])
+	}
+	// @withRetry()
+	async *_createMessageImpl(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream {
 		const model = this.getModel()
 		let stream: AnthropicStream<Anthropic.RawMessageStreamEvent>
 		const modelId = model.id

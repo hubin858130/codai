@@ -2,8 +2,8 @@
 	"name": "codai-top",
 	"displayName": "Codai-Top",
 	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser,autocomplete, and more with your permission every step of the way.",
-	"version": "1.0.2",
-	"icon": "assets/icons/icon.png",
+	"version": "1.0.3",
+	"icon": "assets/icons/logo.png",
 	"engines": {
 		"vscode": "^1.84.0"
 	},
@@ -18,6 +18,9 @@
 	},
 	"homepage": "https://codai.top",
 	"categories": [
+		"MCP",
+		"AutoComplete",
+		"Agent",
 		"AI",
 		"Chat",
 		"Programming Languages",
@@ -41,7 +44,7 @@
 		"llama"
 	],
 	"activationEvents": [
-		"workspaceContains:evals.env"
+		"onStartupFinished"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {

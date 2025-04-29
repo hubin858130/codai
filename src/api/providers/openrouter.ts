@@ -26,8 +26,14 @@ export class OpenRouterHandler implements ApiHandler {
 		})
 	}
 
-	@withRetry()
+	// 移除装饰器，直接实现方法
 	async *createMessage(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream {
+		const descriptor = { value: this._createMessageImpl }
+		const wrappedDescriptor = withRetry()(this, "createMessage", descriptor)
+		yield* await wrappedDescriptor.value.apply(this, [systemPrompt, messages])
+	}
+	// @withRetry()
+	async *_createMessageImpl(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream {
 		this.lastGenerationId = undefined
 
 		const stream = await createOpenRouterStream(
@@ -118,8 +124,28 @@ export class OpenRouterHandler implements ApiHandler {
 		return undefined
 	}
 
-	@withRetry({ maxRetries: 4, baseDelay: 250, maxDelay: 1000, retryAllErrors: true })
+	// 公共方法应用重试逻辑
 	async *fetchGenerationDetails(genId: string) {
+		const tempObj = {
+			value: this._fetchGenerationDetailsImpl,
+		}
+
+		const decoratedObj = withRetry({
+			maxRetries: 4,
+			baseDelay: 250,
+			maxDelay: 1000,
+			retryAllErrors: true,
+		})(
+			this, // target
+			"fetchGenerationDetails", // propertyKey
+			tempObj, // descriptor
+		)
+
+		yield* await decoratedObj.value.apply(this, [genId])
+	}
+
+	// @withRetry({ maxRetries: 4, baseDelay: 250, maxDelay: 1000, retryAllErrors: true })
+	async *_fetchGenerationDetailsImpl(genId: string) {
 		// console.log("Fetching generation details for:", genId)
 		try {
 			const response = await axios.get(`https://openrouter.ai/api/v1/generation?id=${genId}`, {

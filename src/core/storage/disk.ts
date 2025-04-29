@@ -14,7 +14,7 @@ export const GlobalFileNames = {
 	uiMessages: "ui_messages.json",
 	openRouterModels: "openrouter_models.json",
 	mcpSettings: "codai_mcp_settings.json",
-	clineRules: ".clinerules",
+	clineRules: ".codairules",
 	taskMetadata: "task_metadata.json",
 }
 
