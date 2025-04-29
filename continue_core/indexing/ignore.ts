@@ -66,7 +66,7 @@ export const DEFAULT_IGNORE_FILETYPES = [
 	"*.env",
 	"*.gitignore",
 	"*.gitkeep",
-	"*.continueignore",
+	"*.codaiignore",
 	"config.json",
 	"config.yaml",
 	"*.csv",

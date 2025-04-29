@@ -516,7 +516,7 @@ class VsCodeIde implements IDE {
 			// throw new Error("Ripgrep not supported, this workspace is remote");
 
 			// IMPORTANT: findFiles automatically accounts for .gitignore
-			const ignoreFiles = await vscode.workspace.findFiles("**/.continueignore", null)
+			const ignoreFiles = await vscode.workspace.findFiles("**/.codaiignore", null)
 
 			const ignoreGlobs: Set<string> = new Set()
 			for (const file of ignoreFiles) {
@@ -575,7 +575,7 @@ class VsCodeIde implements IDE {
 					"--iglob",
 					pattern,
 					"--ignore-file",
-					".continueignore",
+					".codaiignore",
 					"--ignore-file",
 					".gitignore",
 				])
@@ -596,7 +596,7 @@ class VsCodeIde implements IDE {
 			const dirResults = await this.runRipgrepQuery(dir, [
 				"-i", // Case-insensitive search
 				"--ignore-file",
-				".continueignore",
+				".codaiignore",
 				"--ignore-file",
 				".gitignore",
 				"-C",

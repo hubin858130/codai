@@ -18,9 +18,6 @@
 	},
 	"homepage": "https://codai.top",
 	"categories": [
-		"MCP",
-		"AutoComplete",
-		"Agent",
 		"AI",
 		"Chat",
 		"Programming Languages",
@@ -31,8 +28,6 @@
 	"keywords": [
 		"codai",
 		"deepseek",
-		"claude",
-		"dev",
 		"mcp",
 		"openrouter",
 		"coding",
@@ -41,7 +36,8 @@
 		"chatgpt",
 		"sonnet",
 		"ai",
-		"llama"
+		"llama",
+		"qwen3"
 	],
 	"activationEvents": [
 		"onStartupFinished"

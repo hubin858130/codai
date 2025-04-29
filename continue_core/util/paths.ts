@@ -36,10 +36,10 @@ export function getContinueUtilsPath(): string {
 }
 
 export function getGlobalContinueIgnorePath(): string {
-	const continueIgnorePath = path.join(getContinueGlobalPath(), ".continueignore")
-	// if (!fs.existsSync(continueIgnorePath)) {
-	//   fs.writeFileSync(continueIgnorePath, "");
-	// }
+	const continueIgnorePath = path.join(getContinueGlobalPath(), ".codaiignore")
+	if (!fs.existsSync(continueIgnorePath)) {
+		fs.writeFileSync(continueIgnorePath, "")
+	}
 	return continueIgnorePath
 }
 

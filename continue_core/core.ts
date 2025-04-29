@@ -618,7 +618,7 @@ export class Core {
 
 					if (uri.endsWith(".continuerc.json") || uri.endsWith(".prompt") || uri.endsWith(SYSTEM_PROMPT_DOT_FILE)) {
 						await this.configHandler.reloadConfig()
-					} else if (uri.endsWith(".continueignore") || uri.endsWith(".gitignore")) {
+					} else if (uri.endsWith(".codaiignore") || uri.endsWith(".gitignore")) {
 						// Reindex the workspaces
 						this.invoke("index/forceReIndex", {
 							shouldClearIndexes: true,
