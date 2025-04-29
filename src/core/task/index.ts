@@ -665,7 +665,7 @@ export class Task {
 	}> {
 		// If this Cline instance was aborted by the provider, then the only thing keeping us alive is a promise still running in the background, in which case we don't want to send its result to the webview as it is attached to a new instance of Cline now. So we can safely ignore the result of any active promises, and this class will be deallocated. (Although we set Cline = undefined in provider, that simply removes the reference to this instance, but the instance is still alive until this promise resolves or rejects.)
 		if (this.abort) {
-			throw new Error("Cline instance aborted")
+			throw new Error("Codai instance aborted")
 		}
 		let askTs: number
 		if (partial !== undefined) {
@@ -783,7 +783,7 @@ export class Task {
 
 	async say(type: ClineSay, text?: string, images?: string[], partial?: boolean): Promise<undefined> {
 		if (this.abort) {
-			throw new Error("Cline instance aborted")
+			throw new Error("Codai instance aborted")
 		}
 
 		if (partial !== undefined) {
@@ -1460,7 +1460,7 @@ export class Task {
 			console.error("MCP servers failed to connect in time")
 		})
 
-		const disableBrowserTool = vscode.workspace.getConfiguration("cline").get<boolean>("disableBrowserTool") ?? false
+		const disableBrowserTool = vscode.workspace.getConfiguration("codai").get<boolean>("disableBrowserTool") ?? false
 		// cline browser tool uses image recognition for navigation (requires model image support).
 		const modelSupportsBrowserUse = this.api.getModel().info.supportsImages ?? false
 
@@ -1484,7 +1484,7 @@ export class Task {
 
 		let settingsCustomInstructions = this.customInstructions?.trim()
 		const preferredLanguage = getLanguageKey(
-			vscode.workspace.getConfiguration("cline").get<LanguageDisplay>("preferredLanguage"),
+			vscode.workspace.getConfiguration("codai").get<LanguageDisplay>("preferredLanguage"),
 		)
 		const preferredLanguageInstructions =
 			preferredLanguage && preferredLanguage !== DEFAULT_LANGUAGE_SETTINGS
@@ -1681,7 +1681,7 @@ export class Task {
 
 	async presentAssistantMessage() {
 		if (this.abort) {
-			throw new Error("Cline instance aborted")
+			throw new Error("Codai instance aborted")
 		}
 
 		if (this.presentAssistantMessageLocked) {
@@ -3489,7 +3489,7 @@ export class Task {
 
 	async recursivelyMakeClineRequests(userContent: UserContent, includeFileDetails: boolean = false): Promise<boolean> {
 		if (this.abort) {
-			throw new Error("Cline instance aborted")
+			throw new Error("Codai instance aborted")
 		}
 
 		// Used to know what models were used in the task if user wants to export metadata for error reporting purposes
@@ -3814,7 +3814,7 @@ export class Task {
 
 			// need to call here in case the stream was aborted
 			if (this.abort) {
-				throw new Error("Cline instance aborted")
+				throw new Error("Codai instance aborted")
 			}
 
 			this.didCompleteReadingStream = true
