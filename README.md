@@ -3,7 +3,7 @@
 
 
 <p align="center">
-  <img src="./assets/icons/web-codai-logo.png" width="60%" />
+  <img src="https://github.com/user-attachments/assets/c683e28a-95d5-4252-93fe-c615f16e3cc5" width="60%" />
 </p>
 <div align="center">
 <table>
