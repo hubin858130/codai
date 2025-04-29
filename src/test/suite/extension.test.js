@@ -57,7 +57,7 @@ describe("Extension Tests", function () {
 	it("should handle advanced settings configuration", async () => {
 		// Test browser session setting
 		await vscode.workspace.getConfiguration().update("codai.disableBrowserTool", true, true)
-		const updatedConfig = vscode.workspace.getConfiguration("cline")
+		const updatedConfig = vscode.workspace.getConfiguration("codai")
 		expect(updatedConfig.get("disableBrowserTool")).to.be.true
 
 		// Reset settings

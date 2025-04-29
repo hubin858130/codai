@@ -28,7 +28,7 @@ class CheckpointTracker {
 			}
 
 			// Check if checkpoints are disabled in VS Code settings
-			const enableCheckpoints = vscode.workspace.getConfiguration("cline").get<boolean>("enableCheckpoints") ?? true
+			const enableCheckpoints = vscode.workspace.getConfiguration("codai").get<boolean>("enableCheckpoints") ?? true
 			if (!enableCheckpoints) {
 				return undefined // Don't create tracker when disabled
 			}
@@ -53,7 +53,7 @@ class CheckpointTracker {
 	private static async getWorkingDirectory(): Promise<string> {
 		const cwd = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.fsPath).at(0)
 		if (!cwd) {
-			throw new Error("No workspace detected. Please open Cline in a workspace to use checkpoints.")
+			throw new Error("No workspace detected. Please open Codai in a workspace to use checkpoints.")
 		}
 		const homedir = os.homedir()
 		const desktopPath = path.join(homedir, "Desktop")
