@@ -279,7 +279,12 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 				{/* Autocomplete Settings Section */}
 				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)] [&_vscode-dropdown]:w-full [&_vscode-text-field]:w-full">
-					<details>
+					<details
+						onToggle={(e) => {
+							if (e.currentTarget.open) {
+								vscode.postMessage({ type: "getAutocompleteConfig" })
+							}
+						}}>
 						<summary className="cursor-pointer font-medium">{t("settings.autocomplete.title")}</summary>
 						<div className="mt-3 space-y-3">
 							<VSCodeDropdown>
