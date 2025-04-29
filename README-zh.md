@@ -3,7 +3,7 @@
 
 
 <p align="center">
-  <img src="./assets/icons/web-codai-logo.png" width="60%" />
+  <img src="https://github.com/user-attachments/assets/c683e28a-95d5-4252-93fe-c615f16e3cc5" width="60%" />
 </p>
 <div align="center">
 <table>
@@ -113,7 +113,7 @@ Codai去访问网关获取服务。
 ## 反馈问题
 
 <p align="left">
-  <img src="./assets/icons/wx.JPG" width="50%" />
+  <img src="https://github.com/user-attachments/assets/a4a5abc0-4140-48fa-b095-ce7b9950dc98" width="50%" />
 </p>
 
 ## 许可证
