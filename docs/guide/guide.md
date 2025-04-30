@@ -40,7 +40,7 @@
 
 - 在插件主界面中，点击右上角设置按钮，可以进入设置页面，设置页面中有一个“Autocomplete Settings”的选项
 
-- 目前只实现了openai compatible协议的连接，需要自己填入baseurl,apikey和modelID，具体可以参考[大模型服务器配置方法](./config.md)
+- 目前只实现了openai compatible协议的连接，需要自己填入baseurl,apikey和modelID，具体可以参考[大模型服务器配置方法](https://github.com/codai-agent/codai/blob/main/docs/guide/config.md)
 
   <p>
     <image src="https://github.com/user-attachments/assets/22740180-5b59-40b6-8062-978b56a366d9" width="60%"></image>
