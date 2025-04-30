@@ -17,7 +17,7 @@
     - 弹出选择文件夹，选择刚下载的codat-top-xxxx.vsix，确定即可
     
       <p>
-        <image src="./2.png" width="60%"></image>
+        <image src="https://github.com/user-attachments/assets/b752b0af-ec26-4257-b668-4932f3a20a97" width="60%"></image>
       </p>
 
 #### 2.配置聊天编码的模型
@@ -25,14 +25,14 @@
 - 首次打开Codai插件时，需要配置聊天编码大模型后才能进入主界面，点击“使用自己的API key”按钮，进入配置页面。具体配置方法参考[**大模型服务器配置方法**](https://github.com/codai-agent/codai/blob/main/docs/guide/config.md)
 
   <p>
-    <image src="./3.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/bf60662f-e2a7-46ff-8754-8aedc09f8ff4" width="60%"></image>
   </p>
 
 - 在插件主界面中，点击右上角设置按钮，可以进入设置页面，这里面也可以设置大模型服务器连接信息，选择不同的模型服务器的提供商，填写提供商对应的API key，选择模型。
   - 如果选择的是OpenAI Compatible，还需要输入服务器的URL，以及手动填写模型ID信息。
   
     <p>
-      <image src="./4.png" width="60%"></image>
+      <image src="https://github.com/user-attachments/assets/73172d74-2751-4c42-9c0d-96ad8fa0f45c" width="60%"></image>
     </p>
 
 
@@ -43,7 +43,7 @@
 - 目前只实现了openai compatible协议的连接，需要自己填入baseurl,apikey和modelID，具体可以参考[大模型服务器配置方法](./config.md)
 
   <p>
-    <image src="./5.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/22740180-5b59-40b6-8062-978b56a366d9" width="60%"></image>
   </p>
 
 #### 4.设置插件语言
@@ -53,7 +53,7 @@
 - 设置页面里有一个“语言设置”选项，下拉选择支持12种国际语言设置
 
   <p>
-    <image src="./6.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/1cf26bb8-3b83-4dae-8a83-747842ed368d" width="60%"></image>
   </p>
 
 #### 5.设置插件展示位置
@@ -65,7 +65,7 @@
 - 也可以在codai图标上右键选择：“move to”->"Secondary side bar",将codai展示到右边侧栏区域，**需要重启VS code生效！！！**
 
   <p>
-    <image src="./7.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/1d7b5dcb-ea1d-4175-b522-1d52b3a1770b" width="60%"></image>
   </p>
 
 #### 6.开始对话编码
@@ -77,7 +77,7 @@
 - 在执行模式下，输入框中输入描述词，比如：“请使用H5帮我写一个俄罗斯方块的小游戏。要求：UI美观，功能完整，单人单机。”，点发送按钮，或者按回车键，代码就会被生出来并保存到工作空间中。
 
   <p>
-    <image src="./8.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/3c0a5ea4-e5d0-433d-914f-06942b774bf0" width="60%"></image>
   </p>
 
 #### 7.开始代码补全
@@ -87,7 +87,7 @@
 - 在需要编写代码的地方，首次激活代码补全需要一个回车键，后面就会开始自动跟随鼠标进行代码补全，补全的代码会显示成灰色，如果需要使用补全的代码，就按Tab键接受，否则不用理会。
 
   <p>
-    <image src="./9.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/765c8365-1242-4951-9136-da0bc43bfe5b" width="60%"></image>
   </p>
 
 #### 8.选择编辑功能
@@ -95,13 +95,13 @@
 - 在代码编辑区域，选择一段代码，点击右键，选择“Add to Codai”；或者在下方的命令行中选择输出内容，右键选择“Add to Codai” ，这时候在聊天输入框中就能看见选择的代码信息，也可以在信息后面继续加上自己的要求，比如：请帮忙优化这几行，要求如下...
 
   <p>
-    <image src="./10.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/d80429cc-f8d3-4b3d-a1b7-d66e21b8e828" width="60%"></image>
   </p>
 
 - 如果在代码编辑区中，有波浪线提示代码错误的地方，可以选择 Quick fix，然后选择Fix to Codai或者 Add to Codai，快速去解决错误问题
 
   <p>
-    <image src="./12.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/5aecacce-ffe8-4d96-9e03-99a3db398516" width="60%"></image>
   </p>
 
 #### 9.如果让codai配合其它编辑器工作
@@ -125,7 +125,7 @@
 - 建议自动授权把“读取文件”勾选上。
 
   <p>
-    <image src="./13.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/9e9cd526-c24b-460a-b2c9-acf9350d6a97" width="60%"></image>
   </p>
 
 #### 11.配置忽略文件和规则文件
@@ -138,7 +138,7 @@
   - 全局规则配置也是一样的添加和管理。
 
   <p>
-    <image src="./14.png" width="60%"></image>
+    <image src="https://github.com/user-attachments/assets/7163ecf1-6db3-4e0d-b311-0babdd93fa83" width="60%"></image>
   </p>
 
 #### 12.MCP的使用
@@ -149,5 +149,5 @@
 - 如果明确知道自己不需要使用到MCP，一定要在MCP服务列表中点击开关按钮件MCP关闭掉，这样能节约大量的token
 
 <p>
-  <image src="./15.png" width="60%"></image>
+  <image src="https://github.com/user-attachments/assets/d783819f-da56-4a67-8876-d41ca2ab7297" width="60%"></image>
 </p>
