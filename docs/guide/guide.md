@@ -7,7 +7,7 @@
     - 点开VS code的应用商店界面，在搜索框中搜索“codai-top”，点击“Install”安装即可
     
       <p>
-        <image src="./1.png" width="60%"></image>
+        <image src="https://github.com/user-attachments/assets/64c08343-b2a8-4a16-9294-1cab68518715" width="60%"></image>
       </p>
     
   - 或者从[Github](https://github.com/codai-agent/codai/releases)的Releases中下载codai-top-xxxx.vsix后手动安装
