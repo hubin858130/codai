@@ -19,28 +19,15 @@
 
 ## Key Features of Codai
 
-1. **All functionalities of Cline 3.12**, including code writing and editing, command-line operations, MCP usage, AI model configuration, and more.  
+1. **Including** code writing and editing, command-line operations, MCP usage, AI model configuration, and more.  
 2. **Added internationalization support for the interface, including multiple languages**: English, 简体中文, 日本語, Русский, Français, العربية, 한국어, 繁體中文, Deutsch, Italiano, Bahasa Melayu, Español.  
 3. **Added automatic code completion functionality**. You need to configure the model yourself, preferably one optimized for coding, to achieve outstanding results!  
 4. **Optimized system prompts to reduce token consumption and minimize context length usage in large models**
 
-## Getting Started
+## Getting Started and Model Configuration
 
-- You can directly search for the Codai-top plugin in the VSCode marketplace and install it .  
+- Please read the [==guidance document==](https://github.com/codai-agent/codai/blob/main/docs/guide/guide-en.md) carefully!
 
-- Alternatively, download the plugin from the release section that matches your computer's operating system and chip, then install it in VSCode.  
-
-- Notes for usage:  
-  - If you know for sure that you don’t need MCP services, please disable all installed MCP services.  
-  - If you only want to interact with the large model and don’t need the tool to read or write code files, switch to Plan mode.  
-  - Compared to the original project:  
-    - Currently, in Plan mode with MCP services disabled, upstream token usage is reduced by 1/3.  
-    - If only MCP services are disabled, token usage in ACT mode can also be reduced by 1/5.  
-
-### Model Configuration
-
-- **For code writing models**, it is recommended to use the Claude series or Deepseek-v3 models. These have been tested and deliver excellent results. Other models with high Code test scores are also acceptable, but ensure the model supports tool use (note that Cline’s Tool use is not the same as OpenAI’s or other vendors' function calling protocols).  
-- **For code completion models**, be sure to configure models optimized for coding, such as qwen2.5-coder-3B. The parameters don’t need to be too large, as speed is also a consideration.  
 
 ## The Vision of Codai
 
