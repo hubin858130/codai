@@ -1,10 +1,10 @@
-<div align="center"><sub> <a href="https://github.com/codai-agent/codai/blob/main/README.md" target="_blank">English</a> | <a href="https://github.com/codai-agent/codai/blob/main/README-zh.md" target="_blank">简体中文</a>
-</sub></div>
-
+<div align="center"><span style="font-size: larger"> <a href="https://github.com/codai-agent/codai/blob/main/README.md" target="_blank">English</a> | <a href="https://github.com/codai-agent/codai/blob/main/README-zh.md" target="_blank">简体中文</a>
+</span></div>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/c683e28a-95d5-4252-93fe-c615f16e3cc5" width="60%" />
 </p>
+
 <div align="center">
 <table>
 <tbody>
@@ -27,8 +27,10 @@
 
 ## 开始使用与模型配置
 
-- 请仔细阅读[==使用指北==](https://github.com/codai-agent/codai/blob/main/docs/guide/guide.md)！
+- 请仔细阅读[**==使用指北==**](https://github.com/codai-agent/codai/blob/main/docs/guide/guide.md)！
 
+- 视频教程
+[![Bilibili Video](https://i0.hdslb.com/bfs/archive/4c74e8912147aed9c5aa3b807ca3817fec467b47.jpg)](https://www.bilibili.com/video/BV14WVGzaEPH/)
 
 ## Codai的愿景
 
