@@ -98,7 +98,7 @@ Codai去访问网关获取服务。
 ## 反馈问题
 
 <p align="left">
-  <img src="https://github.com/user-attachments/assets/a4a5abc0-4140-48fa-b095-ce7b9950dc98" width="50%" />
+  <img src="https://github.com/user-attachments/assets/6bf2df00-4848-432d-89bf-d61bf57fa46f" width="50%" />
 </p>
 
 ## 许可证
