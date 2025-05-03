@@ -43,8 +43,6 @@
 
 **I also think this tool should be introduced to every child**. Let them understand AI tools and the power of AI programming from an early age. This will help them quickly bring their brilliant ideas to life, improve their hands-on skills, boost their confidence, and develop their logical thinking. In this era of AI, it’s essential to broaden our horizons and actively embrace the skills that will shape our future. Imagine a world 10 years from now where AI tools are the primary creators of value, and our children are the owners or leaders of these tools. How wonderful!  
 
-**I will continue to share how my own child (now 10 years old) uses Codai** to turn ideas into reality.  
-
 ## Future Directions for Codai
 
 1. **Add codebase indexing** and introduce a local vector database. This will enable local code retrieval, enhance Codai’s ability to handle cross-file operations, and improve accuracy in writing business logic with context.  
