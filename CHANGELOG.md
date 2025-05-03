@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.5]
+
+-   Fix the issue of MCP settings
+-   Update video Tutorials
+
 ## [1.0.4]
 
 -   Fix the issue of incorrect autocomplete settings in the release package
