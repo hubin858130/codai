@@ -10,29 +10,19 @@ import { CodeeConfig } from "@continuedev/core/util/codaiConfigUtil"
 
 export interface WebviewMessage {
 	type:
-		| "addRemoteServer"
 		| "apiConfiguration"
 		| "webviewDidLaunch"
 		| "newTask"
 		| "condense"
+		| "reportBug"
 		| "askResponse"
 		| "didShowAnnouncement"
 		| "selectImages"
-		| "exportCurrentTask"
-		| "showTaskWithId"
-		| "deleteTaskWithId"
-		| "exportTaskWithId"
 		| "resetState"
-		| "requestOllamaModels"
-		| "requestLmStudioModels"
-		| "openImage"
 		| "openInBrowser"
-		| "createRuleFile"
 		| "openMention"
 		| "showChatView"
-		| "refreshOpenRouterModels"
 		| "refreshRequestyModels"
-		| "refreshOpenAiModels"
 		| "refreshClineRules"
 		| "openMcpSettings"
 		| "restartMcpServer"
@@ -44,8 +34,6 @@ export interface WebviewMessage {
 		| "openExtensionSettings"
 		| "requestVsCodeLmModels"
 		| "toggleToolAutoApprove"
-		| "getLatestState"
-		| "accountLoginClicked"
 		| "accountLogoutClicked"
 		| "showAccountViewClicked"
 		| "authStateChanged"
@@ -54,12 +42,10 @@ export interface WebviewMessage {
 		| "downloadMcp"
 		| "silentlyRefreshMcpMarketplace"
 		| "searchCommits"
-		| "showMcpView"
 		| "fetchLatestMcpServersFromHub"
 		| "telemetrySetting"
 		| "openSettings"
 		| "fetchOpenGraphData"
-		| "checkIsImageUrl"
 		| "invoke"
 		| "updateSettings"
 		| "clearAllTaskHistory"
@@ -69,12 +55,17 @@ export interface WebviewMessage {
 		| "relaunchChromeDebugMode"
 		| "taskFeedback"
 		| "scrollToSettings"
-		| "getRelativePaths" // Handles single and multiple URI resolution
 		| "searchFiles"
 		| "toggleFavoriteModel"
 		| "grpc_request"
+		| "grpc_request_cancel"
 		| "toggleClineRule"
+		| "toggleCursorRule"
+		| "toggleWindsurfRule"
 		| "deleteClineRule"
+		| "copyToClipboard"
+		| "updateTerminalConnectionTimeout"
+		| "setActiveQuote"
 
 		// | "relaunchChromeDebugMode"
 		| "getAutocompleteConfig"
@@ -83,7 +74,6 @@ export interface WebviewMessage {
 		| "updateLanguageConfig"
 		| "languageConfig"
 	text?: string
-	uris?: string[] // Used for getRelativePaths
 	disabled?: boolean
 	askResponse?: ClineAskResponse
 	apiConfiguration?: ApiConfiguration
@@ -122,6 +112,10 @@ export interface WebviewMessage {
 		method: string
 		message: any // JSON serialized protobuf message
 		request_id: string // For correlating requests and responses
+		is_streaming?: boolean // Whether this is a streaming request
+	}
+	grpc_request_cancel?: {
+		request_id: string // ID of the request to cancel
 	}
 	// For cline rules
 	isGlobal?: boolean
@@ -130,6 +124,7 @@ export interface WebviewMessage {
 	filename?: string
 
 	offset?: number
+	shellIntegrationTimeout?: number
 	// For autocomplete config
 	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string

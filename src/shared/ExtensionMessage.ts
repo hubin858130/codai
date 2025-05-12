@@ -29,16 +29,12 @@ export interface ExtensionMessage {
 		| "requestyModels"
 		| "mcpServers"
 		| "relinquishControl"
-		| "vsCodeLmModels"
-		| "requestVsCodeLmModels"
 		| "authCallback"
 		| "mcpMarketplaceCatalog"
 		| "mcpDownloadDetails"
 		| "commitSearchResults"
 		| "openGraphData"
-		| "isImageUrlResult"
 		| "didUpdateSettings"
-		| "addRemoteServerResult"
 		| "userCreditsBalance"
 		| "userCreditsUsage"
 		| "userCreditsPayments"
@@ -47,20 +43,18 @@ export interface ExtensionMessage {
 		| "browserConnectionResult"
 		| "scrollToSettings"
 		| "browserRelaunchResult"
-		| "relativePathsResponse" // Handles single and multiple path responses
 		| "fileSearchResults"
 		| "grpc_response" // New type for gRPC responses
+		| "setActiveQuote"
 		| "autocompleteConfig"
 		| "languageConfig"
 	text?: string
-	paths?: (string | null)[] // Used for relativePathsResponse
 	action?:
 		| "chatButtonClicked"
 		| "mcpButtonClicked"
 		| "settingsButtonClicked"
 		| "historyButtonClicked"
 		| "didBecomeVisible"
-		| "accountLoginClicked"
 		| "accountLogoutClicked"
 		| "accountButtonClicked"
 		| "focusChatInput"
@@ -107,16 +101,13 @@ export interface ExtensionMessage {
 		type: "file" | "folder"
 		label?: string
 	}>
-	addRemoteServerResult?: {
-		success: boolean
-		serverName: string
-		error?: string
-	}
 	tab?: McpViewTab
 	grpc_response?: {
 		message?: any // JSON serialized protobuf message
 		request_id: string // Same ID as the request
 		error?: string // Optional error message
+		is_streaming?: boolean // Whether this is part of a streaming response
+		sequence_number?: number // For ordering chunks in streaming responses
 	}
 	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string
@@ -144,6 +135,7 @@ export interface ExtensionState {
 	shouldShowAnnouncement: boolean
 	taskHistory: HistoryItem[]
 	telemetrySetting: TelemetrySetting
+	shellIntegrationTimeout: number
 	uriScheme?: string
 	userInfo?: {
 		displayName: string | null
@@ -154,6 +146,8 @@ export interface ExtensionState {
 	vscMachineId: string
 	globalClineRulesToggles: ClineRulesToggles
 	localClineRulesToggles: ClineRulesToggles
+	localCursorRulesToggles: ClineRulesToggles
+	localWindsurfRulesToggles: ClineRulesToggles
 }
 
 export interface ClineMessage {
@@ -188,6 +182,7 @@ export type ClineAsk =
 	| "use_mcp_server"
 	| "new_task"
 	| "condense"
+	| "report_bug"
 
 export type ClineSay =
 	| "task"
