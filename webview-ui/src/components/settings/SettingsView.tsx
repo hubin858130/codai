@@ -17,9 +17,11 @@ import { TabButton } from "../mcp/configuration/McpConfigurationView"
 import { useEvent } from "react-use"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
 import BrowserSettingsSection from "./BrowserSettingsSection"
+import TerminalSettingsSection from "./TerminalSettingsSection"
+import { FEATURE_FLAGS } from "@shared/services/feature-flags/feature-flags"
+
 import { useTranslation } from "react-i18next"
 import { getLanguageConfig, updateLanguageConfig } from "@continuedev/core/util/codaiConfigUtil"
-
 const { IS_DEV } = process.env
 
 type SettingsViewProps = {
@@ -400,8 +402,8 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 								Allow anonymous error and usage reporting
 							</VSCodeCheckbox>
 							<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-								Help improve Cline by sending anonymous usage data and error reports. No code, prompts, or
-								personal information are ever sent. See our{" "}
+								Help improve Cline by sending anonymous usage data and error reports. No code, prompts, or personal
+								information are ever sent. See our{" "}
 								<VSCodeLink href="https://docs.cline.bot/more-info/telemetry" className="text-inherit">
 									telemetry overview
 								</VSCodeLink>{" "}
@@ -415,6 +417,9 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 						{/* Browser Settings Section */}
 						<BrowserSettingsSection />
+
+						{/* Terminal Settings Section */}
+						<TerminalSettingsSection />
 
 						<div className="mt-auto pr-2 flex justify-center">
 							<SettingsButton
