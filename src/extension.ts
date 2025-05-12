@@ -90,7 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Initialize test mode and add disposables to context
 	context.subscriptions.push(...initializeTestMode(context, sidebarWebview))
 
-		vscode.commands.executeCommand("setContext", "codai.isDevMode", IS_DEV && IS_DEV === "true")
+	vscode.commands.executeCommand("setContext", "codai.isDevMode", IS_DEV && IS_DEV === "true")
 
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(WebviewProvider.sideBarId, sidebarWebview, {
@@ -238,9 +238,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return Buffer.from(uri.query, "base64").toString("utf-8")
 		}
 	})()
-	context.subscriptions.push(
-		vscode.workspace.registerTextDocumentContentProvider(DIFF_VIEW_URI_SCHEME, diffContentProvider),
-	)
+	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider(DIFF_VIEW_URI_SCHEME, diffContentProvider))
 
 	// URI Handler
 	const handleUri = async (uri: vscode.Uri) => {
@@ -307,36 +305,33 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand(
-			"codai.addToChat",
-			async (range?: vscode.Range, diagnostics?: vscode.Diagnostic[]) => {
-				const editor = vscode.window.activeTextEditor
-				if (!editor) {
-					return
-				}
+		vscode.commands.registerCommand("codai.addToChat", async (range?: vscode.Range, diagnostics?: vscode.Diagnostic[]) => {
+			const editor = vscode.window.activeTextEditor
+			if (!editor) {
+				return
+			}
 
-				// Use provided range if available, otherwise use current selection
-				// (vscode command passes an argument in the first param by default, so we need to ensure it's a Range object)
-				const textRange = range instanceof vscode.Range ? range : editor.selection
-				const selectedText = editor.document.getText(textRange)
+			// Use provided range if available, otherwise use current selection
+			// (vscode command passes an argument in the first param by default, so we need to ensure it's a Range object)
+			const textRange = range instanceof vscode.Range ? range : editor.selection
+			const selectedText = editor.document.getText(textRange)
 
-				if (!selectedText) {
-					return
-				}
+			if (!selectedText) {
+				return
+			}
 
-				// Get the file path and language ID
-				const filePath = editor.document.uri.fsPath
-				const languageId = editor.document.languageId
+			// Get the file path and language ID
+			const filePath = editor.document.uri.fsPath
+			const languageId = editor.document.languageId
 
-				const visibleWebview = WebviewProvider.getVisibleInstance()
-				await visibleWebview?.controller.addSelectedCodeToChat(
-					selectedText,
-					filePath,
-					languageId,
-					Array.isArray(diagnostics) ? diagnostics : undefined,
-				)
-			},
-		),
+			const visibleWebview = WebviewProvider.getVisibleInstance()
+			await visibleWebview?.controller.addSelectedCodeToChat(
+				selectedText,
+				filePath,
+				languageId,
+				Array.isArray(diagnostics) ? diagnostics : undefined,
+			)
+		}),
 	)
 
 	context.subscriptions.push(
@@ -440,27 +435,24 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register the command handler
 	context.subscriptions.push(
-		vscode.commands.registerCommand(
-			"codai.fixWithCodai",
-			async (range: vscode.Range, diagnostics: vscode.Diagnostic[]) => {
-				// Add this line to focus the chat input first
-				await vscode.commands.executeCommand("codai.focusChatInput")
-				// Wait for a webview instance to become visible after focusing
-				await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
-				const editor = vscode.window.activeTextEditor
-				if (!editor) {
-					return
-				}
+		vscode.commands.registerCommand("codai.fixWithCodai", async (range: vscode.Range, diagnostics: vscode.Diagnostic[]) => {
+			// Add this line to focus the chat input first
+			await vscode.commands.executeCommand("codai.focusChatInput")
+			// Wait for a webview instance to become visible after focusing
+			await pWaitFor(() => !!WebviewProvider.getVisibleInstance())
+			const editor = vscode.window.activeTextEditor
+			if (!editor) {
+				return
+			}
 
-				const selectedText = editor.document.getText(range)
-				const filePath = editor.document.uri.fsPath
-				const languageId = editor.document.languageId
+			const selectedText = editor.document.getText(range)
+			const filePath = editor.document.uri.fsPath
+			const languageId = editor.document.languageId
 
-				// Send to sidebar provider with diagnostics
-				const visibleWebview = WebviewProvider.getVisibleInstance()
-				await visibleWebview?.controller.fixWithCodai(selectedText, filePath, languageId, diagnostics)
-			},
-		),
+			// Send to sidebar provider with diagnostics
+			const visibleWebview = WebviewProvider.getVisibleInstance()
+			await visibleWebview?.controller.fixWithCodai(selectedText, filePath, languageId, diagnostics)
+		}),
 	)
 
 	// Register the focusChatInput command handler
@@ -500,7 +492,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		}),
 	)
-	
+
 	// 如果成功加载了ContinueCompletionProvider，则注册它
 	if (ContinueCompletionProvider) {
 		try {

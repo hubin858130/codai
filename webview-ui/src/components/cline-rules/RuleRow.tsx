@@ -3,7 +3,6 @@ import { FileServiceClient } from "@/services/grpc-client"
 import { DeleteRuleFileRequest } from "@shared/proto-conversions/file/rule-files-conversion"
 import { useTranslation } from "react-i18next"
 
-
 const RuleRow: React.FC<{
 	rulePath: string
 	enabled: boolean
