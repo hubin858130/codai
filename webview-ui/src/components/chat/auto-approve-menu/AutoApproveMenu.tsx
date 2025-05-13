@@ -8,6 +8,7 @@ import { vscode } from "@/utils/vscode"
 import { getAsVar, VSC_FOREGROUND, VSC_TITLEBAR_INACTIVE_FOREGROUND, VSC_DESCRIPTION_FOREGROUND } from "@/utils/vscStyles"
 import { useClickAway } from "react-use"
 import HeroTooltip from "@/components/common/HeroTooltip"
+import { t } from "i18next"
 
 const breakpoint = 500
 
@@ -29,76 +30,75 @@ export interface ActionMetadata {
 const ACTION_METADATA: ActionMetadata[] = [
 	{
 		id: "readFiles",
-		label: "Read project files",
-		shortName: "Read",
-		description: "Allows Cline to read files within your workspace.",
+		label: "autoApprove.actions.readFiles.label",
+		shortName: "autoApprove.actions.readFiles.shortName",
+		description: "autoApprove.actions.readFiles.description",
 		icon: "codicon-search",
 		subAction: {
 			id: "readFilesExternally",
-			label: "Read all files",
-			shortName: "Read (all)",
-			description: "Allows Cline to read any file on your computer.",
+			label: "autoApprove.actions.readFilesExternally.label",
+			shortName: "autoApprove.actions.readFilesExternally.shortName",
+			description: "autoApprove.actions.readFilesExternally.description",
 			icon: "codicon-folder-opened",
 			parentActionId: "readFiles",
 		},
 	},
 	{
 		id: "editFiles",
-		label: "Edit project files",
-		shortName: "Edit",
-		description: "Allows Cline to modify files within your workspace.",
+		label: "autoApprove.actions.editFiles.label",
+		shortName: "autoApprove.actions.editFiles.shortName",
+		description: "autoApprove.actions.editFiles.description",
 		icon: "codicon-edit",
 		subAction: {
 			id: "editFilesExternally",
-			label: "Edit all files",
-			shortName: "Edit (all)",
-			description: "Allows Cline to modify any file on your computer.",
+			label: "autoApprove.actions.editFilesExternally.label",
+			shortName: "autoApprove.actions.editFilesExternally.shortName",
+			description: "autoApprove.actions.editFilesExternally.description",
 			icon: "codicon-files",
 			parentActionId: "editFiles",
 		},
 	},
 	{
 		id: "executeSafeCommands",
-		label: "Execute safe commands",
-		shortName: "Safe Commands",
-		description:
-			"Allows Cline to execute safe terminal commands. If the model determines a command is potentially destructive, it will still require approval.",
+		label: "autoApprove.actions.executeSafeCommands.label",
+		shortName: "autoApprove.actions.executeSafeCommands.shortName",
+		description: "autoApprove.actions.executeSafeCommands.description",
 		icon: "codicon-terminal",
 		subAction: {
 			id: "executeAllCommands",
-			label: "Execute all commands",
-			shortName: "All Commands",
-			description: "Allows Cline to execute all terminal commands. Use at your own risk.",
+			label: "autoApprove.actions.executeAllCommands.label",
+			shortName: "autoApprove.actions.executeAllCommands.shortName",
+			description: "autoApprove.actions.executeAllCommands.description",
 			icon: "codicon-terminal-bash",
 			parentActionId: "executeSafeCommands",
 		},
 	},
 	{
 		id: "useBrowser",
-		label: "Use the browser",
-		shortName: "Browser",
-		description: "Allows Cline to launch and interact with any website in a browser.",
+		label: "autoApprove.actions.useBrowser.label",
+		shortName: "autoApprove.actions.useBrowser.shortName",
+		description: "autoApprove.actions.useBrowser.description",
 		icon: "codicon-globe",
 	},
 	{
 		id: "useMcp",
-		label: "Use MCP servers",
-		shortName: "MCP",
-		description: "Allows Cline to use configured MCP servers which may modify filesystem or interact with APIs.",
+		label: "autoApprove.actions.useMcp.label",
+		shortName: "autoApprove.actions.useMcp.shortName",
+		description: "autoApprove.actions.useMcp.description",
 		icon: "codicon-server",
 	},
 	{
 		id: "enableAll",
-		label: "Enable all",
-		shortName: "All",
-		description: "Enable all actions.",
+		label: "autoApprove.actions.enableAll.label",
+		shortName: "autoApprove.actions.enableAll.shortName",
+		description: "autoApprove.actions.enableAll.description",
 		icon: "codicon-checklist",
 	},
 	{
 		id: "enableNotifications",
-		label: "Enable notifications",
-		shortName: "Notifications",
-		description: "Receive system notifications when Cline requires approval to proceed or when a task is completed.",
+		label: "autoApprove.actions.enableNotifications.label",
+		shortName: "autoApprove.actions.enableNotifications.shortName",
+		description: "autoApprove.actions.enableNotifications.description",
 		icon: "codicon-bell",
 	},
 ]
@@ -343,10 +343,8 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 								cursor: "pointer",
 							}}>
 							<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-								<HeroTooltip
-									content="Auto-approve allows Cline to perform the following actions without asking for permission. Please use with caution and only enable if you understand the risks."
-									placement="top">
-									<span style={{ color: getAsVar(VSC_FOREGROUND), left: "0" }}>Auto-approve</span>
+								<HeroTooltip content={t("autoApprove.description")} placement="top">
+									<span style={{ color: getAsVar(VSC_FOREGROUND), left: "0" }}>{t("autoApprove.title")}</span>
 								</HeroTooltip>
 							</div>
 						</div>
@@ -375,10 +373,8 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 								position: "relative", // Added for positioning context
 							}}
 							onClick={() => setIsExpanded(false)}>
-							<HeroTooltip
-								content="Auto-approve allows Cline to perform the following actions without asking for permission. Please use with caution and only enable if you understand the risks."
-								placement="top">
-								<span style={{ color: getAsVar(VSC_FOREGROUND) }}>Auto-approve</span>
+							<HeroTooltip content={t("autoApprove.description")} placement="top">
+								<span style={{ color: getAsVar(VSC_FOREGROUND) }}>{t("autoApprove.title")}</span>
 							</HeroTooltip>
 							<span className="codicon codicon-chevron-down" />
 						</div>
@@ -432,7 +428,7 @@ const AutoApproveMenu = ({ style }: AutoApproveMenuProps) => {
 							}}
 						/>
 						<HeroTooltip
-							content="Cline will automatically make this many API requests before asking for approval to proceed with the task."
+							content="Codai will automatically make this many API requests before asking for approval to proceed with the task."
 							placement="top">
 							<div
 								style={{
