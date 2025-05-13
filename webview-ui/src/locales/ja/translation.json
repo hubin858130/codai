@@ -91,7 +91,7 @@
 		}
 	},
 	"autoApprove": {
-		"title": "自動承認：",
+		"title": "自動承認",
 		"none": "なし",
 		"description": "自動承認により、Codaiは以下のアクションを許可なく実行できます。リスクを理解している場合のみ有効にしてください。",
 		"maxRequests": "最大リクエスト数：",
@@ -138,6 +138,16 @@
 				"label": "MCPサーバーを使用",
 				"shortName": "MCP",
 				"description": "Codaiがファイルシステムを変更したりAPIと対話したりする可能性のある設定済みMCPサーバーを使用することを許可します。"
+			},
+			"enableAll": {
+				"label": "すべてを有効化",
+				"shortName": "すべて",
+				"description": "すべてのアクションを有効化します。"
+			},
+			"enableNotifications": {
+				"label": "通知を有効化",
+				"shortName": "通知",
+				"description": "Codaiが続行の承認を必要とする場合やタスクが完了した場合にシステム通知を受け取ります。"
 			}
 		}
 	},

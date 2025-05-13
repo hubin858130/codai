@@ -17,9 +17,11 @@ import { TabButton } from "../mcp/configuration/McpConfigurationView"
 import { useEvent } from "react-use"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
 import BrowserSettingsSection from "./BrowserSettingsSection"
+import TerminalSettingsSection from "./TerminalSettingsSection"
+import { FEATURE_FLAGS } from "@shared/services/feature-flags/feature-flags"
+
 import { useTranslation } from "react-i18next"
 import { getLanguageConfig, updateLanguageConfig } from "@continuedev/core/util/codaiConfigUtil"
-
 const { IS_DEV } = process.env
 
 type SettingsViewProps = {
@@ -280,6 +282,7 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 				{/* Autocomplete Settings Section */}
 				<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)] [&_vscode-dropdown]:w-full [&_vscode-text-field]:w-full">
 					<details
+						open
 						onToggle={(e) => {
 							if (e.currentTarget.open) {
 								vscode.postMessage({ type: "getAutocompleteConfig" })
@@ -415,6 +418,9 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 						{/* Browser Settings Section */}
 						<BrowserSettingsSection />
+
+						{/* Terminal Settings Section */}
+						<TerminalSettingsSection />
 
 						<div className="mt-auto pr-2 flex justify-center">
 							<SettingsButton

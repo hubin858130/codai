@@ -92,7 +92,7 @@
 		}
 	},
 	"autoApprove": {
-		"title": "自动批准：",
+		"title": "自动批准",
 		"none": "无",
 		"description": "自动批准允许 Codai 在不需要请求许可的情况下执行以下操作。请谨慎使用，仅在了解风险的情况下启用。",
 		"maxRequests": "最大请求数：",
@@ -139,6 +139,16 @@
 				"label": "使用 MCP 服务器",
 				"shortName": "MCP",
 				"description": "允许 Codai 使用可能修改文件系统或与 API 交互的已配置 MCP 服务器。"
+			},
+			"enableAll": {
+				"label": "启用全部",
+				"shortName": "全部",
+				"description": "启用所有操作。"
+			},
+			"enableNotifications": {
+				"label": "启用通知",
+				"shortName": "通知",
+				"description": "当 Codai 需要批准继续执行或任务完成时接收系统通知。"
 			}
 		}
 	},

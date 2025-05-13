@@ -10,7 +10,12 @@ import { useTranslation } from "react-i18next"
 
 const ClineRulesToggleModal: React.FC = () => {
 	const { t } = useTranslation()
-	const { globalClineRulesToggles = {}, localClineRulesToggles = {} } = useExtensionState()
+	const {
+		globalClineRulesToggles = {},
+		localClineRulesToggles = {},
+		localCursorRulesToggles = {},
+		localWindsurfRulesToggles = {},
+	} = useExtensionState()
 	const [isVisible, setIsVisible] = useState(false)
 	const buttonRef = useRef<HTMLDivElement>(null)
 	const modalRef = useRef<HTMLDivElement>(null)
@@ -34,11 +39,35 @@ const ClineRulesToggleModal: React.FC = () => {
 		.map(([path, enabled]): [string, boolean] => [path, enabled as boolean])
 		.sort(([a], [b]) => a.localeCompare(b))
 
+	const cursorRules = Object.entries(localCursorRulesToggles || {})
+		.map(([path, enabled]): [string, boolean] => [path, enabled as boolean])
+		.sort(([a], [b]) => a.localeCompare(b))
+
+	const windsurfRules = Object.entries(localWindsurfRulesToggles || {})
+		.map(([path, enabled]): [string, boolean] => [path, enabled as boolean])
+		.sort(([a], [b]) => a.localeCompare(b))
+
 	// Handle toggle rule
 	const toggleRule = (isGlobal: boolean, rulePath: string, enabled: boolean) => {
 		vscode.postMessage({
 			type: "toggleClineRule",
 			isGlobal,
+			rulePath,
+			enabled,
+		})
+	}
+
+	const toggleCursorRule = (rulePath: string, enabled: boolean) => {
+		vscode.postMessage({
+			type: "toggleCursorRule",
+			rulePath,
+			enabled,
+		})
+	}
+
+	const toggleWindsurfRule = (rulePath: string, enabled: boolean) => {
+		vscode.postMessage({
+			type: "toggleWindsurfRule",
 			rulePath,
 			enabled,
 		})
@@ -64,7 +93,7 @@ const ClineRulesToggleModal: React.FC = () => {
 	return (
 		<div ref={modalRef}>
 			<div ref={buttonRef} className="inline-flex min-w-0 max-w-full">
-				<Tooltip tipText={t("CodaiRules.manageRules")}>
+				<Tooltip tipText={t("CodaiRules.manageRules")} visible={isVisible ? false : undefined}>
 					<VSCodeButton
 						appearance="icon"
 						aria-label={t("CodaiRules.CodaiRules")}
@@ -119,6 +148,9 @@ const ClineRulesToggleModal: React.FC = () => {
 							toggleRule={(rulePath, enabled) => toggleRule(true, rulePath, enabled)}
 							listGap="small"
 							isGlobal={true}
+							ruleType={"cline"}
+							showNewRule={true}
+							showNoRules={true}
 						/>
 					</div>
 
@@ -130,6 +162,27 @@ const ClineRulesToggleModal: React.FC = () => {
 							toggleRule={(rulePath, enabled) => toggleRule(false, rulePath, enabled)}
 							listGap="small"
 							isGlobal={false}
+							ruleType={"cline"}
+							showNewRule={false}
+							showNoRules={false}
+						/>
+						<RulesToggleList
+							rules={cursorRules}
+							toggleRule={toggleCursorRule}
+							listGap="small"
+							isGlobal={false}
+							ruleType={"cursor"}
+							showNewRule={false}
+							showNoRules={false}
+						/>
+						<RulesToggleList
+							rules={windsurfRules}
+							toggleRule={toggleWindsurfRule}
+							listGap="small"
+							isGlobal={false}
+							ruleType={"windsurf"}
+							showNewRule={true}
+							showNoRules={localRules.length === 0 && cursorRules.length === 0 && windsurfRules.length === 0}
 						/>
 					</div>
 				</div>

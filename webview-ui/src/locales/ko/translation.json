@@ -91,7 +91,7 @@
 		}
 	},
 	"autoApprove": {
-		"title": "자동 승인:",
+		"title": "자동 승인",
 		"none": "없음",
 		"description": "자동 승인을 통해 Codai은 다음 작업을 허가 없이 수행할 수 있습니다. 위험을 이해하는 경우에만 주의해서 사용하세요.",
 		"maxRequests": "최대 요청 수:",
@@ -138,6 +138,16 @@
 				"label": "MCP 서버 사용",
 				"shortName": "MCP",
 				"description": "Codai이 파일 시스템을 수정하거나 API와 상호작용할 수 있는 구성된 MCP 서버를 사용할 수 있도록 합니다."
+			},
+			"enableAll": {
+				"label": "모두 활성화",
+				"shortName": "모두",
+				"description": "모든 작업을 활성화합니다."
+			},
+			"enableNotifications": {
+				"label": "알림 활성화",
+				"shortName": "알림",
+				"description": "Codai이 계속하기 위해 승인이 필요하거나 작업이 완료되었을 때 시스템 알림을 받습니다."
 			}
 		}
 	},
