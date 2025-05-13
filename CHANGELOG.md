@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0]
+
+-   Refresh openai compatible models
+-   Synchronize Cline v3.15
+-   Fix bugs
+
 ## [1.0.5]
 
 -   Fix the issue of MCP settings
@@ -22,7 +28,7 @@
 ## [1.0.1]
 
 -   First version
--   The key features of clinev3.12
+-   The key features of cline v3.12
 -   Autocomplete
 -   Multilingual internationalization settings
 -   Optimized system prompts

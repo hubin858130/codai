@@ -10,6 +10,7 @@ import { useExtensionState } from "./context/ExtensionStateContext"
 import { vscode } from "./utils/vscode"
 import McpView from "./components/mcp/configuration/McpConfigurationView"
 import { Providers } from "./Providers"
+import i18n from "./i18n"
 
 const AppContent = () => {
 	const { didHydrateState, showWelcome, shouldShowAnnouncement, showMcp, mcpTab } = useExtensionState()
@@ -25,6 +26,13 @@ const AppContent = () => {
 		setShowMcp(false)
 		setMcpTab(undefined)
 	}, [setShowMcp, setMcpTab])
+
+	useEffect(() => {
+		// 请求语言配置
+		vscode.postMessage({
+			type: "getLanguageConfig",
+		})
+	}, [])
 
 	const handleMessage = useCallback(
 		(e: MessageEvent) => {
@@ -66,6 +74,10 @@ const AppContent = () => {
 							setShowAccount(false)
 							break
 					}
+					break
+				case "languageConfig":
+					// 更新语言
+					i18n.changeLanguage(message.language || "en")
 					break
 			}
 		},

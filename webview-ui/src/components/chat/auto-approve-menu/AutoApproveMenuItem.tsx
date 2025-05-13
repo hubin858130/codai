@@ -4,6 +4,7 @@ import HeroTooltip from "@/components/common/HeroTooltip"
 import { ActionMetadata } from "./AutoApproveMenu"
 import { useState } from "react"
 import { VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react"
+import { t } from "i18next"
 
 interface AutoApproveMenuItemProps {
 	action: ActionMetadata
@@ -92,12 +93,12 @@ const AutoApproveMenuItem = ({
 	const content = (
 		<div>
 			<ActionButtonContainer>
-				<HeroTooltip content={action.description} delay={200}>
+				<HeroTooltip content={t(action.description)} delay={200}>
 					<CheckboxContainer isFavorited={favorited} onClick={onChange}>
 						<div className="left-content">
 							<VSCodeCheckbox checked={checked} />
 							<span className={`codicon ${action.icon} icon`}></span>
-							<span className="label">{condensed ? action.shortName : action.label}</span>
+							<span className="label">{condensed ? t(action.shortName) : t(action.label)}</span>
 						</div>
 						{onToggleFavorite && !condensed && (
 							<span
