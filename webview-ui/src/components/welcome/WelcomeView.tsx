@@ -5,6 +5,8 @@ import { validateApiConfiguration } from "@/utils/validate"
 import { vscode } from "@/utils/vscode"
 import ApiOptions from "@/components/settings/ApiOptions"
 import ClineLogoWhite from "@/assets/ClineLogoWhite"
+import { AccountServiceClient } from "@/services/grpc-client"
+import { EmptyRequest } from "@shared/proto/common"
 import { useTranslation, Trans } from "react-i18next"
 
 const WelcomeView = memo(() => {
@@ -16,7 +18,9 @@ const WelcomeView = memo(() => {
 	const disableLetsGoButton = apiErrorMessage != null
 
 	const handleLogin = () => {
-		vscode.postMessage({ type: "accountLoginClicked" })
+		AccountServiceClient.accountLoginClicked(EmptyRequest.create()).catch((err) =>
+			console.error("Failed to get login URL:", err),
+		)
 	}
 
 	const handleSubmit = () => {

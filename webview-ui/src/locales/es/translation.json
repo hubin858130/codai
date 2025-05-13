@@ -91,7 +91,7 @@
 		}
 	},
 	"autoApprove": {
-		"title": "Aprobación Automática:",
+		"title": "Aprobación Automática",
 		"none": "Ninguna",
 		"description": "La aprobación automática permite que Codai ejecute las siguientes acciones sin permiso. Úselo con precaución y habilítelo solo si comprende los riesgos.",
 		"maxRequests": "Número Máximo de Solicitudes:",
@@ -138,6 +138,16 @@
 				"label": "Usar Servidor MCP",
 				"shortName": "MCP",
 				"description": "Permite que Codai use servidores MCP configurados que pueden modificar el sistema de archivos o interactuar con API."
+			},
+			"enableAll": {
+				"label": "Habilitar Todo",
+				"shortName": "Todo",
+				"description": "Habilita todas las acciones."
+			},
+			"enableNotifications": {
+				"label": "Habilitar Notificaciones",
+				"shortName": "Notificaciones",
+				"description": "Reciba notificaciones del sistema cuando Codai necesite aprobación para continuar o cuando se complete una tarea."
 			}
 		}
 	},

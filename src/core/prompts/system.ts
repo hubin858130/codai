@@ -9,7 +9,7 @@ export const SYSTEM_PROMPT = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-) => `You are Codee, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
+) => `You are Codai, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
 
 ====
 
@@ -573,6 +573,7 @@ CAPABILITIES
 		: ""
 }
 - You have access to MCP servers that may provide additional tools and resources. Each server may provide different capabilities that you can use to accomplish tasks more effectively.
+- You can use LaTeX syntax in your responses to render mathematical expressions
 
 ====
 
@@ -636,7 +637,7 @@ export const SYSTEM_PROMPT_WITHOUT_MCP = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-) => `You are Codee, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
+) => `You are Codai, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
 
 ====
 
@@ -1085,6 +1086,7 @@ CAPABILITIES
 		? "\n- You can use the browser_action tool to interact with websites (including html files and locally running development servers) through a Puppeteer-controlled browser when you feel it is necessary in accomplishing the user's task. This tool is particularly useful for web development tasks as it allows you to launch a browser, navigate to pages, interact with elements through clicks and keyboard input, and capture the results through screenshots and console logs. This tool may be useful at key stages of web development tasks-such as after implementing new features, making substantial changes, when troubleshooting issues, or to verify the result of your work. You can analyze the provided screenshots to ensure correct rendering or identify errors, and review console logs for runtime issues.\n	- For example, if asked to add a component to a react website, you might create the necessary files, use execute_command to run the site locally, then use browser_action to launch the browser, navigate to the local server, and verify the component renders & functions correctly before closing the browser."
 		: ""
 }
+- You can use LaTeX syntax in your responses to render mathematical expressions
 
 ====
 
@@ -1147,7 +1149,7 @@ export const SYSTEM_PROMPT_TALK = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-) => `You are Codee, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
+) => `You are Codai, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
 
 ====
 
@@ -1446,6 +1448,8 @@ CAPABILITIES
 		: ""
 }
 - You have access to MCP servers that may provide additional tools and resources. Each server may provide different capabilities that you can use to accomplish tasks more effectively.
+- You can use LaTeX syntax in your responses to render mathematical expressions
+
 
 ====
 
@@ -1504,7 +1508,7 @@ export const SYSTEM_PROMPT_TALK_WITHOUT_MCP = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-) => `You are Codee, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
+) => `You are Codai, a highly skilled software engineer with extensive knowledge in many programming languages, frameworks, design patterns, and best practices.
 
 ====
 
@@ -1688,6 +1692,7 @@ CAPABILITIES
 		? "\n- You can use the browser_action tool to interact with websites (including html files and locally running development servers) through a Puppeteer-controlled browser when you feel it is necessary in accomplishing the user's task. This tool is particularly useful for web development tasks as it allows you to launch a browser, navigate to pages, interact with elements through clicks and keyboard input, and capture the results through screenshots and console logs. This tool may be useful at key stages of web development tasks-such as after implementing new features, making substantial changes, when troubleshooting issues, or to verify the result of your work. You can analyze the provided screenshots to ensure correct rendering or identify errors, and review console logs for runtime issues.\n	- For example, if asked to add a component to a react website, you might create the necessary files, use execute_command to run the site locally, then use browser_action to launch the browser, navigate to the local server, and verify the component renders & functions correctly before closing the browser."
 		: ""
 }
+- You can use LaTeX syntax in your responses to render mathematical expressions
 
 ====
 
@@ -1744,6 +1749,9 @@ export function addUserInstructions(
 	settingsCustomInstructions?: string,
 	globalClineRulesFileInstructions?: string,
 	localClineRulesFileInstructions?: string,
+	localCursorRulesFileInstructions?: string,
+	localCursorRulesDirInstructions?: string,
+	localWindsurfRulesFileInstructions?: string,
 	clineIgnoreInstructions?: string,
 	preferredLanguageInstructions?: string,
 ) {
@@ -1759,6 +1767,15 @@ export function addUserInstructions(
 	}
 	if (localClineRulesFileInstructions) {
 		customInstructions += localClineRulesFileInstructions + "\n\n"
+	}
+	if (localCursorRulesFileInstructions) {
+		customInstructions += localCursorRulesFileInstructions + "\n\n"
+	}
+	if (localCursorRulesDirInstructions) {
+		customInstructions += localCursorRulesDirInstructions + "\n\n"
+	}
+	if (localWindsurfRulesFileInstructions) {
+		customInstructions += localWindsurfRulesFileInstructions + "\n\n"
 	}
 	if (clineIgnoreInstructions) {
 		customInstructions += clineIgnoreInstructions

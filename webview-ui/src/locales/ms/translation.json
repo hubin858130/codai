@@ -91,7 +91,7 @@
 		}
 	},
 	"autoApprove": {
-		"title": "Kelulusan Automatik:",
+		"title": "Kelulusan Automatik",
 		"none": "Tiada",
 		"description": "Kelulusan automatik membolehkan Codai melaksanakan tindakan berikut tanpa kebenaran. Sila gunakan dengan berhati-hati dan dayakan hanya jika anda memahami risikonya.",
 		"maxRequests": "Bilangan Permintaan Maksimum:",
@@ -138,6 +138,16 @@
 				"label": "Gunakan Pelayan MCP",
 				"shortName": "MCP",
 				"description": "Membolehkan Codai menggunakan pelayan MCP yang dikonfigurasi yang boleh mengubah sistem fail atau berinteraksi dengan API."
+			},
+			"enableAll": {
+				"label": "Dayakan Semua",
+				"shortName": "Semua",
+				"description": "Dayakan semua tindakan."
+			},
+			"enableNotifications": {
+				"label": "Dayakan Pemberitahuan",
+				"shortName": "Pemberitahuan",
+				"description": "Terima pemberitahuan sistem apabila Codai memerlukan kelulusan untuk meneruskan atau apabila tugas selesai."
 			}
 		}
 	},
