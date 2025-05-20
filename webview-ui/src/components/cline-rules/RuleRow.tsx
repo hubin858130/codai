@@ -64,6 +64,7 @@ const RuleRow: React.FC<{
 			DeleteRuleFileRequest.create({
 				rulePath: rulePath,
 				isGlobal: isGlobal,
+				type: ruleType || "codai",
 			}),
 		).catch((err) => console.error("Failed to delete rule file:", err))
 	}
@@ -76,7 +77,7 @@ const RuleRow: React.FC<{
 				}`}>
 				<span className="flex-1 overflow-hidden break-all whitespace-normal flex items-center mr-1" title={rulePath}>
 					{getRuleTypeIcon() && <span className="mr-1.5">{getRuleTypeIcon()}</span>}
-					{displayName}
+					<span className="ph-no-capture">{displayName}</span>
 				</span>
 
 				{/* Toggle Switch */}

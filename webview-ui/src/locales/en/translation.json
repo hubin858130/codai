@@ -100,6 +100,11 @@
 		"enableNotifications": "Enable Notifications",
 		"notificationsDesc": "Receive system notifications when Codai requires approval to proceed or when a task is completed.",
 		"actions": {
+			"enableAutoApprove": {
+				"label": "Enable auto-approve",
+				"shortName": "Enable",
+				"description": "Toggle the auto-approve feature on or off."
+			},
 			"readFiles": {
 				"label": "Read project files",
 				"shortName": "Read Local",
@@ -197,9 +202,11 @@
 		"underConstruction": "Under construction..."
 	},
 	"CodaiRules": {
-		"manageRules": "Manage Codai Rules",
+		"manageRules": "Manage Codai Rules & Workflows",
 		"CodaiRules": "Codai Rules",
 		"globalRules": "Global Rules",
+		"CodaiWorkflows": "Codai Workflows",
+		"workspaceWorkflows": "Workspace Workflows",
 		"workspaceRules": "Workspace Rules",
 		"noRulesFound": "No rules found",
 		"editRuleFile": "Edit rule file",
@@ -208,6 +215,12 @@
 		"createRuleFile": "Create rule file",
 		"newRuleFileButton": "New rule file",
 		"ruleNamePlaceholder": "rule-name (.md, .txt, or no extension)",
-		"invalidExtension": "Only .md, .txt, or no file extension allowed"
+		"invalidExtension": "Only .md, .txt, or no file extension allowed",
+		"ruleDescription": "Rules allow you to provide Codai with system-level guidance. Think of them as a persistent way to include context and preferences for your projects or globally for every conversation.",
+		"createWorkflowFile": "New workflow file",
+		"newWorkflowFile": "New workflow file...",
+		"workflowNamePlaceholder": "workflow-name (.md, .txt, or no extension)",
+		"noWorkflowsFound": "No rules found",
+		"workflowsDescription": "Workflows allow you to define a series of steps to guide Cline through a repetitive set of tasks, such as deploying a service or submitting a PR. To invoke a workflow, type /workflow-name in the chat."
 	}
 }
