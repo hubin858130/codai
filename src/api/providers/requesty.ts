@@ -17,8 +17,8 @@ export class RequestyHandler implements ApiHandler {
 			baseURL: "https://router.requesty.ai/v1",
 			apiKey: this.options.requestyApiKey,
 			defaultHeaders: {
-				"HTTP-Referer": "https://cline.bot",
-				"X-Title": "Cline",
+				"HTTP-Referer": "https://codai.top",
+				"X-Title": "Codai",
 			},
 		})
 	}
@@ -32,7 +32,7 @@ export class RequestyHandler implements ApiHandler {
 			...convertToOpenAiMessages(messages),
 		]
 
-		const reasoningEffort = this.options.o3MiniReasoningEffort || "medium"
+		const reasoningEffort = this.options.reasoningEffort || "medium"
 		const reasoning = { reasoning_effort: reasoningEffort }
 		const reasoningArgs = model.id.startsWith("openai/o") ? reasoning : {}
 

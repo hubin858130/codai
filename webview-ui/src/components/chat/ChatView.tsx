@@ -18,11 +18,10 @@ import { combineCommandSequences } from "@shared/combineCommandSequences"
 import { getApiMetrics } from "@shared/getApiMetrics"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { vscode } from "@/utils/vscode"
-import { TaskServiceClient } from "@/services/grpc-client"
+import { TaskServiceClient, SlashServiceClient, FileServiceClient } from "@/services/grpc-client"
 import HistoryPreview from "@/components/history/HistoryPreview"
 import { normalizeApiConfiguration } from "@/components/settings/ApiOptions"
 import Announcement from "@/components/chat/Announcement"
-import AutoApproveMenu from "@/components/chat/auto-approve-menu/AutoApproveMenu"
 import BrowserSessionRow from "@/components/chat/BrowserSessionRow"
 import ChatRow from "@/components/chat/ChatRow"
 import ChatTextArea from "@/components/chat/ChatTextArea"
@@ -34,10 +33,9 @@ import remarkStringify from "remark-stringify"
 import rehypeRemark from "rehype-remark"
 import rehypeParse from "rehype-parse"
 import HomeHeader from "../welcome/HomeHeader"
-
+import AutoApproveBar from "./auto-approve-menu/AutoApproveBar"
 import { t } from "i18next"
 import { Trans } from "react-i18next"
-
 interface ChatViewProps {
 	isHidden: boolean
 	showAnnouncement: boolean
@@ -150,17 +148,62 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			if (window.getSelection) {
 				const selection = window.getSelection()
 				if (selection && selection.rangeCount > 0) {
-					// Get the selected HTML content
 					const range = selection.getRangeAt(0)
-					const clonedSelection = range.cloneContents()
-					const div = document.createElement("div")
-					div.appendChild(clonedSelection)
-					const selectedHtml = div.innerHTML
+					const commonAncestor = range.commonAncestorContainer
+					let textToCopy: string | null = null
 
-					// Convert HTML to Markdown
-					const markdown = await convertHtmlToMarkdown(selectedHtml)
-					vscode.postMessage({ type: "copyToClipboard", text: markdown })
-					e.preventDefault()
+					// Check if the selection is inside an element where plain text copy is preferred
+					let currentElement =
+						commonAncestor.nodeType === Node.ELEMENT_NODE
+							? (commonAncestor as HTMLElement)
+							: commonAncestor.parentElement
+					let preferPlainTextCopy = false
+					while (currentElement) {
+						if (currentElement.tagName === "PRE" && currentElement.querySelector("code")) {
+							preferPlainTextCopy = true
+							break
+						}
+						// Check computed white-space style
+						const computedStyle = window.getComputedStyle(currentElement)
+						if (
+							computedStyle.whiteSpace === "pre" ||
+							computedStyle.whiteSpace === "pre-wrap" ||
+							computedStyle.whiteSpace === "pre-line"
+						) {
+							// If the element itself or an ancestor has pre-like white-space,
+							// and the selection is likely contained within it, prefer plain text.
+							// This helps with elements like the TaskHeader's text display.
+							preferPlainTextCopy = true
+							break
+						}
+
+						// Stop searching if we reach a known chat message boundary or body
+						if (
+							currentElement.classList.contains("chat-row-assistant-message-container") ||
+							currentElement.classList.contains("chat-row-user-message-container") ||
+							currentElement.tagName === "BODY"
+						) {
+							break
+						}
+						currentElement = currentElement.parentElement
+					}
+
+					if (preferPlainTextCopy) {
+						// For code blocks or elements with pre-formatted white-space, get plain text.
+						textToCopy = selection.toString()
+					} else {
+						// For other content, use the existing HTML-to-Markdown conversion
+						const clonedSelection = range.cloneContents()
+						const div = document.createElement("div")
+						div.appendChild(clonedSelection)
+						const selectedHtml = div.innerHTML
+						textToCopy = await convertHtmlToMarkdown(selectedHtml)
+					}
+
+					if (textToCopy !== null) {
+						vscode.postMessage({ type: "copyToClipboard", text: textToCopy })
+						e.preventDefault()
+					}
 				}
 			}
 		}
@@ -422,25 +465,22 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						case "resume_completed_task":
 						case "mistake_limit_reached":
 						case "new_task": // user can provide feedback or reject the new task suggestion
-							vscode.postMessage({
-								type: "askResponse",
-								askResponse: "messageResponse",
+							await TaskServiceClient.askResponse({
+								responseType: "messageResponse",
 								text: messageToSend,
 								images,
 							})
 							break
 						case "condense":
-							vscode.postMessage({
-								type: "askResponse",
-								askResponse: "messageResponse",
+							await TaskServiceClient.askResponse({
+								responseType: "messageResponse",
 								text: messageToSend,
 								images,
 							})
 							break
 						case "report_bug":
-							vscode.postMessage({
-								type: "askResponse",
-								askResponse: "messageResponse",
+							await TaskServiceClient.askResponse({
+								responseType: "messageResponse",
 								text: messageToSend,
 								images,
 							})
@@ -484,16 +524,14 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				case "mistake_limit_reached":
 				case "auto_approval_max_req_reached":
 					if (trimmedInput || (images && images.length > 0)) {
-						vscode.postMessage({
-							type: "askResponse",
-							askResponse: "yesButtonClicked",
+						await TaskServiceClient.askResponse({
+							responseType: "yesButtonClicked",
 							text: trimmedInput,
 							images: images,
 						})
 					} else {
-						vscode.postMessage({
-							type: "askResponse",
-							askResponse: "yesButtonClicked",
+						await TaskServiceClient.askResponse({
+							responseType: "yesButtonClicked",
 						})
 					}
 					// Clear input state after sending
@@ -514,16 +552,10 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					})
 					break
 				case "condense":
-					vscode.postMessage({
-						type: "condense",
-						text: lastMessage?.text,
-					})
+					await SlashServiceClient.condense({ value: lastMessage?.text }).catch((err) => console.error(err))
 					break
 				case "report_bug":
-					vscode.postMessage({
-						type: "reportBug",
-						text: lastMessage?.text,
-					})
+					await SlashServiceClient.reportBug({ value: lastMessage?.text }).catch((err) => console.error(err))
 					break
 			}
 			setSendingDisabled(true)
@@ -556,17 +588,15 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				case "browser_action_launch":
 				case "use_mcp_server":
 					if (trimmedInput || (images && images.length > 0)) {
-						vscode.postMessage({
-							type: "askResponse",
-							askResponse: "noButtonClicked",
+						await TaskServiceClient.askResponse({
+							responseType: "noButtonClicked",
 							text: trimmedInput,
 							images: images,
 						})
 					} else {
 						// responds to the API with a "This operation failed" and lets it try again
-						vscode.postMessage({
-							type: "askResponse",
-							askResponse: "noButtonClicked",
+						await TaskServiceClient.askResponse({
+							responseType: "noButtonClicked",
 						})
 					}
 					// Clear input state after sending
@@ -597,8 +627,15 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		return normalizeApiConfiguration(apiConfiguration)
 	}, [apiConfiguration])
 
-	const selectImages = useCallback(() => {
-		vscode.postMessage({ type: "selectImages" })
+	const selectImages = useCallback(async () => {
+		try {
+			const response = await FileServiceClient.selectImages({})
+			if (response && response.values && response.values.length > 0) {
+				setSelectedImages((prevImages) => [...prevImages, ...response.values].slice(0, MAX_IMAGES_PER_MESSAGE))
+			}
+		} catch (error) {
+			console.error("Error selecting images:", error)
+		}
 	}, [])
 
 	const shouldDisableImages = !selectedModelInfo.supportsImages || selectedImages.length >= MAX_IMAGES_PER_MESSAGE
@@ -941,6 +978,14 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				)
 			}
 
+			// We display certain statuses for the last message only
+			// If the last message is a checkpoint, we want to show the status of the previous message
+			const nextMessage = index < groupedMessages.length - 1 && groupedMessages[index + 1]
+			const isNextCheckpoint = !Array.isArray(nextMessage) && nextMessage && nextMessage?.say === "checkpoint_created"
+			const isLastMessageGroup = isNextCheckpoint && index === groupedMessages.length - 2
+
+			const isLast = index === groupedMessages.length - 1 || isLastMessageGroup
+
 			// regular message
 			return (
 				<ChatRow
@@ -949,7 +994,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					isExpanded={expandedRows[messageOrGroup.ts] || false}
 					onToggleExpand={() => toggleRowExpansion(messageOrGroup.ts)}
 					lastModifiedMessage={modifiedMessages.at(-1)}
-					isLast={index === groupedMessages.length - 1}
+					isLast={isLast}
 					onHeightChange={handleRowHeightChange}
 					inputValue={inputValue}
 					sendMessageFromChatRow={handleSendMessage}
@@ -1024,7 +1069,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				</div>
 			)}
 
-			{!task && <AutoApproveMenu />}
+			{!task && <AutoApproveBar />}
 
 			{task && (
 				<>
@@ -1058,7 +1103,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							initialTopMostItemIndex={groupedMessages.length - 1}
 						/>
 					</div>
-					<AutoApproveMenu />
+					<AutoApproveBar />
 					{showScrollToBottom ? (
 						<div
 							style={{
