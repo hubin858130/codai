@@ -12,6 +12,7 @@ import { handleStateServiceRequest, handleStateServiceStreamingRequest } from ".
 import { handleTaskServiceRequest, handleTaskServiceStreamingRequest } from "./task/index"
 import { handleWebServiceRequest, handleWebServiceStreamingRequest } from "./web/index"
 import { handleModelsServiceRequest, handleModelsServiceStreamingRequest } from "./models/index"
+import { handleSlashServiceRequest, handleSlashServiceStreamingRequest } from "./slash/index"
 
 /**
  * Configuration for a service handler
@@ -31,7 +32,7 @@ export interface ServiceHandlerConfig {
  * Map of service names to their handler configurations
  */
 export const serviceHandlers: Record<string, ServiceHandlerConfig> = {
-	"cline.AccountService": {
+	"codai.AccountService": {
 		requestHandler: handleAccountServiceRequest,
 		streamingHandler: handleAccountServiceStreamingRequest,
 	},
@@ -66,5 +67,9 @@ export const serviceHandlers: Record<string, ServiceHandlerConfig> = {
 	"codai.ModelsService": {
 		requestHandler: handleModelsServiceRequest,
 		streamingHandler: handleModelsServiceStreamingRequest,
+	},
+	"codai.SlashService": {
+		requestHandler: handleSlashServiceRequest,
+		streamingHandler: handleSlashServiceStreamingRequest,
 	},
 }
