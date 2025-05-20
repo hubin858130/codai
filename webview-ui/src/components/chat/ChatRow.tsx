@@ -208,12 +208,12 @@ export const ChatRowContent = ({
 		selectedText: "",
 	})
 	const contentRef = useRef<HTMLDivElement>(null)
-	const [cost, apiReqCancelReason, apiReqStreamingFailedMessage] = useMemo(() => {
+	const [cost, apiReqCancelReason, apiReqStreamingFailedMessage, retryStatus] = useMemo(() => {
 		if (message.text != null && message.say === "api_req_started") {
 			const info: ClineApiReqInfo = JSON.parse(message.text)
-			return [info.cost, info.cancelReason, info.streamingFailedMessage]
+			return [info.cost, info.cancelReason, info.streamingFailedMessage, info.retryStatus]
 		}
-		return [undefined, undefined, undefined]
+		return [undefined, undefined, undefined, undefined]
 	}, [message.text, message.say])
 
 	// when resuming task last won't be api_req_failed but a resume_task message so api_req_started will show loading spinner. that's why we just remove the last api_req_started that failed without streaming anything
@@ -378,7 +378,7 @@ export const ChatRowContent = ({
 								marginBottom: "-1.5px",
 							}}></span>
 					),
-					<span style={{ color: normalColor, fontWeight: "bold", wordBreak: "break-word" }}>
+					<span className="ph-no-capture" style={{ color: normalColor, fontWeight: "bold", wordBreak: "break-word" }}>
 						Codai wants to {mcpServerUse.type === "use_mcp_tool" ? "use a tool" : "access a resource"} on the{" "}
 						<code style={{ wordBreak: "break-all" }}>
 							{getMcpServerDisplayName(mcpServerUse.serverName, mcpMarketplaceCatalog)}
@@ -445,6 +445,17 @@ export const ChatRowContent = ({
 						if (apiRequestFailedMessage) {
 							return <span style={{ color: errorColor, fontWeight: "bold" }}>API Request Failed</span>
 						}
+						// New: Check for retryStatus to modify the title
+						if (retryStatus && cost == null && !apiReqCancelReason) {
+							const retryOperations = retryStatus.maxAttempts > 0 ? retryStatus.maxAttempts - 1 : 0
+							return (
+								<span
+									style={{
+										color: normalColor,
+										fontWeight: "bold",
+									}}>{`API Request (Retrying failed attempt ${retryStatus.attempt}/${retryOperations})...`}</span>
+							)
+						}
 
 						return <span style={{ color: normalColor, fontWeight: "bold" }}>API Request...</span>
 					})(),
@@ -493,7 +504,7 @@ export const ChatRowContent = ({
 		}
 		const toolIcon = (name: string, color?: string, rotation?: number, title?: string) => (
 			<span
-				className={`codicon codicon-${name}`}
+				className={`codicon codicon-${name} ph-no-capture`}
 				style={{
 					color: color ? colorMap[color as keyof typeof colorMap] || color : "var(--vscode-foreground)",
 					marginBottom: "-1.5px",
@@ -577,6 +588,7 @@ export const ChatRowContent = ({
 								}}>
 								{tool.path?.startsWith(".") && <span>.</span>}
 								<span
+									className="ph-no-capture"
 									style={{
 										whiteSpace: "nowrap",
 										overflow: "hidden",
@@ -999,12 +1011,13 @@ export const ChatRowContent = ({
 													}}
 												/>
 											</span>
-											{message.text}
+											<span className="ph-no-capture">{message.text}</span>
 										</div>
 									) : (
 										<div style={{ display: "flex", alignItems: "center" }}>
 											<span style={{ fontWeight: "bold", marginRight: "4px" }}>Thinking:</span>
 											<span
+												className="ph-no-capture"
 												style={{
 													whiteSpace: "nowrap",
 													overflow: "hidden",

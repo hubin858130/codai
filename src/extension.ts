@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	ErrorService.initialize()
 	Logger.initialize(outputChannel)
-	Logger.log("Cline extension activated")
+	Logger.log("Codai extension activated")
 
 	const sidebarWebview = new WebviewProvider(context, outputChannel)
 
@@ -148,7 +148,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		const targetCol = hasVisibleEditors ? Math.max(lastCol + 1, 1) : vscode.ViewColumn.Two
 
-		const panel = vscode.window.createWebviewPanel(WebviewProvider.tabPanelId, "Cline", targetCol, {
+		const panel = vscode.window.createWebviewPanel(WebviewProvider.tabPanelId, "Codai", targetCol, {
 			enableScripts: true,
 			retainContextWhenHidden: true,
 			localResourceRoots: [context.extensionUri],
@@ -229,10 +229,10 @@ export function activate(context: vscode.ExtensionContext) {
 	/*
 	We use the text document content provider API to show the left side for diff view by creating a virtual document for the original content. This makes it readonly so users know to edit the right side if they want to keep their changes.
 
-		- This API allows you to create readonly documents in VSCode from arbitrary sources, and works by claiming an uri-scheme for which your provider then returns text contents. The scheme must be provided when registering a provider and cannot change afterwards.
-		- Note how the provider doesn't create uris for virtual documents - its role is to provide contents given such an uri. In return, content providers are wired into the open document logic so that providers are always considered.
-		https://code.visualstudio.com/api/extension-guides/virtual-documents
-		*/
+	- This API allows you to create readonly documents in VSCode from arbitrary sources, and works by claiming an uri-scheme for which your provider then returns text contents. The scheme must be provided when registering a provider and cannot change afterwards.
+	- Note how the provider doesn't create uris for virtual documents - its role is to provide contents given such an uri. In return, content providers are wired into the open document logic so that providers are always considered.
+	https://code.visualstudio.com/api/extension-guides/virtual-documents
+	*/
 	const diffContentProvider = new (class implements vscode.TextDocumentContentProvider {
 		provideTextDocumentContent(uri: vscode.Uri): string {
 			return Buffer.from(uri.query, "base64").toString("utf-8")
@@ -475,7 +475,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register the generateGitCommitMessage command handler
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.generateGitCommitMessage", async () => {
+		vscode.commands.registerCommand("codai.generateGitCommitMessage", async () => {
 			// Get the controller from any instance, without activating the view
 			const controller = WebviewProvider.getAllInstances()[0]?.controller
 
@@ -484,7 +484,7 @@ export function activate(context: vscode.ExtensionContext) {
 				await controller.generateGitCommitMessage()
 			} else {
 				// Create a temporary controller just for this operation
-				const outputChannel = vscode.window.createOutputChannel("Cline Commit Generator")
+				const outputChannel = vscode.window.createOutputChannel("Codai Commit Generator")
 				const tempController = new Controller(context, outputChannel, () => Promise.resolve(true))
 
 				await tempController.generateGitCommitMessage()
@@ -526,7 +526,7 @@ export async function deactivate() {
 	// Clean up test mode
 	cleanupTestMode()
 	await posthogClientProvider.shutdown()
-	Logger.log("Cline extension deactivated")
+	Logger.log("Codai extension deactivated")
 }
 
 // Set up development mode file watcher

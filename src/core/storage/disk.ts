@@ -15,6 +15,7 @@ export const GlobalFileNames = {
 	openRouterModels: "openrouter_models.json",
 	mcpSettings: "codai_mcp_settings.json",
 	clineRules: ".codairules",
+	workflows: ".codairules/workflows",
 	cursorRulesDir: ".cursor/rules",
 	cursorRulesFile: ".cursorrules",
 	windsurfRules: ".windsurfrules",

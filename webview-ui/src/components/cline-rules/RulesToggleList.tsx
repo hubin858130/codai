@@ -42,16 +42,16 @@ const RulesToggleList = ({
 							ruleType={ruleType}
 						/>
 					))}
-					{showNewRule && <NewRuleRow isGlobal={isGlobal} />}
+					{showNewRule && <NewRuleRow isGlobal={isGlobal} ruleType={ruleType} />}
 				</>
 			) : (
 				<>
 					{showNoRules && (
 						<div className="flex flex-col items-center gap-3 my-3 text-[var(--vscode-descriptionForeground)]">
-							{t("CodaiRules.noRulesFound")}
+							{ruleType === "workflow" ? t("CodaiRules.noWorkflowsFound") : t("CodaiRules.noRulesFound")}
 						</div>
 					)}
-					{showNewRule && <NewRuleRow isGlobal={isGlobal} />}
+					{showNewRule && <NewRuleRow isGlobal={isGlobal} ruleType={ruleType} />}
 				</>
 			)}
 		</div>

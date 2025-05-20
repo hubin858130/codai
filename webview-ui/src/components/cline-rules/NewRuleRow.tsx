@@ -8,9 +8,10 @@ import { useTranslation } from "react-i18next"
 
 interface NewRuleRowProps {
 	isGlobal: boolean
+	ruleType?: string
 }
 
-const NewRuleRow: React.FC<NewRuleRowProps> = ({ isGlobal }) => {
+const NewRuleRow: React.FC<NewRuleRowProps> = ({ isGlobal, ruleType }) => {
 	const { t } = useTranslation()
 	const [isExpanded, setIsExpanded] = useState(false)
 	const [filename, setFilename] = useState("")
@@ -66,6 +67,7 @@ const NewRuleRow: React.FC<NewRuleRowProps> = ({ isGlobal }) => {
 					CreateRuleFileRequest.create({
 						isGlobal,
 						filename: finalFilename,
+						type: ruleType || "codai",
 					}),
 				)
 			} catch (err) {
@@ -99,7 +101,11 @@ const NewRuleRow: React.FC<NewRuleRowProps> = ({ isGlobal }) => {
 						<input
 							ref={inputRef}
 							type="text"
-							placeholder={t("CodaiRules.ruleNamePlaceholder")}
+							placeholder={
+								ruleType === "workflow"
+									? t("CodaiRules.workflowNamePlaceholder")
+									: t("CodaiRules.ruleNamePlaceholder")
+							}
 							value={filename}
 							onChange={(e) => setFilename(e.target.value)}
 							onKeyDown={handleKeyDown}
@@ -123,7 +129,7 @@ const NewRuleRow: React.FC<NewRuleRowProps> = ({ isGlobal }) => {
 				) : (
 					<>
 						<span className="flex-1 text-[var(--vscode-descriptionForeground)] bg-[var(--vscode-input-background)] italic text-xs">
-							{t("CodaiRules.newRuleFile")}
+							{ruleType === "workflow" ? t("CodaiRules.newWorkflowFile") : t("CodaiRules.newRuleFile")}
 						</span>
 						<div className="flex items-center ml-2 space-x-2">
 							<VSCodeButton

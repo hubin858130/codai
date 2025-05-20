@@ -1,13 +1,15 @@
 import {
 	VSCodeButton,
 	VSCodeCheckbox,
+	VSCodeDropdown,
 	VSCodeLink,
 	VSCodeTextArea,
-	VSCodeDropdown,
 	VSCodeOption,
 	VSCodeTextField,
 } from "@vscode/webview-ui-toolkit/react"
 import { memo, useCallback, useEffect, useState } from "react"
+import PreferredLanguageSetting from "./PreferredLanguageSetting" // Added import
+import { OpenAIReasoningEffort } from "@shared/ChatSettings"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { validateApiConfiguration, validateModelId } from "@/utils/validate"
 import { vscode } from "@/utils/vscode"
@@ -16,6 +18,8 @@ import ApiOptions from "./ApiOptions"
 import { TabButton } from "../mcp/configuration/McpConfigurationView"
 import { useEvent } from "react-use"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
+import { StateServiceClient } from "@/services/grpc-client"
+import FeatureSettingsSection from "./FeatureSettingsSection"
 import BrowserSettingsSection from "./BrowserSettingsSection"
 import TerminalSettingsSection from "./TerminalSettingsSection"
 import { FEATURE_FLAGS } from "@shared/services/feature-flags/feature-flags"
@@ -39,8 +43,11 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 		telemetrySetting,
 		setTelemetrySetting,
 		chatSettings,
+		setChatSettings,
 		planActSeparateModelsSetting,
 		setPlanActSeparateModelsSetting,
+		enableCheckpointsSetting,
+		mcpMarketplaceEnabled,
 	} = useExtensionState()
 	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
 	const [modelIdErrorMessage, setModelIdErrorMessage] = useState<string | undefined>(undefined)
@@ -129,13 +136,13 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 			apiConfigurationToSubmit = undefined
 		}
 
-		// 确保autocompleteConfig变更总是提交
-		console.log("Submitting autocomplete config:", autocompleteConfig)
 		vscode.postMessage({
 			type: "updateSettings",
 			planActSeparateModelsSetting,
 			customInstructionsSetting: customInstructions,
 			telemetrySetting,
+			enableCheckpointsSetting,
+			mcpMarketplaceEnabled,
 			apiConfiguration: apiConfigurationToSubmit,
 			autocompleteConfig,
 		})
@@ -152,16 +159,16 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 	// validate as soon as the component is mounted
 	/*
-    useEffect will use stale values of variables if they are not included in the dependency array. 
-    so trying to use useEffect with a dependency array of only one value for example will use any 
-    other variables' old values. In most cases you don't want this, and should opt to use react-use 
-    hooks.
+	useEffect will use stale values of variables if they are not included in the dependency array. 
+	so trying to use useEffect with a dependency array of only one value for example will use any 
+	other variables' old values. In most cases you don't want this, and should opt to use react-use 
+	hooks.
     
-        // uses someVar and anotherVar
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [someVar])
+		// uses someVar and anotherVar
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [someVar])
 	If we only want to run code once on mount we can use react-use's useEffectOnce or useMount
-    */
+	*/
 
 	const handleMessage = useCallback(
 		(event: MessageEvent) => {
@@ -203,8 +210,12 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 
 	useEvent("message", handleMessage)
 
-	const handleResetState = () => {
-		vscode.postMessage({ type: "resetState" })
+	const handleResetState = async () => {
+		try {
+			await StateServiceClient.resetState({})
+		} catch (error) {
+			console.error("Failed to reset state:", error)
+		}
 	}
 
 	const handleTabChange = (tab: "plan" | "act") => {
@@ -392,7 +403,7 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 							</p>
 						</div>
 
-						<div className="mb-[5px]">
+						{/* <div className="mb-[5px]">
 							<VSCodeCheckbox
 								className="mb-[5px]"
 								checked={telemetrySetting === "enabled"}
@@ -414,22 +425,16 @@ const SettingsView = ({ onDone }: SettingsViewProps) => {
 								</VSCodeLink>{" "}
 								for more details.
 							</p>
-						</div>
+						</div> */}
+
+						{/* Feature Settings Section */}
+						<FeatureSettingsSection />
 
 						{/* Browser Settings Section */}
 						<BrowserSettingsSection />
 
 						{/* Terminal Settings Section */}
 						<TerminalSettingsSection />
-
-						<div className="mt-auto pr-2 flex justify-center">
-							<SettingsButton
-								onClick={() => vscode.postMessage({ type: "openExtensionSettings" })}
-								className="mt-0 mr-0 mb-4 ml-0">
-								<i className="codicon codicon-settings-gear" />
-								{t("settings.other.advancedSettings")}
-							</SettingsButton>
-						</div>
 
 						{IS_DEV && (
 							<>

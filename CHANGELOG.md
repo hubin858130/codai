@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.1]
+
+-   Synchronize Cline v3.16
+-   Fix bugs
+
 ## [1.1.0]
 
 -   Refresh openai compatible models
