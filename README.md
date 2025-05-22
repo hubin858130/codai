@@ -74,7 +74,7 @@ Codai去访问网关获取服务。
 
 1. 克隆仓库 ：
         ```bash
-        git clone https://github.com/cline/cline.git
+        git clone https://github.com/codai-agent/codai
         ```
 2. 在 VSCode 中打开项目：
         ```bash
