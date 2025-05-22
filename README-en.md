@@ -77,7 +77,7 @@ To contribute to the project,you need to comply with the [Contributor Covenant](
         ```
 2. Open the project in VSCode:
         ```bash
-        code cline
+        code codai
         ```
 3. Install the extension and necessary dependencies for webview-gui:
         ```bash
