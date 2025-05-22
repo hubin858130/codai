@@ -73,7 +73,7 @@ To contribute to the project,you need to comply with the [Contributor Covenant](
 
 1. Clone the repository:
         ```bash
-        git clone https://github.com/cline/cline.git
+        git clone https://github.com/codai-agent/codai
         ```
 2. Open the project in VSCode:
         ```bash
