@@ -78,7 +78,7 @@ Codai去访问网关获取服务。
         ```
 2. 在 VSCode 中打开项目：
         ```bash
-        code cline
+        code codai
         ```
 3. 安装扩展和 webview-gui 的必要依赖：
         ```bash
