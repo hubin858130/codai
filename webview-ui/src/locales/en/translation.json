@@ -73,8 +73,8 @@
 	"chat": {
 		"addContext": "Add Context",
 		"addImages": "Add Images",
-		"planMode": "Plan",
-		"actMode": "Act",
+		"planMode": "Plan Mode",
+		"actMode": "Act Mode",
 		"planModeTooltip": "In Plan mode, Codai will gather information to architect a plan",
 		"actModeTooltip": "In Act mode, Codai will complete the task immediately",
 		"toggleModeHint": "Toggle with {{metaKey}}+Shift+A",
