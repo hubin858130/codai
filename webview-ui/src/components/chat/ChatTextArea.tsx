@@ -1419,7 +1419,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 							/>
 						</div>
 					)}
-					{!isTextAreaFocused && !activeQuote && (
+					{/*!isTextAreaFocused && !activeQuote && (
 						<div
 							style={{
 								position: "absolute",
@@ -1430,7 +1430,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								zIndex: 5,
 							}}
 						/>
-					)}
+					)*/}
 					<div
 						ref={highlightLayerRef}
 						style={{
@@ -1525,9 +1525,9 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								isDraggingOver && !showUnsupportedFileError // Only show drag outline if not showing error
 									? "2px dashed var(--vscode-focusBorder)"
 									: isTextAreaFocused
-										? `1px solid ${chatSettings.mode === "plan" ? PLAN_MODE_COLOR : "var(--vscode-focusBorder)"}`
-										: "none",
-							outlineOffset: isDraggingOver && !showUnsupportedFileError ? "1px" : "0px", // Add offset for drag-over outline
+										? `2px solid ${chatSettings.mode === "plan" ? PLAN_MODE_COLOR : "var(--vscode-focusBorder)"}`
+										: `2px solid ${chatSettings.mode === "plan" ? PLAN_MODE_COLOR : "var(--vscode-focusBorder)"}`,
+							outlineOffset: isDraggingOver && !showUnsupportedFileError ? "2px" : "0px", // Add offset for drag-over outline
 						}}
 						onScroll={() => updateHighlights()}
 					/>
