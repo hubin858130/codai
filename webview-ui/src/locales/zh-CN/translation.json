@@ -2,6 +2,7 @@
 	"settings": {
 		"title": "设置",
 		"done": "完成",
+		"cancel": "取消",
 		"language": {
 			"title": "语言设置"
 		},
@@ -27,6 +28,43 @@
 		"feedback": {
 			"text": "如果您有任何问题或反馈，请随时在以下地址提交issues",
 			"version": "版本 {{version}}"
+		},
+		"tabs": {
+			"apiConfig": {
+				"name": "API配置",
+				"tooltip": "API配置",
+				"header": "API配置"
+			},
+			"general": {
+				"name": "通用",
+				"tooltip": "通用设置",
+				"header": "通用设置"
+			},
+			"features": {
+				"name": "功能",
+				"tooltip": "功能设置",
+				"header": "功能设置"
+			},
+			"browser": {
+				"name": "浏览器",
+				"tooltip": "浏览器设置",
+				"header": "浏览器设置"
+			},
+			"terminal": {
+				"name": "终端",
+				"tooltip": "终端设置",
+				"header": "终端设置"
+			},
+			"debug": {
+				"name": "调试",
+				"tooltip": "调试工具",
+				"header": "调试"
+			},
+			"about": {
+				"name": "关于",
+				"tooltip": "关于Codai",
+				"header": "关于"
+			}
 		},
 		"planMode": "规划模式",
 		"actMode": "执行模式",
@@ -206,6 +244,7 @@
 		"CodaiRules": "Codai 规则",
 		"CodaiWorkflows": "Codai 工作流",
 		"workspaceWorkflows": "工作区流程",
+		"globalWorkflows": "全局工作流",
 		"globalRules": "全局规则",
 		"workspaceRules": "工作区规则",
 		"noRulesFound": "未找到规则",

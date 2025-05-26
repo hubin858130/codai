@@ -7,9 +7,14 @@ import { getLatestState } from "./getLatestState"
 import { resetState } from "./resetState"
 import { subscribeToState } from "./subscribeToState"
 import { toggleFavoriteModel } from "./toggleFavoriteModel"
+import { togglePlanActMode } from "./togglePlanActMode"
+import { updateAutoApprovalSettings } from "./updateAutoApprovalSettings"
+import { updateTerminalConnectionTimeout } from "./updateTerminalConnectionTimeout"
 
 // Streaming methods for this service
-export const streamingMethods = ["subscribeToState"]
+export const streamingMethods = [
+  "subscribeToState"
+]
 
 // Register all state service methods
 export function registerAllMethods(): void {
@@ -18,4 +23,7 @@ export function registerAllMethods(): void {
 	registerMethod("resetState", resetState)
 	registerMethod("subscribeToState", subscribeToState, { isStreaming: true })
 	registerMethod("toggleFavoriteModel", toggleFavoriteModel)
+	registerMethod("togglePlanActMode", togglePlanActMode)
+	registerMethod("updateAutoApprovalSettings", updateAutoApprovalSettings)
+	registerMethod("updateTerminalConnectionTimeout", updateTerminalConnectionTimeout)
 }
