@@ -13,63 +13,62 @@ import { handleTaskServiceRequest, handleTaskServiceStreamingRequest } from "./t
 import { handleWebServiceRequest, handleWebServiceStreamingRequest } from "./web/index"
 import { handleModelsServiceRequest, handleModelsServiceStreamingRequest } from "./models/index"
 import { handleSlashServiceRequest, handleSlashServiceStreamingRequest } from "./slash/index"
+import { handleUiServiceRequest, handleUiServiceStreamingRequest } from "./ui/index"
 
 /**
  * Configuration for a service handler
  */
 export interface ServiceHandlerConfig {
-	requestHandler: (controller: Controller, method: string, message: any) => Promise<any>
-	streamingHandler: (
-		controller: Controller,
-		method: string,
-		message: any,
-		responseStream: StreamingResponseHandler,
-		requestId?: string,
-	) => Promise<void>
+  requestHandler: (controller: Controller, method: string, message: any) => Promise<any>;
+  streamingHandler: (controller: Controller, method: string, message: any, responseStream: StreamingResponseHandler, requestId?: string) => Promise<void>;
 }
 
 /**
  * Map of service names to their handler configurations
  */
 export const serviceHandlers: Record<string, ServiceHandlerConfig> = {
-	"codai.AccountService": {
-		requestHandler: handleAccountServiceRequest,
-		streamingHandler: handleAccountServiceStreamingRequest,
-	},
-	"codai.BrowserService": {
-		requestHandler: handleBrowserServiceRequest,
-		streamingHandler: handleBrowserServiceStreamingRequest,
-	},
-	"codai.CheckpointsService": {
-		requestHandler: handleCheckpointsServiceRequest,
-		streamingHandler: handleCheckpointsServiceStreamingRequest,
-	},
-	"codai.FileService": {
-		requestHandler: handleFileServiceRequest,
-		streamingHandler: handleFileServiceStreamingRequest,
-	},
-	"codai.McpService": {
-		requestHandler: handleMcpServiceRequest,
-		streamingHandler: handleMcpServiceStreamingRequest,
-	},
-	"codai.StateService": {
-		requestHandler: handleStateServiceRequest,
-		streamingHandler: handleStateServiceStreamingRequest,
-	},
-	"codai.TaskService": {
-		requestHandler: handleTaskServiceRequest,
-		streamingHandler: handleTaskServiceStreamingRequest,
-	},
-	"codai.WebService": {
-		requestHandler: handleWebServiceRequest,
-		streamingHandler: handleWebServiceStreamingRequest,
-	},
-	"codai.ModelsService": {
-		requestHandler: handleModelsServiceRequest,
-		streamingHandler: handleModelsServiceStreamingRequest,
-	},
-	"codai.SlashService": {
-		requestHandler: handleSlashServiceRequest,
-		streamingHandler: handleSlashServiceStreamingRequest,
-	},
-}
+  "codai.AccountService": {
+    requestHandler: handleAccountServiceRequest,
+    streamingHandler: handleAccountServiceStreamingRequest
+  },
+  "codai.BrowserService": {
+    requestHandler: handleBrowserServiceRequest,
+    streamingHandler: handleBrowserServiceStreamingRequest
+  },
+  "codai.CheckpointsService": {
+    requestHandler: handleCheckpointsServiceRequest,
+    streamingHandler: handleCheckpointsServiceStreamingRequest
+  },
+  "codai.FileService": {
+    requestHandler: handleFileServiceRequest,
+    streamingHandler: handleFileServiceStreamingRequest
+  },
+  "codai.McpService": {
+    requestHandler: handleMcpServiceRequest,
+    streamingHandler: handleMcpServiceStreamingRequest
+  },
+  "codai.StateService": {
+    requestHandler: handleStateServiceRequest,
+    streamingHandler: handleStateServiceStreamingRequest
+  },
+  "codai.TaskService": {
+    requestHandler: handleTaskServiceRequest,
+    streamingHandler: handleTaskServiceStreamingRequest
+  },
+  "codai.WebService": {
+    requestHandler: handleWebServiceRequest,
+    streamingHandler: handleWebServiceStreamingRequest
+  },
+  "codai.ModelsService": {
+    requestHandler: handleModelsServiceRequest,
+    streamingHandler: handleModelsServiceStreamingRequest
+  },
+  "codai.SlashService": {
+    requestHandler: handleSlashServiceRequest,
+    streamingHandler: handleSlashServiceStreamingRequest
+  },
+  "codai.UiService": {
+    requestHandler: handleUiServiceRequest,
+    streamingHandler: handleUiServiceStreamingRequest
+  }
+};
