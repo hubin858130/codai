@@ -34,6 +34,7 @@ const AppContent = () => {
 		},
 		[],
 	)
+	useEvent("message", handleMessage)
 	
 	const {
 		didHydrateState,
