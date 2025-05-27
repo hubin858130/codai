@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.2.0]
+
+-   Synchronize Cline v3.17
+-   Modify interface layout
+-   Fix bugs
+
 ## [1.1.1]
 
 -   Synchronize Cline v3.16
