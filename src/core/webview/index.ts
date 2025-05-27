@@ -149,6 +149,8 @@ export class WebviewProvider implements vscode.WebviewViewProvider {
 			this.controller.clearTask()
 
 			this.outputChannel.appendLine("Webview view resolved")
+
+			// Title setting logic removed to allow VSCode to use the container title primarily.
 		}
 	}
 
@@ -225,7 +227,7 @@ export class WebviewProvider implements vscode.WebviewViewProvider {
 				<link href="${codiconsUri}" rel="stylesheet" />
 				<link href="${katexCssUri}" rel="stylesheet" />
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://*.posthog.com https://*.firebaseauth.com https://*.firebaseio.com https://*.googleapis.com https://*.firebase.com; font-src ${webview.cspSource} data:; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https: data:; script-src 'nonce-${nonce}' 'unsafe-eval';">
-				<title>Codai</title>
+				<title>Cline</title>
 			</head>
 			<body>
 				<noscript>You need to enable JavaScript to run this app.</noscript>
@@ -277,7 +279,7 @@ export class WebviewProvider implements vscode.WebviewViewProvider {
 			await axios.get(`http://${localServerUrl}`)
 		} catch (error) {
 			vscode.window.showErrorMessage(
-				"Codai: Local webview dev server is not running, HMR will not work. Please run 'npm run dev:webview' before launching the extension to enable HMR. Using bundled assets.",
+				"Cline: Local webview dev server is not running, HMR will not work. Please run 'npm run dev:webview' before launching the extension to enable HMR. Using bundled assets.",
 			)
 
 			return this.getHtmlContent(webview)
@@ -335,7 +337,7 @@ export class WebviewProvider implements vscode.WebviewViewProvider {
 					<link rel="stylesheet" type="text/css" href="${stylesUri}">
 					<link href="${codiconsUri}" rel="stylesheet" />
 					<link href="${katexCssUri}" rel="stylesheet" />
-					<title>Codai</title>
+					<title>Cline</title>
 				</head>
 				<body>
 					<div id="root"></div>

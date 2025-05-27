@@ -2,6 +2,7 @@
 	"settings": {
 		"title": "Settings",
 		"done": "Done",
+		"cancel": "Cancel",
 		"language": {
 			"title": "Language Settings"
 		},
@@ -27,6 +28,43 @@
 		"feedback": {
 			"text": "If you have any questions or feedback, feel free to open an issue at",
 			"version": "v{{version}}"
+		},
+		"tabs": {
+			"apiConfig": {
+				"name": "API Configuration",
+				"tooltip": "API Configuration",
+				"header": "API Configuration"
+			},
+			"general": {
+				"name": "General",
+				"tooltip": "General Settings",
+				"header": "General Settings"
+			},
+			"features": {
+				"name": "Features",
+				"tooltip": "Feature Settings",
+				"header": "Feature Settings"
+			},
+			"browser": {
+				"name": "Browser",
+				"tooltip": "Browser Settings",
+				"header": "Browser Settings"
+			},
+			"terminal": {
+				"name": "Terminal",
+				"tooltip": "Terminal Settings",
+				"header": "Terminal Settings"
+			},
+			"debug": {
+				"name": "Debug",
+				"tooltip": "Debug Tools",
+				"header": "Debug"
+			},
+			"about": {
+				"name": "About",
+				"tooltip": "About Codai",
+				"header": "About"
+			}
 		},
 		"planMode": "Plan Mode",
 		"actMode": "Act Mode",
@@ -73,8 +111,8 @@
 	"chat": {
 		"addContext": "Add Context",
 		"addImages": "Add Images",
-		"planMode": "Plan",
-		"actMode": "Act",
+		"planMode": "Plan Mode",
+		"actMode": "Act Mode",
 		"planModeTooltip": "In Plan mode, Codai will gather information to architect a plan",
 		"actModeTooltip": "In Act mode, Codai will complete the task immediately",
 		"toggleModeHint": "Toggle with {{metaKey}}+Shift+A",
@@ -207,6 +245,7 @@
 		"globalRules": "Global Rules",
 		"CodaiWorkflows": "Codai Workflows",
 		"workspaceWorkflows": "Workspace Workflows",
+		"globalWorkflows": "Global Workflows",
 		"workspaceRules": "Workspace Rules",
 		"noRulesFound": "No rules found",
 		"editRuleFile": "Edit rule file",

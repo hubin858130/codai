@@ -5,32 +5,32 @@
 // source: slash.proto
 
 /* eslint-disable */
-import { Empty, StringRequest } from "./common"
+import { Empty, StringRequest } from "./common";
 
-export const protobufPackage = "codai"
+export const protobufPackage = "codai";
 
 /** SlashService provides methods for managing slash */
-export type SlashServiceDefinition = typeof SlashServiceDefinition
+export type SlashServiceDefinition = typeof SlashServiceDefinition;
 export const SlashServiceDefinition = {
-	name: "SlashService",
-	fullName: "codai.SlashService",
-	methods: {
-		/** Sends button click message */
-		reportBug: {
-			name: "reportBug",
-			requestType: StringRequest,
-			requestStream: false,
-			responseType: Empty,
-			responseStream: false,
-			options: {},
-		},
-		condense: {
-			name: "condense",
-			requestType: StringRequest,
-			requestStream: false,
-			responseType: Empty,
-			responseStream: false,
-			options: {},
-		},
-	},
-} as const
+  name: "SlashService",
+  fullName: "codai.SlashService",
+  methods: {
+    /** Sends button click message */
+    reportBug: {
+      name: "reportBug",
+      requestType: StringRequest,
+      requestStream: false,
+      responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+    condense: {
+      name: "condense",
+      requestType: StringRequest,
+      requestStream: false,
+      responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
