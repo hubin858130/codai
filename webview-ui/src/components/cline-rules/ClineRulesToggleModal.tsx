@@ -109,7 +109,7 @@ const ClineRulesToggleModal: React.FC = () => {
 				}
 			})
 			.catch((error) => {
-				console.error("Error toggling Cline rule:", error)
+				console.error("Error toggling Codai rule:", error)
 			})
 	}
 
