@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.1]
+
+-   Update the top icon of the chatview
+-   Modify the encryption field of autocomplete 
+
 ## [1.2.0]
 
 -   Synchronize Cline v3.17
