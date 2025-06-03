@@ -36,6 +36,7 @@ import HomeHeader from "../welcome/HomeHeader"
 import AutoApproveBar from "./auto-approve-menu/AutoApproveBar"
 import { t } from "i18next"
 import { Trans } from "react-i18next"
+import CodaiLogoVariable from "@/assets/CodaiLogoVariable"
 interface ChatViewProps {
 	isHidden: boolean
 	showAnnouncement: boolean
@@ -727,7 +728,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		return modifiedMessages.filter((message) => {
 			switch (message.ask) {
 				case "completion_result":
-					// don't show a chat row for a completion_result ask without text. This specific type of message only occurs if cline wants to execute a command as part of its completion result, in which case we interject the completion_result tool with the execute_command tool.
+					// don't show a chat row for a completion_result ask without text. This specific type of message only occurs if Codai wants to execute a command as part of its completion result, in which case we interject the completion_result tool with the execute_command tool.
 					if (message.text === "") {
 						return false
 					}
@@ -743,7 +744,7 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				case "deleted_api_reqs": // aggregated api_req metrics from deleted messages
 					return false
 				case "text":
-					// Sometimes cline returns an empty text message, we don't want to render these. (We also use a say text for user messages, so in case they just sent images we still render that)
+					// Sometimes Codai returns an empty text message, we don't want to render these. (We also use a say text for user messages, so in case they just sent images we still render that)
 					if ((message.text ?? "") === "" && (message.images?.length ?? 0) === 0) {
 						return false
 					}
@@ -1057,19 +1058,11 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 
 					{/* {showAnnouncement && <Announcement version={version} hideAnnouncement={hideAnnouncement} />} */}
 
-					<div style={{ padding: "0 20px", flexShrink: 0 }}>
+					<div style={{ padding: "0 20px", flexShrink: 0, textAlign: "center" }}>
 						<h2>{t("chat.welcome.title")}</h2>
-						<p>
-							<Trans
-								i18nKey="chat.welcome.description"
-								components={{
-									1: <VSCodeLink href="https://claude.ai" style={{ display: "inline" }} />,
-								}}
-								values={{
-									claudeLink: t("chat.welcome.claudeLinkText"),
-								}}
-							/>
-						</p>
+						<div className="my-5">
+							<CodaiLogoVariable className="size-16" />
+						</div>
 					</div>
 					{taskHistory.length > 0 && <HistoryPreview showHistoryView={showHistoryView} />}
 				</div>
