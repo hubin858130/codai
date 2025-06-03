@@ -380,7 +380,7 @@ export const BrowserSettingsSection: React.FC = () => {
 						color: "var(--vscode-descriptionForeground)",
 						margin: "4px 0 0 0px",
 					}}>
-					Prevent Cline from using browser actions (e.g. launch, click, type).
+					Prevent Codai from using browser actions (e.g. launch, click, type).
 				</p>
 			</div>
 
@@ -438,7 +438,7 @@ export const BrowserSettingsSection: React.FC = () => {
 							color: "var(--vscode-descriptionForeground)",
 							margin: "0 0 6px 0px",
 						}}>
-						Enable Cline to use your Chrome
+						Enable Codai to use your Chrome
 						{isBundled ? "(not detected on your machine)" : detectedChromePath ? ` (${detectedChromePath})` : ""}. You
 						can specify a custom path below. Using a remote browser connection requires starting Chrome in debug mode
 						{browserSettings.remoteBrowserEnabled ? (

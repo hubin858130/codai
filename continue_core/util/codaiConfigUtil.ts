@@ -1,6 +1,8 @@
 import * as fs from "fs"
 import * as path from "path"
 import { getContinueGlobalPath } from "./paths"
+import { AesUtil } from "./aesutil"
+import { K } from "handlebars"
 
 function getCodaiConfigJsonPath(): string {
 	const p = path.join(getContinueGlobalPath(), "codaiConfig.json")
@@ -46,11 +48,20 @@ export function getCodaiConfig(): CodeeConfig {
 export function updateCodaiConfig(config: Partial<CodeeConfig>): void {
 	const currentConfig = getCodaiConfig()
 	const newConfig = { ...currentConfig, ...config }
+	// let url = newConfig.autocomplete.apiBase
+	let key = newConfig.autocomplete.apiKey
+
+	// newConfig.autocomplete.apiBase = AesUtil.aesEncrypt(url)
+	newConfig.autocomplete.apiKey = AesUtil.aesEncrypt(key)
+
 	fs.writeFileSync(getCodaiConfigJsonPath(), JSON.stringify(newConfig, null, 2))
 }
 
 export function getAutocompleteConfig() {
-	return getCodaiConfig().autocomplete
+	let autocompleteConfig = getCodaiConfig().autocomplete
+	// autocompleteConfig.apiBase = AesUtil.aesDecrypt(autocompleteConfig.apiBase)
+	autocompleteConfig.apiKey = AesUtil.aesDecrypt(autocompleteConfig.apiKey)
+	return autocompleteConfig
 }
 
 export function updateAutocompleteConfig(config: Partial<CodeeConfig["autocomplete"]>) {
