@@ -36,6 +36,7 @@ import HomeHeader from "../welcome/HomeHeader"
 import AutoApproveBar from "./auto-approve-menu/AutoApproveBar"
 import { t } from "i18next"
 import { Trans } from "react-i18next"
+import CodaiLogoVariable from "@/assets/CodaiLogoVariable"
 interface ChatViewProps {
 	isHidden: boolean
 	showAnnouncement: boolean
@@ -1057,19 +1058,11 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 
 					{/* {showAnnouncement && <Announcement version={version} hideAnnouncement={hideAnnouncement} />} */}
 
-					<div style={{ padding: "0 20px", flexShrink: 0 }}>
+					<div style={{ padding: "0 20px", flexShrink: 0, textAlign: "center" }}>
 						<h2>{t("chat.welcome.title")}</h2>
-						<p>
-							<Trans
-								i18nKey="chat.welcome.description"
-								components={{
-									1: <VSCodeLink href="https://claude.ai" style={{ display: "inline" }} />,
-								}}
-								values={{
-									claudeLink: t("chat.welcome.claudeLinkText"),
-								}}
-							/>
-						</p>
+						<div className="my-5">
+							<CodaiLogoVariable className="size-16" />
+						</div>
 					</div>
 					{taskHistory.length > 0 && <HistoryPreview showHistoryView={showHistoryView} />}
 				</div>
