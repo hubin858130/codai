@@ -463,9 +463,9 @@ export class Controller {
 				if (message.autocompleteConfig) {
 					//huqb
 					let key = message.autocompleteConfig.autocomplete?.apiKey
-					if (key) {
-						key = AesUtil.aesEncrypt(key)
-					}
+					// if (key) {
+					// 	key = AesUtil.aesEncrypt(key)
+					// }
 					updateAutocompleteConfig({
 						model: message.autocompleteConfig.autocomplete?.model,
 						apiKey: key,
@@ -485,9 +485,9 @@ export class Controller {
 				//huqb
 				const config = getAutocompleteConfig()
 				let key = config.apiKey
-				if (key) {
-					key = AesUtil.aesDecrypt(key)
-				}
+				// if (key) {
+				// 	key = AesUtil.aesDecrypt(key)
+				// }
 				await this.postMessageToWebview({
 					type: "autocompleteConfig",
 					autocompleteConfig: {
