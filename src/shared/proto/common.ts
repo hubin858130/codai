@@ -7,8 +7,6 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
-export const protobufPackage = "codai";
-
 export interface Metadata {
 }
 
@@ -62,6 +60,11 @@ export interface Boolean {
 
 export interface StringArray {
   values: string[];
+}
+
+export interface StringArrays {
+  values1: string[];
+  values2: string[];
 }
 
 function createBaseMetadata(): Metadata {
@@ -892,6 +895,82 @@ export const StringArray: MessageFns<StringArray> = {
   },
 };
 
+function createBaseStringArrays(): StringArrays {
+  return { values1: [], values2: [] };
+}
+
+export const StringArrays: MessageFns<StringArrays> = {
+  encode(message: StringArrays, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.values1) {
+      writer.uint32(10).string(v!);
+    }
+    for (const v of message.values2) {
+      writer.uint32(18).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): StringArrays {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseStringArrays();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.values1.push(reader.string());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.values2.push(reader.string());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): StringArrays {
+    return {
+      values1: globalThis.Array.isArray(object?.values1) ? object.values1.map((e: any) => globalThis.String(e)) : [],
+      values2: globalThis.Array.isArray(object?.values2) ? object.values2.map((e: any) => globalThis.String(e)) : [],
+    };
+  },
+
+  toJSON(message: StringArrays): unknown {
+    const obj: any = {};
+    if (message.values1?.length) {
+      obj.values1 = message.values1;
+    }
+    if (message.values2?.length) {
+      obj.values2 = message.values2;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<StringArrays>, I>>(base?: I): StringArrays {
+    return StringArrays.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<StringArrays>, I>>(object: I): StringArrays {
+    const message = createBaseStringArrays();
+    message.values1 = object.values1?.map((e) => e) || [];
+    message.values2 = object.values2?.map((e) => e) || [];
+    return message;
+  },
+};
+
 function bytesFromBase64(b64: string): Uint8Array {
   return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
 }
@@ -902,14 +981,14 @@ function base64FromBytes(arr: Uint8Array): string {
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
+type DeepPartial<T> = T extends Builtin ? T
   : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
+type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(int64: { toString(): string }): number {
@@ -927,7 +1006,7 @@ function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export interface MessageFns<T> {
+interface MessageFns<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;

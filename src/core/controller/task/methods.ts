@@ -10,6 +10,7 @@ import { deleteNonFavoritedTasks } from "./deleteNonFavoritedTasks"
 import { deleteTasksWithIds } from "./deleteTasksWithIds"
 import { exportTaskWithId } from "./exportTaskWithId"
 import { getTaskHistory } from "./getTaskHistory"
+import { getTotalTasksSize } from "./getTotalTasksSize"
 import { newTask } from "./newTask"
 import { showTaskWithId } from "./showTaskWithId"
 import { taskCompletionViewChanges } from "./taskCompletionViewChanges"
@@ -26,6 +27,7 @@ export function registerAllMethods(): void {
 	registerMethod("deleteTasksWithIds", deleteTasksWithIds)
 	registerMethod("exportTaskWithId", exportTaskWithId)
 	registerMethod("getTaskHistory", getTaskHistory)
+	registerMethod("getTotalTasksSize", getTotalTasksSize)
 	registerMethod("newTask", newTask)
 	registerMethod("showTaskWithId", showTaskWithId)
 	registerMethod("taskCompletionViewChanges", taskCompletionViewChanges)

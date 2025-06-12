@@ -260,6 +260,6 @@
 		"newWorkflowFile": "New workflow file...",
 		"workflowNamePlaceholder": "workflow-name (.md, .txt, or no extension)",
 		"noWorkflowsFound": "No rules found",
-		"workflowsDescription": "Workflows allow you to define a series of steps to guide Cline through a repetitive set of tasks, such as deploying a service or submitting a PR. To invoke a workflow, type /workflow-name in the chat."
+		"workflowsDescription": "Workflows allow you to define a series of steps to guide Codai through a repetitive set of tasks, such as deploying a service or submitting a PR. To invoke a workflow, type /workflow-name in the chat."
 	}
 }

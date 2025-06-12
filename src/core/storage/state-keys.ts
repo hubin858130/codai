@@ -21,6 +21,7 @@ export type SecretKey =
 	| "xaiApiKey"
 	| "nebiusApiKey"
 	| "sambanovaApiKey"
+	| "cerebrasApiKey"
 
 export type GlobalStateKey =
 	| "apiProvider"
@@ -90,6 +91,7 @@ export type GlobalStateKey =
 	| "favoritedModelIds"
 	| "requestTimeoutMs"
 	| "shellIntegrationTimeout"
+	| "terminalReuseEnabled"
 	| "isNewUser"
 
 export type LocalStateKey = "localClineRulesToggles"
