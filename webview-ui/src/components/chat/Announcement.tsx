@@ -91,7 +91,7 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 							<b>Task Timeline:</b> See the history of your coding journey with a visual timeline of checkpoints.
 						</li>
 						<li>
-							<b>UX Improvements:</b> Type while Codai works, smarter auto-scrolling, and copy buttons for task
+							<b>UX Improvements:</b> Type while Cline works, smarter auto-scrolling, and copy buttons for task
 							headers and messages.
 						</li>
 						<li>
@@ -99,7 +99,7 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 							tracking.
 						</li>
 						<li>
-							<b>Global Codai Rules:</b> Store multiple rules files in Documents/Cline/Rules to share between
+							<b>Global Cline Rules:</b> Store multiple rules files in Documents/Cline/Rules to share between
 							projects.
 						</li>
 					</ul>
