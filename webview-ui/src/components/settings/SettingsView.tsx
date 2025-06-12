@@ -1,50 +1,34 @@
+import { UnsavedChangesDialog } from "@/components/common/AlertDialog"
+import HeroTooltip from "@/components/common/HeroTooltip"
+import { useExtensionState } from "@/context/ExtensionStateContext"
+import { StateServiceClient } from "@/services/grpc-client"
+import { cn } from "@/utils/cn"
+import { validateApiConfiguration, validateModelId } from "@/utils/validate"
+import { vscode } from "@/utils/vscode"
+import { ExtensionMessage } from "@shared/ExtensionMessage"
+import { EmptyRequest } from "@shared/proto/common"
+import { PlanActMode, TogglePlanActModeRequest } from "@shared/proto/state"
 import {
 	VSCodeButton,
 	VSCodeCheckbox,
-	VSCodeDropdown,
 	VSCodeLink,
-	VSCodeOption,
 	VSCodeTextArea,
+	VSCodeDropdown,
+	VSCodeOption,
 	VSCodeTextField,
 } from "@vscode/webview-ui-toolkit/react"
-import { memo, useCallback, useEffect, useState, useRef } from "react"
-import {
-	Settings,
-	Webhook,
-	CheckCheck,
-	SquareMousePointer,
-	GitBranch,
-	Bell,
-	Database,
-	SquareTerminal,
-	FlaskConical,
-	Globe,
-	Info,
-	LucideIcon,
-} from "lucide-react"
-import HeroTooltip from "@/components/common/HeroTooltip"
-import { UnsavedChangesDialog } from "@/components/common/AlertDialog"
-import SectionHeader from "./SectionHeader"
-import Section from "./Section"
-import PreferredLanguageSetting from "./PreferredLanguageSetting" // Added import
-import { OpenAIReasoningEffort } from "@shared/ChatSettings"
-import { useExtensionState } from "@/context/ExtensionStateContext"
-import { validateApiConfiguration, validateModelId } from "@/utils/validate"
-import { vscode } from "@/utils/vscode"
-import SettingsButton from "@/components/common/SettingsButton"
-import ApiOptions from "./ApiOptions"
-import { TabButton } from "../mcp/configuration/McpConfigurationView"
+import { CheckCheck, FlaskConical, Info, LucideIcon, Settings, SquareMousePointer, SquareTerminal, Webhook } from "lucide-react"
+import { memo, useCallback, useEffect, useRef, useState } from "react"
 import { useEvent } from "react-use"
-import { ExtensionMessage } from "@shared/ExtensionMessage"
-import { StateServiceClient } from "@/services/grpc-client"
-import FeatureSettingsSection from "./FeatureSettingsSection"
-import BrowserSettingsSection from "./BrowserSettingsSection"
-import TerminalSettingsSection from "./TerminalSettingsSection"
-import { FEATURE_FLAGS } from "@shared/services/feature-flags/feature-flags"
 import { Tab, TabContent, TabHeader, TabList, TabTrigger } from "../common/Tab"
-import { cn } from "@/utils/cn"
-import { PlanActMode } from "@shared/proto/state"
-
+import { TabButton } from "../mcp/configuration/McpConfigurationView"
+import ApiOptions from "./ApiOptions"
+import BrowserSettingsSection from "./BrowserSettingsSection"
+import FeatureSettingsSection from "./FeatureSettingsSection"
+import PreferredLanguageSetting from "./PreferredLanguageSetting" // Added import
+import Section from "./Section"
+import SectionHeader from "./SectionHeader"
+import TerminalSettingsSection from "./TerminalSettingsSection"
 import { useTranslation } from "react-i18next"
 import { getLanguageConfig, updateLanguageConfig } from "@continuedev/core/util/codaiConfigUtil"
 const { IS_DEV } = process.env
@@ -70,37 +54,37 @@ interface SettingsTab {
 export const SETTINGS_TABS: SettingsTab[] = [
 	{
 		id: "api-config",
-		name: ('settings.tabs.apiConfig.name'),
-		tooltipText: ('settings.tabs.apiConfig.tooltip'),
-		headerText: ('settings.tabs.apiConfig.header'),
+		name: "settings.tabs.apiConfig.name",
+		tooltipText: "settings.tabs.apiConfig.tooltip",
+		headerText: "settings.tabs.apiConfig.header",
 		icon: Webhook,
 	},
 	{
 		id: "general",
-		name: ('settings.tabs.general.name'),
-		tooltipText: ('settings.tabs.general.tooltip'),
-		headerText: ('settings.tabs.general.header'),
+		name: "settings.tabs.general.name",
+		tooltipText: "settings.tabs.general.tooltip",
+		headerText: "settings.tabs.general.header",
 		icon: Settings,
 	},
 	{
 		id: "features",
-		name: ('settings.tabs.features.name'),
-		tooltipText: ('settings.tabs.features.tooltip'),
-		headerText: ('settings.tabs.features.header'),
+		name: "settings.tabs.features.name",
+		tooltipText: "settings.tabs.features.tooltip",
+		headerText: "settings.tabs.features.header",
 		icon: CheckCheck,
 	},
 	{
 		id: "browser",
-		name: ('settings.tabs.browser.name'),
-		tooltipText: ('settings.tabs.browser.tooltip'),
-		headerText: ('settings.tabs.browser.header'),
+		name: "settings.tabs.browser.name",
+		tooltipText: "settings.tabs.browser.tooltip",
+		headerText: "settings.tabs.browser.header",
 		icon: SquareMousePointer,
 	},
 	{
 		id: "terminal",
-		name: ('settings.tabs.terminal.name'),
-		tooltipText: ('settings.tabs.terminal.tooltip'),
-		headerText: ('settings.tabs.terminal.header'),
+		name: "settings.tabs.terminal.name",
+		tooltipText: "settings.tabs.terminal.tooltip",
+		headerText: "settings.tabs.terminal.header",
 		icon: SquareTerminal,
 	},
 	// Only show in dev mode
@@ -108,18 +92,18 @@ export const SETTINGS_TABS: SettingsTab[] = [
 		? [
 				{
 					id: "debug",
-					name: ('settings.tabs.debug.name'),
-					tooltipText: ('settings.tabs.debug.tooltip'),
-					headerText: ('settings.tabs.debug.header'),
+					name: "settings.tabs.debug.name",
+					tooltipText: "settings.tabs.debug.tooltip",
+					headerText: "settings.tabs.debug.header",
 					icon: FlaskConical,
 				},
 			]
 		: []),
 	{
 		id: "about",
-		name: ('settings.tabs.about.name'),
-		tooltipText: ('settings.tabs.about.tooltip'),
-		headerText: ('settings.tabs.about.header'),
+		name: "settings.tabs.about.name",
+		tooltipText: "settings.tabs.about.tooltip",
+		headerText: "settings.tabs.about.header",
 		icon: Info,
 	},
 ]
@@ -153,6 +137,10 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		setEnableCheckpointsSetting,
 		mcpMarketplaceEnabled,
 		setMcpMarketplaceEnabled,
+		shellIntegrationTimeout,
+		setShellIntegrationTimeout,
+		terminalReuseEnabled,
+		setTerminalReuseEnabled,
 		setApiConfiguration,
 	} = useExtensionState()
 
@@ -165,6 +153,8 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		enableCheckpointsSetting,
 		mcpMarketplaceEnabled,
 		chatSettings,
+		shellIntegrationTimeout,
+		terminalReuseEnabled,
 	})
 	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
 	const [modelIdErrorMessage, setModelIdErrorMessage] = useState<string | undefined>(undefined)
@@ -207,7 +197,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			type: "updateLanguageConfig",
 			language: newLanguage,
 		})
-		setHasUnsavedChanges(true)//huqb
+		setHasUnsavedChanges(true) //huqb
 	}
 
 	useEffect(() => {
@@ -261,6 +251,8 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			telemetrySetting,
 			enableCheckpointsSetting,
 			mcpMarketplaceEnabled,
+			shellIntegrationTimeout,
+			terminalReuseEnabled,
 			apiConfiguration: apiConfigurationToSubmit,
 			autocompleteConfig,
 		})
@@ -284,7 +276,9 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			planActSeparateModelsSetting !== originalState.current.planActSeparateModelsSetting ||
 			enableCheckpointsSetting !== originalState.current.enableCheckpointsSetting ||
 			mcpMarketplaceEnabled !== originalState.current.mcpMarketplaceEnabled ||
-			JSON.stringify(chatSettings) !== JSON.stringify(originalState.current.chatSettings)
+			JSON.stringify(chatSettings) !== JSON.stringify(originalState.current.chatSettings) ||
+			shellIntegrationTimeout !== originalState.current.shellIntegrationTimeout ||
+			terminalReuseEnabled !== originalState.current.terminalReuseEnabled
 
 		setHasUnsavedChanges(hasChanges)
 	}, [
@@ -295,6 +289,8 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		enableCheckpointsSetting,
 		mcpMarketplaceEnabled,
 		chatSettings,
+		shellIntegrationTimeout,
+		terminalReuseEnabled,
 	])
 
 	// Handle cancel button click
@@ -378,13 +374,15 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			switch (message.type) {
 				case "didUpdateSettings":
 					if (pendingTabChange) {
-						StateServiceClient.togglePlanActMode({
-							chatSettings: {
-								mode: pendingTabChange === "plan" ? PlanActMode.PLAN : PlanActMode.ACT,
-								preferredLanguage: chatSettings.preferredLanguage,
-								openAIReasoningEffort: chatSettings.openAIReasoningEffort,
-							},
-						})
+						StateServiceClient.togglePlanActMode(
+							TogglePlanActModeRequest.create({
+								chatSettings: {
+									mode: pendingTabChange === "plan" ? PlanActMode.PLAN : PlanActMode.ACT,
+									preferredLanguage: chatSettings.preferredLanguage,
+									openAiReasoningEffort: chatSettings.openAIReasoningEffort,
+								},
+							}),
+						)
 						setPendingTabChange(null)
 					}
 					break
@@ -428,7 +426,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 
 	const handleResetState = async () => {
 		try {
-			await StateServiceClient.resetState({})
+			await StateServiceClient.resetState(EmptyRequest.create({}))
 		} catch (error) {
 			console.error("Failed to reset state:", error)
 		}
@@ -582,7 +580,6 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 								<div>
 									{renderSectionHeader("api-config")}
 									<Section>
-										
 										{/* Tabs container */}
 										{planActSeparateModelsSetting ? (
 											<div className="rounded-md mb-5 bg-[var(--vscode-panel-background)]">
@@ -632,7 +629,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 												{t("settings.other.planActSeparateModelsDesc")}
 											</p>
 										</div>
-										
+
 										{/* Autocomplete Settings Section */}
 										<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)] [&_vscode-dropdown]:w-full [&_vscode-text-field]:w-full">
 											<details
@@ -642,7 +639,9 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 														vscode.postMessage({ type: "getAutocompleteConfig" })
 													}
 												}}>
-												<summary className="cursor-pointer font-medium">{t("settings.autocomplete.title")}</summary>
+												<summary className="cursor-pointer font-medium">
+													{t("settings.autocomplete.title")}
+												</summary>
 												<div className="mt-3 space-y-3">
 													<VSCodeDropdown>
 														<VSCodeOption value="openai">OpenAI Compatible</VSCodeOption>
@@ -652,7 +651,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 														value={autocompleteConfig.autocomplete.apiBase}
 														onInput={(e: any) => {
 															if (e.target.value !== autocompleteConfig.autocomplete.apiBase) {
-																setHasUnsavedChanges(true)//huqb
+																setHasUnsavedChanges(true) //huqb
 															}
 															setAutocompleteConfig({
 																...autocompleteConfig,
@@ -660,8 +659,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 																	...autocompleteConfig.autocomplete,
 																	apiBase: e.target.value,
 																},
-															});
-															
+															})
 														}}
 														placeholder={t("settings.autocomplete.apiBase")}>
 														{t("settings.autocomplete.apiBase")}
@@ -672,7 +670,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 														type="password"
 														onInput={(e: any) => {
 															if (e.target.value !== autocompleteConfig.autocomplete.apiKey) {
-																setHasUnsavedChanges(true)//huqb
+																setHasUnsavedChanges(true) //huqb
 															}
 															setAutocompleteConfig({
 																...autocompleteConfig,
@@ -680,7 +678,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 																	...autocompleteConfig.autocomplete,
 																	apiKey: e.target.value,
 																},
-															});
+															})
 														}}
 														placeholder={t("settings.autocomplete.apiKey")}>
 														{t("settings.autocomplete.apiKey")}
@@ -690,7 +688,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 														value={autocompleteConfig.autocomplete.model}
 														onInput={(e: any) => {
 															if (e.target.value !== autocompleteConfig.autocomplete.model) {
-																setHasUnsavedChanges(true)//huqb
+																setHasUnsavedChanges(true) //huqb
 															}
 															setAutocompleteConfig({
 																...autocompleteConfig,
@@ -698,7 +696,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 																	...autocompleteConfig.autocomplete,
 																	model: e.target.value,
 																},
-															});
+															})
 														}}
 														placeholder={t("settings.autocomplete.model")}>
 														{t("settings.autocomplete.model")}
@@ -707,8 +705,8 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 													<VSCodeCheckbox
 														checked={autocompleteConfig.autocomplete.enable}
 														onChange={(e: any) => {
-															if (e.target.checked !== autocompleteConfig.autocomplete.enable) {	
-																setHasUnsavedChanges(true)//huqb
+															if (e.target.checked !== autocompleteConfig.autocomplete.enable) {
+																setHasUnsavedChanges(true) //huqb
 															}
 															setAutocompleteConfig({
 																...autocompleteConfig,
@@ -716,7 +714,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 																	...autocompleteConfig.autocomplete,
 																	enable: e.target.checked,
 																},
-															});
+															})
 														}}>
 														{t("settings.autocomplete.enable")}
 													</VSCodeCheckbox>
@@ -759,7 +757,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 										{/* <div className="mb-[5px]">
 											<VSCodeCheckbox
 												className="mb-[5px]"
-												checked={telemetrySetting === "enabled"}
+												checked={telemetrySetting !== "disabled"}
 												onChange={(e: any) => {
 													const checked = e.target.checked === true
 													setTelemetrySetting(checked ? "enabled" : "disabled")
@@ -782,7 +780,9 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 										{/* Language Selection */}
 										<div className="border border-solid border-[var(--vscode-panel-border)] rounded-md p-[10px] mb-5 bg-[var(--vscode-panel-background)]">
 											<details>
-												<summary className="cursor-pointer font-medium">{t("settings.language.title")}</summary>
+												<summary className="cursor-pointer font-medium">
+													{t("settings.language.title")}
+												</summary>
 												<div className="mt-3">
 													<VSCodeDropdown
 														value={currentLanguage || "English"}
@@ -862,13 +862,15 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 									{renderSectionHeader("about")}
 									<Section>
 										<div className="text-center text-[var(--vscode-descriptionForeground)] text-xs leading-[1.2] px-0 py-0 pr-2 pb-[15px] mt-auto">
-										<p className="break-words m-0 p-0">
-											{t("settings.feedback.text")}{" "}
-											<VSCodeLink href="https://github.com/codai-agent/codai" className="inline">
-												https://github.com/codai-agent/codai
-											</VSCodeLink>
-										</p>
-										<p className="italic mt-[10px] mb-0 p-0">{t("settings.feedback.version", { version })}</p>
+											<p className="break-words m-0 p-0">
+												{t("settings.feedback.text")}{" "}
+												<VSCodeLink href="https://github.com/codai-agent/codai" className="inline">
+													https://github.com/codai-agent/codai
+												</VSCodeLink>
+											</p>
+											<p className="italic mt-[10px] mb-0 p-0">
+												{t("settings.feedback.version", { version })}
+											</p>
 										</div>
 									</Section>
 								</div>

@@ -10,9 +10,11 @@ import { getRelativePaths } from "./getRelativePaths"
 import { openFile } from "./openFile"
 import { openImage } from "./openImage"
 import { openMention } from "./openMention"
+import { openTaskHistory } from "./openTaskHistory"
 import { refreshRules } from "./refreshRules"
 import { searchCommits } from "./searchCommits"
 import { searchFiles } from "./searchFiles"
+import { selectFiles } from "./selectFiles"
 import { selectImages } from "./selectImages"
 import { toggleClineRule } from "./toggleClineRule"
 import { toggleCursorRule } from "./toggleCursorRule"
@@ -28,9 +30,11 @@ export function registerAllMethods(): void {
 	registerMethod("openFile", openFile)
 	registerMethod("openImage", openImage)
 	registerMethod("openMention", openMention)
+	registerMethod("openTaskHistory", openTaskHistory)
 	registerMethod("refreshRules", refreshRules)
 	registerMethod("searchCommits", searchCommits)
 	registerMethod("searchFiles", searchFiles)
+	registerMethod("selectFiles", selectFiles)
 	registerMethod("selectImages", selectImages)
 	registerMethod("toggleClineRule", toggleClineRule)
 	registerMethod("toggleCursorRule", toggleCursorRule)

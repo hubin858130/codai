@@ -22,15 +22,11 @@ export interface ExtensionMessage {
 		| "lmStudioModels"
 		| "theme"
 		| "workspaceUpdated"
-		| "invoke"
-		| "partialMessage"
 		| "openRouterModels"
 		| "openAiModels"
 		| "requestyModels"
 		| "mcpServers"
 		| "relinquishControl"
-		| "authCallback"
-		| "mcpMarketplaceCatalog"
 		| "mcpDownloadDetails"
 		| "commitSearchResults"
 		| "openGraphData"
@@ -38,31 +34,19 @@ export interface ExtensionMessage {
 		| "userCreditsBalance"
 		| "userCreditsUsage"
 		| "userCreditsPayments"
-		| "totalTasksSize"
-		| "addToInput"
-		| "browserConnectionResult"
 		| "fileSearchResults"
 		| "grpc_response" // New type for gRPC responses
 		| "autocompleteConfig"
 		| "languageConfig"
 	text?: string
-	action?:
-		| "chatButtonClicked"
-		| "mcpButtonClicked"
-		| "settingsButtonClicked"
-		| "historyButtonClicked"
-		| "didBecomeVisible"
-		| "accountLogoutClicked"
-		| "accountButtonClicked"
-		| "focusChatInput"
-	invoke?: Invoke
+	action?: "didBecomeVisible" | "accountLogoutClicked" | "focusChatInput"
 	state?: ExtensionState
 	images?: string[]
+	files?: string[]
 	ollamaModels?: string[]
 	lmStudioModels?: string[]
 	vsCodeLmModels?: { vendor?: string; family?: string; version?: string; id?: string }[]
 	filePaths?: string[]
-	partialMessage?: ClineMessage
 	openRouterModels?: Record<string, ModelInfo>
 	openAiModels?: string[]
 	requestyModels?: Record<string, ModelInfo>
@@ -85,7 +69,6 @@ export interface ExtensionMessage {
 	userCreditsBalance?: BalanceResponse
 	userCreditsUsage?: UsageTransaction[]
 	userCreditsPayments?: PaymentTransaction[]
-	totalTasksSize?: number | null
 	success?: boolean
 	endpoint?: string
 	isBundled?: boolean
@@ -110,8 +93,6 @@ export interface ExtensionMessage {
 	language?: string
 }
 
-export type Invoke = "sendMessage" | "primaryButtonClick" | "secondaryButtonClick"
-
 export type Platform = "aix" | "darwin" | "freebsd" | "linux" | "openbsd" | "sunos" | "win32" | "unknown"
 
 export const DEFAULT_PLATFORM = "unknown"
@@ -135,6 +116,7 @@ export interface ExtensionState {
 	taskHistory: HistoryItem[]
 	telemetrySetting: TelemetrySetting
 	shellIntegrationTimeout: number
+	terminalReuseEnabled?: boolean
 	uriScheme?: string
 	userInfo?: {
 		displayName: string | null
@@ -142,7 +124,7 @@ export interface ExtensionState {
 		photoURL: string | null
 	}
 	version: string
-	vscMachineId: string
+	distinctId: string
 	globalClineRulesToggles: ClineRulesToggles
 	localClineRulesToggles: ClineRulesToggles
 	localWorkflowToggles: ClineRulesToggles
@@ -160,6 +142,7 @@ export interface ClineMessage {
 	text?: string
 	reasoning?: string
 	images?: string[]
+	files?: string[]
 	partial?: boolean
 	lastCheckpointHash?: string
 	isCheckpointCheckedOut?: boolean
@@ -223,6 +206,7 @@ export interface ClineSayTool {
 		| "listFilesRecursive"
 		| "listCodeDefinitionNames"
 		| "searchFiles"
+		| "webFetch"
 	path?: string
 	diff?: string
 	content?: string

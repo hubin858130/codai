@@ -6,15 +6,14 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { Empty, EmptyRequest, Int64Request, Metadata, StringArrayRequest, StringRequest } from "./common";
-
-export const protobufPackage = "codai";
+import { Empty, EmptyRequest, Int64, Int64Request, Metadata, StringArrayRequest, StringRequest } from "./common";
 
 /** Request message for creating a new task */
 export interface NewTaskRequest {
   metadata?: Metadata | undefined;
   text: string;
   images: string[];
+  files: string[];
 }
 
 /** Request message for toggling task favorite status */
@@ -79,10 +78,11 @@ export interface AskResponseRequest {
   responseType: string;
   text: string;
   images: string[];
+  files: string[];
 }
 
 function createBaseNewTaskRequest(): NewTaskRequest {
-  return { metadata: undefined, text: "", images: [] };
+  return { metadata: undefined, text: "", images: [], files: [] };
 }
 
 export const NewTaskRequest: MessageFns<NewTaskRequest> = {
@@ -95,6 +95,9 @@ export const NewTaskRequest: MessageFns<NewTaskRequest> = {
     }
     for (const v of message.images) {
       writer.uint32(26).string(v!);
+    }
+    for (const v of message.files) {
+      writer.uint32(34).string(v!);
     }
     return writer;
   },
@@ -130,6 +133,14 @@ export const NewTaskRequest: MessageFns<NewTaskRequest> = {
           message.images.push(reader.string());
           continue;
         }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          message.files.push(reader.string());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -144,6 +155,7 @@ export const NewTaskRequest: MessageFns<NewTaskRequest> = {
       metadata: isSet(object.metadata) ? Metadata.fromJSON(object.metadata) : undefined,
       text: isSet(object.text) ? globalThis.String(object.text) : "",
       images: globalThis.Array.isArray(object?.images) ? object.images.map((e: any) => globalThis.String(e)) : [],
+      files: globalThis.Array.isArray(object?.files) ? object.files.map((e: any) => globalThis.String(e)) : [],
     };
   },
 
@@ -158,6 +170,9 @@ export const NewTaskRequest: MessageFns<NewTaskRequest> = {
     if (message.images?.length) {
       obj.images = message.images;
     }
+    if (message.files?.length) {
+      obj.files = message.files;
+    }
     return obj;
   },
 
@@ -171,6 +186,7 @@ export const NewTaskRequest: MessageFns<NewTaskRequest> = {
       : undefined;
     message.text = object.text ?? "";
     message.images = object.images?.map((e) => e) || [];
+    message.files = object.files?.map((e) => e) || [];
     return message;
   },
 };
@@ -982,7 +998,7 @@ export const TaskItem: MessageFns<TaskItem> = {
 };
 
 function createBaseAskResponseRequest(): AskResponseRequest {
-  return { metadata: undefined, responseType: "", text: "", images: [] };
+  return { metadata: undefined, responseType: "", text: "", images: [], files: [] };
 }
 
 export const AskResponseRequest: MessageFns<AskResponseRequest> = {
@@ -998,6 +1014,9 @@ export const AskResponseRequest: MessageFns<AskResponseRequest> = {
     }
     for (const v of message.images) {
       writer.uint32(34).string(v!);
+    }
+    for (const v of message.files) {
+      writer.uint32(42).string(v!);
     }
     return writer;
   },
@@ -1041,6 +1060,14 @@ export const AskResponseRequest: MessageFns<AskResponseRequest> = {
           message.images.push(reader.string());
           continue;
         }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.files.push(reader.string());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1056,6 +1083,7 @@ export const AskResponseRequest: MessageFns<AskResponseRequest> = {
       responseType: isSet(object.responseType) ? globalThis.String(object.responseType) : "",
       text: isSet(object.text) ? globalThis.String(object.text) : "",
       images: globalThis.Array.isArray(object?.images) ? object.images.map((e: any) => globalThis.String(e)) : [],
+      files: globalThis.Array.isArray(object?.files) ? object.files.map((e: any) => globalThis.String(e)) : [],
     };
   },
 
@@ -1073,6 +1101,9 @@ export const AskResponseRequest: MessageFns<AskResponseRequest> = {
     if (message.images?.length) {
       obj.images = message.images;
     }
+    if (message.files?.length) {
+      obj.files = message.files;
+    }
     return obj;
   },
 
@@ -1087,6 +1118,7 @@ export const AskResponseRequest: MessageFns<AskResponseRequest> = {
     message.responseType = object.responseType ?? "";
     message.text = object.text ?? "";
     message.images = object.images?.map((e) => e) || [];
+    message.files = object.files?.map((e) => e) || [];
     return message;
   },
 };
@@ -1111,6 +1143,15 @@ export const TaskServiceDefinition = {
       requestType: EmptyRequest,
       requestStream: false,
       responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+    /** Gets the total size of all tasks */
+    getTotalTasksSize: {
+      name: "getTotalTasksSize",
+      requestType: EmptyRequest,
+      requestStream: false,
+      responseType: Int64,
       responseStream: false,
       options: {},
     },
@@ -1209,14 +1250,14 @@ export const TaskServiceDefinition = {
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
+type DeepPartial<T> = T extends Builtin ? T
   : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
+type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function longToNumber(int64: { toString(): string }): number {
@@ -1234,7 +1275,7 @@ function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export interface MessageFns<T> {
+interface MessageFns<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
