@@ -87,7 +87,7 @@ export class ContinueCompletionProvider implements vscode.InlineCompletionItemPr
 				console.log("##### 自动补全配置不完整，返回空")
 				return undefined
 			}
-			let key = config.apiKey//AesUtil.aesDecrypt(config.apiKey)
+			let key = config.apiKey //AesUtil.aesDecrypt(config.apiKey)
 			setupStatusBar(config.enable ? StatusBarStatus.Enabled : StatusBarStatus.Disabled) //huqb
 			return {
 				title: config.title,

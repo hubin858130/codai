@@ -6,11 +6,18 @@ import { registerMethod } from "./index"
 import { addRemoteMcpServer } from "./addRemoteMcpServer"
 import { deleteMcpServer } from "./deleteMcpServer"
 import { downloadMcp } from "./downloadMcp"
+import { openMcpSettings } from "./openMcpSettings"
 import { refreshMcpMarketplace } from "./refreshMcpMarketplace"
 import { restartMcpServer } from "./restartMcpServer"
+import { subscribeToMcpMarketplaceCatalog } from "./subscribeToMcpMarketplaceCatalog"
 import { toggleMcpServer } from "./toggleMcpServer"
 import { toggleToolAutoApprove } from "./toggleToolAutoApprove"
 import { updateMcpTimeout } from "./updateMcpTimeout"
+
+// Streaming methods for this service
+export const streamingMethods = [
+  "subscribeToMcpMarketplaceCatalog"
+]
 
 // Register all mcp service methods
 export function registerAllMethods(): void {
@@ -18,8 +25,10 @@ export function registerAllMethods(): void {
 	registerMethod("addRemoteMcpServer", addRemoteMcpServer)
 	registerMethod("deleteMcpServer", deleteMcpServer)
 	registerMethod("downloadMcp", downloadMcp)
+	registerMethod("openMcpSettings", openMcpSettings)
 	registerMethod("refreshMcpMarketplace", refreshMcpMarketplace)
 	registerMethod("restartMcpServer", restartMcpServer)
+	registerMethod("subscribeToMcpMarketplaceCatalog", subscribeToMcpMarketplaceCatalog, { isStreaming: true })
 	registerMethod("toggleMcpServer", toggleMcpServer)
 	registerMethod("toggleToolAutoApprove", toggleToolAutoApprove)
 	registerMethod("updateMcpTimeout", updateMcpTimeout)

@@ -85,7 +85,7 @@
 			"problemMatcher": [],
 			"isBackground": true,
 			"label": "npm: build:webview",
-			"dependsOn": ["npm: protos"],
+			"dependsOn": ["npm: protos", "npm: build:continue_core"],
 			"presentation": {
 				"group": "watch",
 				"reveal": "always"
@@ -138,7 +138,7 @@
 			],
 			"isBackground": true,
 			"label": "npm: dev:webview",
-			"dependsOn": ["npm: protos"],
+			"dependsOn": ["npm: protos", "npm: build:continue_core"],
 			"presentation": {
 				"group": "watch",
 				"reveal": "always"

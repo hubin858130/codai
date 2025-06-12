@@ -14,30 +14,20 @@ export interface WebviewMessage {
 		| "newTask"
 		| "condense"
 		| "reportBug"
-		| "openInBrowser"
-		| "showChatView"
-		| "openMcpSettings"
-		| "openExtensionSettings"
 		| "requestVsCodeLmModels"
-		| "showAccountViewClicked"
 		| "authStateChanged"
-		| "authCallback"
 		| "fetchMcpMarketplace"
 		| "searchCommits"
 		| "fetchLatestMcpServersFromHub"
 		| "telemetrySetting"
-		| "invoke"
 		| "updateSettings"
 		| "clearAllTaskHistory"
 		| "fetchUserCreditsData"
-		| "optionsResponse"
-		| "requestTotalTasksSize"
 		| "searchFiles"
 		| "grpc_request"
 		| "grpc_request_cancel"
 		| "toggleWorkflow"
-
-		// | "relaunchChromeDebugMode"
+		| "executeQuickWin"
 		| "getAutocompleteConfig"
 		| "autocompleteConfig"
 		| "getLanguageConfig"
@@ -47,6 +37,7 @@ export interface WebviewMessage {
 	disabled?: boolean
 	apiConfiguration?: ApiConfiguration
 	images?: string[]
+	files?: string[]
 	bool?: boolean
 	number?: number
 	browserSettings?: BrowserSettings
@@ -64,8 +55,6 @@ export interface WebviewMessage {
 	// For auth
 	user?: UserInfo | null
 	customToken?: string
-	// For openInBrowser
-	url?: string
 	planActSeparateModelsSetting?: boolean
 	enableCheckpointsSetting?: boolean
 	mcpMarketplaceEnabled?: boolean
@@ -92,8 +81,11 @@ export interface WebviewMessage {
 	enabled?: boolean
 	filename?: string
 
+	payload?: { command: string; title: string }
+
 	offset?: number
 	shellIntegrationTimeout?: number
+	terminalReuseEnabled?: boolean
 	// For autocomplete config
 	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string

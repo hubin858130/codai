@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.2]
+
+-   Synchronize Cline v3.17.10
+-   Fix bugs
+
 ## [1.2.1]
 
 -   Update the top icon of the chatview
@@ -7,7 +12,7 @@
 
 ## [1.2.0]
 
--   Synchronize Cline v3.17
+-   Synchronize Cline v3.17.3
 -   Modify interface layout
 -   Fix bugs
 
