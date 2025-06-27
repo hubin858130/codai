@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 import path from "path"
 import fs from "fs/promises"
 import { Controller } from ".."
 import { Empty, StringArrayRequest, BooleanRequest } from "../../../shared/proto/common"
 import { TaskMethodHandler } from "./index"
 import { fileExistsAtPath } from "../../../utils/fs"
+=======
+import { Controller } from ".."
+import { Empty, StringArrayRequest } from "../../../shared/proto/common"
+import { TaskMethodHandler } from "./index"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 /**
  * Deletes tasks with the specified IDs
@@ -20,6 +26,7 @@ export const deleteTasksWithIds: TaskMethodHandler = async (
 		throw new Error("Missing task IDs")
 	}
 
+<<<<<<< HEAD
 	for (const id of request.value) {
 		await deleteTaskWithId(controller, id)
 	}
@@ -89,3 +96,9 @@ async function deleteTaskWithId(controller: Controller, id: string): Promise<voi
 	// Update webview state
 	await controller.postStateToWebview()
 }
+=======
+	await Promise.all(request.value.map((value) => controller.deleteTaskWithId(value)))
+
+	return Empty.create()
+}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d

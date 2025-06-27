@@ -129,11 +129,17 @@ const baseConfig = {
 	loader: {
 		".node": "file",
 	},
+<<<<<<< HEAD
 	define: production
 		? {
 				"process.env.IS_DEV": JSON.stringify(!production),
 			}
 		: undefined,
+=======
+	define: {
+		"process.env.IS_DEV": JSON.stringify(!production),
+	},
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	tsconfig: path.resolve(__dirname, "tsconfig.json"),
 	plugins: [
 		copyWasmFiles,

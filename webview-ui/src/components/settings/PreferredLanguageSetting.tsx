@@ -44,7 +44,11 @@ const PreferredLanguageSetting: React.FC<PreferredLanguageSettingProps> = ({ cha
 				<VSCodeOption value="Turkish - Türkçe">Turkish - Türkçe</VSCodeOption>
 			</VSCodeDropdown>
 			<p className="text-xs text-[var(--vscode-descriptionForeground)] mt-1">
+<<<<<<< HEAD
 				The language that codai should use for communication.
+=======
+				The language that Cline should use for communication.
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			</p>
 		</div>
 	)

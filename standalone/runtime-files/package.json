@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
 	"name": "cline-standalone",
 	"version": "0.0.1",
+=======
+	"name": "Cline standalone",
+	"version": "1.0.0",
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	"main": "standalone.js",
 	"dependencies": {
 		"@grpc/grpc-js": "^1.13.3",

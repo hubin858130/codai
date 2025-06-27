@@ -22,8 +22,11 @@ export type SecretKey =
 	| "nebiusApiKey"
 	| "sambanovaApiKey"
 	| "cerebrasApiKey"
+<<<<<<< HEAD
 	| "sapAiCoreClientId"
 	| "sapAiCoreClientSecret"
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 export type GlobalStateKey =
 	| "awsRegion"
@@ -32,6 +35,8 @@ export type GlobalStateKey =
 	| "awsBedrockEndpoint"
 	| "awsProfile"
 	| "awsUseProfile"
+	| "awsBedrockCustomSelected"
+	| "awsBedrockCustomModelBaseId"
 	| "vertexProjectId"
 	| "vertexRegion"
 	| "lastShownAnnouncementId"
@@ -53,8 +58,24 @@ export type GlobalStateKey =
 	| "globalWorkflowToggles"
 	| "browserSettings"
 	| "userInfo"
+<<<<<<< HEAD
 	| "liteLlmBaseUrl"
 	| "liteLlmUsePromptCache"
+=======
+	| "previousModeApiProvider"
+	| "previousModeModelId"
+	| "previousModeThinkingBudgetTokens"
+	| "previousModeReasoningEffort"
+	| "previousModeVsCodeLmModelSelector"
+	| "previousModeAwsBedrockCustomSelected"
+	| "previousModeAwsBedrockCustomModelBaseId"
+	| "previousModeModelInfo"
+	| "liteLlmBaseUrl"
+	| "liteLlmModelId"
+	| "liteLlmModelInfo"
+	| "liteLlmUsePromptCache"
+	| "fireworksModelId"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	| "fireworksModelMaxCompletionTokens"
 	| "fireworksModelMaxTokens"
 	| "qwenApiLine"
@@ -89,6 +110,7 @@ export type LocalStateKey =
 	| "apiModelId"
 	| "thinkingBudgetTokens"
 	| "reasoningEffort"
+<<<<<<< HEAD
 	| "vsCodeLmModelSelector"
 	| "awsBedrockCustomSelected"
 	| "awsBedrockCustomModelBaseId"
@@ -119,3 +141,15 @@ export type LocalStateKey =
 	| "previousModeSapAiCoreTokenUrl"
 	| "previousModeSapAiCoreResourceGroup"
 	| "previousModeSapAiCoreModelId"
+=======
+	| "planActSeparateModelsSetting"
+	| "enableCheckpointsSetting"
+	| "mcpMarketplaceEnabled"
+	| "favoritedModelIds"
+	| "requestTimeoutMs"
+	| "shellIntegrationTimeout"
+	| "terminalReuseEnabled"
+	| "isNewUser"
+
+export type LocalStateKey = "localClineRulesToggles"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d

@@ -15,7 +15,11 @@ const outputChannel: vscode.OutputChannel = {
 }
 
 function postMessage(message: ExtensionMessage): Promise<boolean> {
+<<<<<<< HEAD
 	log("postMessage stub called:", JSON.stringify(message).slice(0, 200))
+=======
+	log("postMessage stub called:", message)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	return Promise.resolve(true)
 }
 

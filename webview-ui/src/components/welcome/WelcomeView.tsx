@@ -5,10 +5,15 @@ import { validateApiConfiguration } from "@/utils/validate"
 import { vscode } from "@/utils/vscode"
 import ApiOptions from "@/components/settings/ApiOptions"
 import ClineLogoWhite from "@/assets/ClineLogoWhite"
+<<<<<<< HEAD
 import { AccountServiceClient, ModelsServiceClient } from "@/services/grpc-client"
 import { EmptyRequest } from "@shared/proto/common"
 import { UpdateApiConfigurationRequest } from "@shared/proto/models"
 import { convertApiConfigurationToProto } from "@shared/proto-conversions/models/api-configuration-conversion"
+=======
+import { AccountServiceClient } from "@/services/grpc-client"
+import { EmptyRequest } from "@shared/proto/common"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { useTranslation, Trans } from "react-i18next"
 
 const WelcomeView = memo(() => {

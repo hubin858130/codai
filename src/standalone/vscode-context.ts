@@ -1,4 +1,5 @@
 import { URI } from "vscode-uri"
+<<<<<<< HEAD
 import os from "os"
 import { mkdirSync, readFileSync } from "fs"
 import path, { join } from "path"
@@ -17,6 +18,17 @@ mkdirSync(DATA_DIR, { recursive: true })
 log("Using settings dir:", DATA_DIR)
 
 const EXTENSION_DIR = path.join(CLINE_DIR, "core", VERSION, "extension")
+=======
+
+import path from "path"
+import type { Extension, ExtensionContext } from "vscode"
+import { ExtensionKind, ExtensionMode } from "vscode"
+import { outputChannel, postMessage } from "./vscode-context-stubs"
+import { EnvironmentVariableCollection, MementoStore, readJson, SecretStore } from "./vscode-context-utils"
+
+const DATA_DIR = process.env.DATA_DIR ?? "."
+const EXTENSION_DIR = process.env.EXTENSION_DIR ?? "."
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 const EXTENSION_MODE = process.env.IS_DEV === "true" ? ExtensionMode.Development : ExtensionMode.Production
 
 const extension: Extension<void> = {
@@ -59,11 +71,14 @@ const extensionContext: ExtensionContext = {
 	workspaceState: new MementoStore(path.join(DATA_DIR, "workspaceState.json")),
 }
 
+<<<<<<< HEAD
 function getPackageVersion(): string {
 	const packageJson = JSON.parse(readFileSync(join(__dirname, "package.json"), "utf8"))
 	return packageJson.version
 }
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 console.log("Finished loading vscode context...")
 
 export { extensionContext, outputChannel, postMessage }

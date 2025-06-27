@@ -19,7 +19,11 @@
 
 ## Key Features of Codai
 
+<<<<<<< HEAD
 1. **Including** code writing and editing, command-line operations, MCP usage, AI model configuration, Enhancement of prompts, and more.  
+=======
+1. **Including** code writing and editing, command-line operations, MCP usage, AI model configuration, and more.  
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 2. **Added internationalization support for the interface, including multiple languages**: English, 简体中文, 日本語, Русский, Français, العربية, 한국어, 繁體中文, Deutsch, Italiano, Bahasa Melayu, Español.  
 3. **Added automatic code completion functionality**. You need to configure the model yourself, preferably one optimized for coding, to achieve outstanding results!  
 4. **Optimized system prompts to reduce token consumption and minimize context length usage in large models**

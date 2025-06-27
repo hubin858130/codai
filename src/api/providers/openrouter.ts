@@ -104,6 +104,7 @@ export class OpenRouterHandler implements ApiHandler {
 			}
 
 			if (!didOutputUsage && chunk.usage) {
+<<<<<<< HEAD
 				let modelId = this.options.openRouterModelId
 				if (modelId && modelId.includes("gemini")) {
 					yield {
@@ -125,6 +126,16 @@ export class OpenRouterHandler implements ApiHandler {
 						// @ts-ignore-next-line
 						totalCost: (chunk.usage.cost || 0) + (chunk.usage.cost_details?.upstream_inference_cost || 0),
 					}
+=======
+				yield {
+					type: "usage",
+					cacheWriteTokens: 0,
+					cacheReadTokens: chunk.usage.prompt_tokens_details?.cached_tokens || 0,
+					inputTokens: chunk.usage.prompt_tokens || 0,
+					outputTokens: chunk.usage.completion_tokens || 0,
+					// @ts-ignore-next-line
+					totalCost: chunk.usage.cost || 0,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				}
 				didOutputUsage = true
 			}
@@ -146,6 +157,7 @@ export class OpenRouterHandler implements ApiHandler {
 				const generationIterator = this.fetchGenerationDetails(this.lastGenerationId)
 				const generation = (await generationIterator.next()).value
 				// console.log("OpenRouter generation details:", generation)
+<<<<<<< HEAD
 				let modelId = this.options.openRouterModelId
 				if (modelId && modelId.includes("gemini")) {
 					return {
@@ -167,6 +179,16 @@ export class OpenRouterHandler implements ApiHandler {
 						outputTokens: generation?.native_tokens_completion || 0,
 						totalCost: generation?.total_cost || 0,
 					}
+=======
+				return {
+					type: "usage",
+					cacheWriteTokens: 0,
+					cacheReadTokens: generation?.native_tokens_cached || 0,
+					// openrouter generation endpoint fails often
+					inputTokens: generation?.native_tokens_prompt || 0,
+					outputTokens: generation?.native_tokens_completion || 0,
+					totalCost: generation?.total_cost || 0,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				}
 			} catch (error) {
 				// ignore if fails

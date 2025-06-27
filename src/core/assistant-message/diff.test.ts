@@ -19,6 +19,7 @@ new content
 			isFinal: true,
 		},
 		{
+<<<<<<< HEAD
 			name: "malformed search - mixed symbols",
 			original: "line1\nline2\nline3",
 			diff: `<<-- SEARCH
@@ -47,6 +48,16 @@ line2
 replaced
 +++++++ REPLACE`,
 			shouldThrow: true,
+=======
+			name: "full file replacement",
+			original: "old content",
+			diff: `------- SEARCH
+=======
+new content
++++++++ REPLACE`,
+			expected: "new content\n",
+			isFinal: true,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		},
 		{
 			name: "exact match replacement",

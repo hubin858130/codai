@@ -36,14 +36,22 @@ if (nativeModules.length > 0) {
 // Zip the build directory (excluding any pre-existing output zip).
 const zipPath = path.join(BUILD_DIR, "standalone.zip")
 const output = fs.createWriteStream(zipPath)
+<<<<<<< HEAD
 const archive = archiver("zip", { zlib: { level: 3 } })
+=======
+const archive = archiver("zip", { zlib: { level: 9 } })
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 output.on("close", () => {
 	console.log(`Created ${zipPath} (${(archive.pointer() / 1024 / 1024).toFixed(1)} MB)`)
 })
+<<<<<<< HEAD
 archive.on("warning", (err) => {
 	console.warn(`Warning: ${err}`)
 })
+=======
+
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 archive.on("error", (err) => {
 	throw err
 })
@@ -53,6 +61,7 @@ archive.glob("**/*", {
 	cwd: BUILD_DIR,
 	ignore: ["standalone.zip"],
 })
+<<<<<<< HEAD
 
 // Add the whole cline directory under "extension"
 archive.directory(process.cwd(), "extension", (entry) => {
@@ -80,4 +89,6 @@ archive.directory(process.cwd(), "extension", (entry) => {
 })
 
 console.log("Zipping package...")
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 await archive.finalize()

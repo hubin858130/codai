@@ -15,7 +15,11 @@ enum WebviewProviderType {
 // Define a new message type for webview provider info
 message WebviewProviderTypeRequest {
   Metadata metadata = 1;
+<<<<<<< HEAD
   WebviewProviderType provider_type = 2;
+=======
+  WebviewProviderType providerType = 2;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // Enum for ClineMessage type
@@ -65,6 +69,7 @@ enum ClineSay {
   BROWSER_ACTION_RESULT = 16;
   MCP_SERVER_REQUEST_STARTED = 17;
   MCP_SERVER_RESPONSE = 18;
+<<<<<<< HEAD
   MCP_NOTIFICATION = 19;
   USE_MCP_SERVER_SAY = 20;
   DIFF_ERROR = 21;
@@ -73,6 +78,15 @@ enum ClineSay {
   CHECKPOINT_CREATED = 24;
   LOAD_MCP_DOCUMENTATION = 25;
   INFO = 26;
+=======
+  USE_MCP_SERVER_SAY = 19;
+  DIFF_ERROR = 20;
+  DELETED_API_REQS = 21;
+  CLINEIGNORE_ERROR = 22;
+  CHECKPOINT_CREATED = 23;
+  LOAD_MCP_DOCUMENTATION = 24;
+  INFO = 25;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // Enum for ClineSayTool tool types
@@ -222,7 +236,11 @@ message ClineMessage {
 // UiService provides methods for managing UI interactions
 service UiService {
   // Scrolls to a specific settings section in the settings view
+<<<<<<< HEAD
   rpc scrollToSettings(StringRequest) returns (KeyValuePair);
+=======
+  rpc scrollToSettings(StringRequest) returns (Empty);
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   
   // Marks the current announcement as shown and returns whether an announcement should still be shown
   rpc onDidShowAnnouncement(EmptyRequest) returns (Boolean);
@@ -247,6 +265,7 @@ service UiService {
   
   // Subscribe to partial message updates (streaming Cline messages as they're built)
   rpc subscribeToPartialMessage(EmptyRequest) returns (stream ClineMessage);
+<<<<<<< HEAD
   
   // Subscribe to theme change events
   rpc subscribeToTheme(EmptyRequest) returns (stream String);
@@ -268,4 +287,6 @@ service UiService {
   
   // Opens a URL in the default browser
   rpc openUrl(StringRequest) returns (Empty);
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

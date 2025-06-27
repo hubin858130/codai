@@ -15,6 +15,7 @@ import { refreshRules } from "./refreshRules"
 import { searchCommits } from "./searchCommits"
 import { searchFiles } from "./searchFiles"
 import { selectFiles } from "./selectFiles"
+<<<<<<< HEAD
 import { subscribeToWorkspaceUpdates } from "./subscribeToWorkspaceUpdates"
 import { toggleClineRule } from "./toggleClineRule"
 import { toggleCursorRule } from "./toggleCursorRule"
@@ -25,6 +26,12 @@ import { toggleWorkflow } from "./toggleWorkflow"
 export const streamingMethods = [
   "subscribeToWorkspaceUpdates"
 ]
+=======
+import { selectImages } from "./selectImages"
+import { toggleClineRule } from "./toggleClineRule"
+import { toggleCursorRule } from "./toggleCursorRule"
+import { toggleWindsurfRule } from "./toggleWindsurfRule"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 // Register all file service methods
 export function registerAllMethods(): void {
@@ -41,9 +48,16 @@ export function registerAllMethods(): void {
 	registerMethod("searchCommits", searchCommits)
 	registerMethod("searchFiles", searchFiles)
 	registerMethod("selectFiles", selectFiles)
+<<<<<<< HEAD
 	registerMethod("subscribeToWorkspaceUpdates", subscribeToWorkspaceUpdates, { isStreaming: true })
 	registerMethod("toggleClineRule", toggleClineRule)
 	registerMethod("toggleCursorRule", toggleCursorRule)
 	registerMethod("toggleWindsurfRule", toggleWindsurfRule)
 	registerMethod("toggleWorkflow", toggleWorkflow)
+=======
+	registerMethod("selectImages", selectImages)
+	registerMethod("toggleClineRule", toggleClineRule)
+	registerMethod("toggleCursorRule", toggleCursorRule)
+	registerMethod("toggleWindsurfRule", toggleWindsurfRule)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

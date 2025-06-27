@@ -2,11 +2,20 @@ import { UnsavedChangesDialog } from "@/components/common/AlertDialog"
 import HeroTooltip from "@/components/common/HeroTooltip"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { StateServiceClient } from "@/services/grpc-client"
+<<<<<<< HEAD
 import { validateApiConfiguration, validateModelId } from "@/utils/validate"
 import { vscode } from "@/utils/vscode"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
 import { EmptyRequest, StringRequest } from "@shared/proto/common"
 import { PlanActMode, ResetStateRequest, TogglePlanActModeRequest, UpdateSettingsRequest } from "@shared/proto/state"
+=======
+import { cn } from "@/utils/cn"
+import { validateApiConfiguration, validateModelId } from "@/utils/validate"
+import { vscode } from "@/utils/vscode"
+import { ExtensionMessage } from "@shared/ExtensionMessage"
+import { EmptyRequest } from "@shared/proto/common"
+import { PlanActMode, TogglePlanActModeRequest } from "@shared/proto/state"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import {
 	VSCodeButton,
 	VSCodeCheckbox,
@@ -23,18 +32,102 @@ import { Tab, TabContent, TabHeader, TabList, TabTrigger } from "../common/Tab"
 import { TabButton } from "../mcp/configuration/McpConfigurationView"
 import ApiOptions from "./ApiOptions"
 import BrowserSettingsSection from "./BrowserSettingsSection"
+<<<<<<< HEAD
 import { BrowserSettings } from "@shared/BrowserSettings"
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import FeatureSettingsSection from "./FeatureSettingsSection"
 import PreferredLanguageSetting from "./PreferredLanguageSetting" // Added import
 import Section from "./Section"
 import SectionHeader from "./SectionHeader"
 import TerminalSettingsSection from "./TerminalSettingsSection"
+<<<<<<< HEAD
 import { convertApiConfigurationToProtoApiConfiguration } from "@shared/proto-conversions/state/settings-conversion"
 import { convertChatSettingsToProtoChatSettings } from "@shared/proto-conversions/state/chat-settings-conversion"
 import { useTranslation } from "react-i18next"
 import { getLanguageConfig, updateLanguageConfig } from "@continuedev/core/util/codaiConfigUtil"
 
 const IS_DEV = process.env.IS_DEV
+
+// Styles for the tab system
+const settingsTabsContainer = "flex flex-1 overflow-hidden [&.narrow_.tab-label]:hidden"
+const settingsTabList =
+	"w-48 data-[compact=true]:w-12 flex-shrink-0 flex flex-col overflow-y-auto overflow-x-hidden border-r border-[var(--vscode-sideBar-background)]"
+const settingsTabTrigger =
+	"whitespace-nowrap overflow-hidden min-w-0 h-12 px-4 py-3 box-border flex items-center border-l-2 border-transparent text-[var(--vscode-foreground)] opacity-70 bg-transparent hover:bg-[var(--vscode-list-hoverBackground)] data-[compact=true]:w-12 data-[compact=true]:p-4 cursor-pointer"
+const settingsTabTriggerActive =
+	"opacity-100 border-l-2 border-l-[var(--vscode-focusBorder)] border-t-0 border-r-0 border-b-0 bg-[var(--vscode-list-activeSelectionBackground)]"
+
+// Tab definitions
+interface SettingsTab {
+	id: string
+	name: string
+	tooltipText: string
+	headerText: string
+	icon: LucideIcon
+}
+
+export const SETTINGS_TABS: SettingsTab[] = [
+	{
+		id: "api-config",
+		name: "settings.tabs.apiConfig.name",
+		tooltipText: "settings.tabs.apiConfig.tooltip",
+		headerText: "settings.tabs.apiConfig.header",
+		icon: Webhook,
+	},
+	{
+		id: "general",
+		name: "settings.tabs.general.name",
+		tooltipText: "settings.tabs.general.tooltip",
+		headerText: "settings.tabs.general.header",
+		icon: Settings,
+	},
+	{
+		id: "features",
+		name: "settings.tabs.features.name",
+		tooltipText: "settings.tabs.features.tooltip",
+		headerText: "settings.tabs.features.header",
+		icon: CheckCheck,
+	},
+	{
+		id: "browser",
+		name: "settings.tabs.browser.name",
+		tooltipText: "settings.tabs.browser.tooltip",
+		headerText: "settings.tabs.browser.header",
+		icon: SquareMousePointer,
+	},
+	{
+		id: "terminal",
+		name: "settings.tabs.terminal.name",
+		tooltipText: "settings.tabs.terminal.tooltip",
+		headerText: "settings.tabs.terminal.header",
+		icon: SquareTerminal,
+	},
+	// Only show in dev mode
+	...(IS_DEV
+		? [
+				{
+					id: "debug",
+					name: "settings.tabs.debug.name",
+					tooltipText: "settings.tabs.debug.tooltip",
+					headerText: "settings.tabs.debug.header",
+					icon: FlaskConical,
+				},
+			]
+		: []),
+	{
+		id: "about",
+		name: "settings.tabs.about.name",
+		tooltipText: "settings.tabs.about.tooltip",
+		headerText: "settings.tabs.about.header",
+		icon: Info,
+	},
+]
+=======
+import { useTranslation } from "react-i18next"
+import { getLanguageConfig, updateLanguageConfig } from "@continuedev/core/util/codaiConfigUtil"
+const { IS_DEV } = process.env
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 // Styles for the tab system
 const settingsTabsContainer = "flex flex-1 overflow-hidden [&.narrow_.tab-label]:hidden"
@@ -124,10 +217,13 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 	const [isUnsavedChangesDialogOpen, setIsUnsavedChangesDialogOpen] = useState(false)
 	// Store the action to perform after confirmation
 	const pendingAction = useRef<() => void>()
+<<<<<<< HEAD
 	// Track if we're currently switching modes
 	const [isSwitchingMode, setIsSwitchingMode] = useState(false)
 	// Track pending mode switch when there are unsaved changes
 	const [pendingModeSwitch, setPendingModeSwitch] = useState<"plan" | "act" | null>(null)
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const {
 		apiConfiguration,
 		version,
@@ -142,6 +238,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		setEnableCheckpointsSetting,
 		mcpMarketplaceEnabled,
 		setMcpMarketplaceEnabled,
+<<<<<<< HEAD
 		mcpRichDisplayEnabled,
 		setMcpRichDisplayEnabled,
 		shellIntegrationTimeout,
@@ -164,10 +261,24 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 	// Store the original state to detect changes
 	const originalState = useRef({
 		apiConfiguration,
+=======
+		shellIntegrationTimeout,
+		setShellIntegrationTimeout,
+		terminalReuseEnabled,
+		setTerminalReuseEnabled,
+		setApiConfiguration,
+	} = useExtensionState()
+
+	// Store the original state to detect changes
+	const originalState = useRef({
+		apiConfiguration,
+		customInstructions,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		telemetrySetting,
 		planActSeparateModelsSetting,
 		enableCheckpointsSetting,
 		mcpMarketplaceEnabled,
+<<<<<<< HEAD
 		mcpRichDisplayEnabled,
 		mcpResponsesCollapsed,
 		chatSettings,
@@ -176,6 +287,11 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		terminalOutputLineLimit,
 		defaultTerminalProfile,
 		browserSettings,
+=======
+		chatSettings,
+		shellIntegrationTimeout,
+		terminalReuseEnabled,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	})
 	const [apiErrorMessage, setApiErrorMessage] = useState<string | undefined>(undefined)
 	const [modelIdErrorMessage, setModelIdErrorMessage] = useState<string | undefined>(undefined)
@@ -263,6 +379,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			apiConfigurationToSubmit = undefined
 		}
 
+<<<<<<< HEAD
 		try {
 			await StateServiceClient.updateSettings(
 				UpdateSettingsRequest.create({
@@ -325,6 +442,20 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		} catch (error) {
 			console.error("Failed to update settings:", error)
 		}
+=======
+		vscode.postMessage({
+			type: "updateSettings",
+			planActSeparateModelsSetting,
+			customInstructionsSetting: customInstructions,
+			telemetrySetting,
+			enableCheckpointsSetting,
+			mcpMarketplaceEnabled,
+			shellIntegrationTimeout,
+			terminalReuseEnabled,
+			apiConfiguration: apiConfigurationToSubmit,
+			autocompleteConfig,
+		})
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 		if (!withoutDone) {
 			onDone()
@@ -336,6 +467,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		setModelIdErrorMessage(undefined)
 	}, [apiConfiguration])
 
+<<<<<<< HEAD
 	// Track the previous mode to detect mode switches
 	const previousMode = useRef(chatSettings.mode)
 
@@ -364,10 +496,18 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 
 		const hasChanges =
 			JSON.stringify(apiConfiguration) !== JSON.stringify(originalState.current.apiConfiguration) ||
+=======
+	// Check for unsaved changes by comparing current state with original state
+	useEffect(() => {
+		const hasChanges =
+			JSON.stringify(apiConfiguration) !== JSON.stringify(originalState.current.apiConfiguration) ||
+			customInstructions !== originalState.current.customInstructions ||
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			telemetrySetting !== originalState.current.telemetrySetting ||
 			planActSeparateModelsSetting !== originalState.current.planActSeparateModelsSetting ||
 			enableCheckpointsSetting !== originalState.current.enableCheckpointsSetting ||
 			mcpMarketplaceEnabled !== originalState.current.mcpMarketplaceEnabled ||
+<<<<<<< HEAD
 			mcpRichDisplayEnabled !== originalState.current.mcpRichDisplayEnabled ||
 			JSON.stringify(chatSettings) !== JSON.stringify(originalState.current.chatSettings) ||
 			mcpResponsesCollapsed !== originalState.current.mcpResponsesCollapsed ||
@@ -376,14 +516,24 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			terminalReuseEnabled !== originalState.current.terminalReuseEnabled ||
 			defaultTerminalProfile !== originalState.current.defaultTerminalProfile ||
 			JSON.stringify(localBrowserSettings) !== JSON.stringify(originalState.current.browserSettings)
+=======
+			JSON.stringify(chatSettings) !== JSON.stringify(originalState.current.chatSettings) ||
+			shellIntegrationTimeout !== originalState.current.shellIntegrationTimeout ||
+			terminalReuseEnabled !== originalState.current.terminalReuseEnabled
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 		setHasUnsavedChanges(hasChanges)
 	}, [
 		apiConfiguration,
+<<<<<<< HEAD
+=======
+		customInstructions,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		telemetrySetting,
 		planActSeparateModelsSetting,
 		enableCheckpointsSetting,
 		mcpMarketplaceEnabled,
+<<<<<<< HEAD
 		mcpRichDisplayEnabled,
 		mcpResponsesCollapsed,
 		chatSettings,
@@ -392,12 +542,18 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 		terminalOutputLineLimit,
 		defaultTerminalProfile,
 		isSwitchingMode,
+=======
+		chatSettings,
+		shellIntegrationTimeout,
+		terminalReuseEnabled,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	])
 
 	// Handle cancel button click
 	const handleCancel = useCallback(() => {
 		if (hasUnsavedChanges) {
 			// Show confirmation dialog
+<<<<<<< HEAD
 			setIsUnsavedChangesDialogOpen(true)
 			pendingAction.current = () => {
 				// Reset all tracked state to original values
@@ -449,6 +605,36 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 				// Close settings view
 				onDone()
 			}
+=======
+			// setIsUnsavedChangesDialogOpen(true)
+			// pendingAction.current = () => {
+			// 	// Reset all tracked state to original values
+			// 	setCustomInstructions(originalState.current.customInstructions)
+			// 	setTelemetrySetting(originalState.current.telemetrySetting)
+			// 	setPlanActSeparateModelsSetting(originalState.current.planActSeparateModelsSetting)
+			// 	setChatSettings(originalState.current.chatSettings)
+			// 	if (typeof setApiConfiguration === "function") {
+			// 		setApiConfiguration(originalState.current.apiConfiguration ?? {})
+			// 	}
+			// 	if (typeof setEnableCheckpointsSetting === "function") {
+			// 		setEnableCheckpointsSetting(
+			// 			typeof originalState.current.enableCheckpointsSetting === "boolean"
+			// 				? originalState.current.enableCheckpointsSetting
+			// 				: false,
+			// 		)
+			// 	}
+			// 	if (typeof setMcpMarketplaceEnabled === "function") {
+			// 		setMcpMarketplaceEnabled(
+			// 			typeof originalState.current.mcpMarketplaceEnabled === "boolean"
+			// 				? originalState.current.mcpMarketplaceEnabled
+			// 				: false,
+			// 		)
+			// 	}
+			// 	// Close settings view
+			// 	onDone()
+			// }
+			onDone()
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		} else {
 			// No changes, just close
 			onDone()
@@ -456,12 +642,17 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 	}, [
 		hasUnsavedChanges,
 		onDone,
+<<<<<<< HEAD
+=======
+		setCustomInstructions,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		setTelemetrySetting,
 		setPlanActSeparateModelsSetting,
 		setChatSettings,
 		setApiConfiguration,
 		setEnableCheckpointsSetting,
 		setMcpMarketplaceEnabled,
+<<<<<<< HEAD
 		setMcpRichDisplayEnabled,
 		setMcpResponsesCollapsed,
 	])
@@ -590,11 +781,26 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			}
 		}
 	}, [pendingModeSwitch, handleSubmit, chatSettings.preferredLanguage, chatSettings.openAIReasoningEffort])
+=======
+	])
+
+	// Handle confirmation dialog actions
+	const handleConfirmDiscard = useCallback(() => {
+		setIsUnsavedChangesDialogOpen(false)
+		if (pendingAction.current) {
+			pendingAction.current()
+			pendingAction.current = undefined
+		}
+	}, [])
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	const handleCancelDiscard = useCallback(() => {
 		setIsUnsavedChangesDialogOpen(false)
 		pendingAction.current = undefined
+<<<<<<< HEAD
 		setPendingModeSwitch(null)
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	}, [])
 
 	// validate as soon as the component is mounted
@@ -610,6 +816,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 	If we only want to run code once on mount we can use react-use's useEffectOnce or useMount
 	*/
 
+<<<<<<< HEAD
 	const handleMessage = useCallback((event: MessageEvent) => {
 		const message: ExtensionMessage = event.data
 		switch (message.type) {
@@ -656,14 +863,80 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 					global: resetGlobalState,
 				}),
 			)
+=======
+	const handleMessage = useCallback(
+		(event: MessageEvent) => {
+			const message: ExtensionMessage = event.data
+			switch (message.type) {
+				case "didUpdateSettings":
+					if (pendingTabChange) {
+						StateServiceClient.togglePlanActMode(
+							TogglePlanActModeRequest.create({
+								chatSettings: {
+									mode: pendingTabChange === "plan" ? PlanActMode.PLAN : PlanActMode.ACT,
+									preferredLanguage: chatSettings.preferredLanguage,
+									openAiReasoningEffort: chatSettings.openAIReasoningEffort,
+								},
+							}),
+						)
+						setPendingTabChange(null)
+					}
+					break
+				// Handle tab navigation through targetSection prop instead
+				case "grpc_response":
+					if (message.grpc_response?.message?.action === "scrollToSettings") {
+						const tabId = message.grpc_response?.message?.value
+						if (tabId) {
+							console.log("Opening settings tab from GRPC response:", tabId)
+							// Check if the value corresponds to a valid tab ID
+							const isValidTabId = SETTINGS_TABS.some((tab) => tab.id === tabId)
+
+							if (isValidTabId) {
+								// Set the active tab directly
+								setActiveTab(tabId)
+							} else {
+								// Fall back to the old behavior of scrolling to an element
+								setTimeout(() => {
+									const element = document.getElementById(tabId)
+									if (element) {
+										element.scrollIntoView({ behavior: "smooth" })
+
+										element.style.transition = "background-color 0.5s ease"
+										element.style.backgroundColor = "var(--vscode-textPreformat-background)"
+
+										setTimeout(() => {
+											element.style.backgroundColor = "transparent"
+										}, 1200)
+									}
+								}, 300)
+							}
+						}
+					}
+					break
+			}
+		},
+		[pendingTabChange],
+	)
+
+	useEvent("message", handleMessage)
+
+	const handleResetState = async () => {
+		try {
+			await StateServiceClient.resetState(EmptyRequest.create({}))
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		} catch (error) {
 			console.error("Failed to reset state:", error)
 		}
 	}
 
+<<<<<<< HEAD
 	const handlePlanActModeChange = async (tab: "plan" | "act") => {
 		// Prevent switching if already in that mode or if currently switching
 		if (tab === chatSettings.mode || isSwitchingMode) {
+=======
+	const handlePlanActModeChange = (tab: "plan" | "act") => {
+		if (tab === chatSettings.mode) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			return
 		}
 
@@ -761,22 +1034,39 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 			</TabHeader>
 
 			{/* Vertical tabs layout */}
+<<<<<<< HEAD
 			<div ref={containerRef} className={`${settingsTabsContainer} ${isCompactMode ? "narrow" : ""}`}>
+=======
+			<div ref={containerRef} className={cn(settingsTabsContainer, isCompactMode && "narrow")}>
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				{/* Tab sidebar */}
 				<TabList
 					value={activeTab}
 					onValueChange={handleTabChange}
+<<<<<<< HEAD
 					className={settingsTabList}
+=======
+					className={cn(settingsTabList)}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					data-compact={isCompactMode}>
 					{SETTINGS_TABS.map((tab) =>
 						isCompactMode ? (
 							<HeroTooltip key={tab.id} content={t(tab.tooltipText)} placement="right">
 								<div
+<<<<<<< HEAD
 									className={`${
 										activeTab === tab.id
 											? `${settingsTabTrigger} ${settingsTabTriggerActive}`
 											: settingsTabTrigger
 									} focus:ring-0`}
+=======
+									className={cn(
+										activeTab === tab.id
+											? `${settingsTabTrigger} ${settingsTabTriggerActive}`
+											: settingsTabTrigger,
+										"focus:ring-0",
+									)}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 									data-compact={isCompactMode}
 									data-testid={`tab-${tab.id}`}
 									data-value={tab.id}
@@ -784,7 +1074,11 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 										console.log("Compact tab clicked:", tab.id)
 										handleTabChange(tab.id)
 									}}>
+<<<<<<< HEAD
 									<div className={`flex items-center gap-2 ${isCompactMode ? "justify-center" : ""}`}>
+=======
+									<div className={cn("flex items-center gap-2", isCompactMode && "justify-center")}>
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 										<tab.icon className="w-4 h-4" />
 										<span className="tab-label">{t(tab.name)}</span>
 									</div>
@@ -794,6 +1088,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 							<TabTrigger
 								key={tab.id}
 								value={tab.id}
+<<<<<<< HEAD
 								className={`${
 									activeTab === tab.id
 										? `${settingsTabTrigger} ${settingsTabTriggerActive}`
@@ -802,6 +1097,17 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 								data-compact={isCompactMode}
 								data-testid={`tab-${tab.id}`}>
 								<div className={`flex items-center gap-2 ${isCompactMode ? "justify-center" : ""}`}>
+=======
+								className={cn(
+									activeTab === tab.id
+										? `${settingsTabTrigger} ${settingsTabTriggerActive}`
+										: settingsTabTrigger,
+									"focus:ring-0",
+								)}
+								data-compact={isCompactMode}
+								data-testid={`tab-${tab.id}`}>
+								<div className={cn("flex items-center gap-2", isCompactMode && "justify-center")}>
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 									<tab.icon className="w-4 h-4" />
 									<span className="tab-label">{t(tab.name)}</span>
 								</div>
@@ -842,6 +1148,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 												<div className="flex gap-[1px] mb-[10px] -mt-2 border-0 border-b border-solid border-[var(--vscode-panel-border)]">
 													<TabButton
 														isActive={chatSettings.mode === "plan"}
+<<<<<<< HEAD
 														onClick={() => handlePlanActModeChange("plan")}
 														disabled={isSwitchingMode}
 														style={{
@@ -863,6 +1170,15 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 														{isSwitchingMode && chatSettings.mode === "plan"
 															? "Switching..."
 															: t("settings.actMode")}
+=======
+														onClick={() => handlePlanActModeChange("plan")}>
+														{t("settings.planMode")}
+													</TabButton>
+													<TabButton
+														isActive={chatSettings.mode === "act"}
+														onClick={() => handlePlanActModeChange("act")}>
+														{t("settings.actMode")}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 													</TabButton>
 												</div>
 
@@ -992,6 +1308,25 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 											</details>
 										</div>
 
+<<<<<<< HEAD
+=======
+										<div className="mb-[5px]">
+											<VSCodeTextArea
+												value={customInstructions ?? ""}
+												className="w-full"
+												resize="vertical"
+												rows={4}
+												placeholder={
+													'e.g. "Run unit tests at the end", "Use TypeScript with async/await", "Speak in Spanish"'
+												}
+												onInput={(e: any) => setCustomInstructions(e.target?.value ?? "")}>
+												<span className="font-medium">{t("settings.other.customInstructions")}</span>
+											</VSCodeTextArea>
+											<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
+												{t("settings.other.customInstructionsDesc")}
+											</p>
+										</div>
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 									</Section>
 								</div>
 							)}
@@ -1019,11 +1354,17 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 												Allow anonymous error and usage reporting
 											</VSCodeCheckbox>
 											<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
+<<<<<<< HEAD
 												Help improve codai by sending anonymous usage data and error reports. No code,
 												prompts, or personal information are ever sent. See our{" "}
 												<VSCodeLink
 													href="https://docs.cline.bot/more-info/telemetry"
 													className="text-inherit">
+=======
+												Help improve Codai by sending anonymous usage data and error reports. No code, prompts, or
+												personal information are ever sent. See our{" "}
+												<VSCodeLink href="https://docs.cline.bot/more-info/telemetry" className="text-inherit">
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 													telemetry overview
 												</VSCodeLink>{" "}
 												and{" "}
@@ -1079,10 +1420,14 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 								<div>
 									{renderSectionHeader("browser")}
 									<Section>
+<<<<<<< HEAD
 										<BrowserSettingsSection
 											localBrowserSettings={localBrowserSettings}
 											onBrowserSettingsChange={setLocalBrowserSettings}
 										/>
+=======
+										<BrowserSettingsSection />
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 									</Section>
 								</div>
 							)}
@@ -1103,6 +1448,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 									{renderSectionHeader("debug")}
 									<Section>
 										<VSCodeButton
+<<<<<<< HEAD
 											onClick={() => handleResetState()}
 											className="mt-[5px] w-auto"
 											style={{ backgroundColor: "var(--vscode-errorForeground)", color: "black" }}>
@@ -1110,6 +1456,9 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 										</VSCodeButton>
 										<VSCodeButton
 											onClick={() => handleResetState(true)}
+=======
+											onClick={handleResetState}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 											className="mt-[5px] w-auto"
 											style={{ backgroundColor: "var(--vscode-errorForeground)", color: "black" }}>
 											{t("settings.other.resetState")}
@@ -1151,6 +1500,7 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 				onOpenChange={setIsUnsavedChangesDialogOpen}
 				onConfirm={handleConfirmDiscard}
 				onCancel={handleCancelDiscard}
+<<<<<<< HEAD
 				onSave={pendingModeSwitch ? handleSaveAndSwitch : undefined}
 				title={pendingModeSwitch ? "Save Changes?" : "Unsaved Changes"}
 				description={
@@ -1161,6 +1511,8 @@ const SettingsView = ({ onDone, targetSection }: SettingsViewProps) => {
 				confirmText={pendingModeSwitch ? "Switch Without Saving" : "Discard Changes"}
 				saveText="Save & Switch"
 				showSaveOption={!!pendingModeSwitch}
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			/>
 		</Tab>
 	)

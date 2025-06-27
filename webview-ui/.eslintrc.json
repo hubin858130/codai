@@ -27,6 +27,7 @@
 		"prefer-const": "off",
 		"no-extra-semi": "off",
 		"eslint-rules/no-protobuf-object-literals": "error",
+<<<<<<< HEAD
 		"eslint-rules/no-grpc-client-object-literals": "error",
 		"eslint-rules/no-vscode-postmessage": "warn",
 		"no-restricted-syntax": [
@@ -36,6 +37,9 @@
 				"message": "Use process.env.VARIABLE_NAME directly instead of destructuring"
 			}
 		]
+=======
+		"eslint-rules/no-grpc-client-object-literals": "error"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	},
 	"ignorePatterns": ["build"]
 }

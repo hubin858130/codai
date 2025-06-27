@@ -5,8 +5,11 @@
 import { registerMethod } from "./index"
 import { accountLoginClicked } from "./accountLoginClicked"
 import { accountLogoutClicked } from "./accountLogoutClicked"
+<<<<<<< HEAD
 import { authStateChanged } from "./authStateChanged"
 import { fetchUserCreditsData } from "./fetchUserCreditsData"
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { subscribeToAuthCallback } from "./subscribeToAuthCallback"
 
 // Streaming methods for this service
@@ -19,7 +22,10 @@ export function registerAllMethods(): void {
 	// Register each method with the registry
 	registerMethod("accountLoginClicked", accountLoginClicked)
 	registerMethod("accountLogoutClicked", accountLogoutClicked)
+<<<<<<< HEAD
 	registerMethod("authStateChanged", authStateChanged)
 	registerMethod("fetchUserCreditsData", fetchUserCreditsData)
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	registerMethod("subscribeToAuthCallback", subscribeToAuthCallback, { isStreaming: true })
 }

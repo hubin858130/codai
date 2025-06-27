@@ -27,7 +27,10 @@ export type ApiProvider =
 	| "xai"
 	| "sambanova"
 	| "cerebras"
+<<<<<<< HEAD
 	| "sapaicore"
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 export interface ApiHandlerOptions {
 	apiModelId?: string
@@ -56,7 +59,10 @@ export interface ApiHandlerOptions {
 	awsBedrockEndpoint?: string
 	awsBedrockCustomSelected?: boolean
 	awsBedrockCustomModelBaseId?: BedrockModelId
+<<<<<<< HEAD
 	claudeCodePath?: string
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	vertexProjectId?: string
 	vertexRegion?: string
 	openAiBaseUrl?: string
@@ -98,12 +104,15 @@ export interface ApiHandlerOptions {
 	sambanovaApiKey?: string
 	cerebrasApiKey?: string
 	requestTimeoutMs?: number
+<<<<<<< HEAD
 	sapAiCoreClientId?: string
 	sapAiCoreClientSecret?: string
 	sapAiResourceGroup?: string
 	sapAiCoreTokenUrl?: string
 	sapAiCoreBaseUrl?: string
 	sapAiCoreModelId?: string
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	onRetryAttempt?: (attempt: number, maxRetries: number, delay: number, error: any) => void
 }
 
@@ -594,7 +603,11 @@ export const vertexModels = {
 		inputPrice: 0,
 		outputPrice: 0,
 	},
+<<<<<<< HEAD
 	"gemini-2.5-pro": {
+=======
+	"gemini-2.5-pro-preview-05-06": {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		maxTokens: 65536,
 		contextWindow: 1_048_576,
 		supportsImages: true,
@@ -602,7 +615,35 @@ export const vertexModels = {
 		supportsGlobalEndpoint: true,
 		inputPrice: 2.5,
 		outputPrice: 15,
+<<<<<<< HEAD
 		cacheReadsPrice: 0.625,
+=======
+		cacheReadsPrice: 0.31,
+		tiers: [
+			{
+				contextWindow: 200000,
+				inputPrice: 1.25,
+				outputPrice: 10,
+				cacheReadsPrice: 0.31,
+			},
+			{
+				contextWindow: Infinity,
+				inputPrice: 2.5,
+				outputPrice: 15,
+				cacheReadsPrice: 0.625,
+			},
+		],
+	},
+	"gemini-2.5-pro-preview-06-05": {
+		maxTokens: 65536,
+		contextWindow: 1_048_576,
+		supportsImages: true,
+		supportsPromptCache: true,
+		supportsGlobalEndpoint: true,
+		inputPrice: 2.5,
+		outputPrice: 15,
+		cacheReadsPrice: 0.31,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		tiers: [
 			{
 				contextWindow: 200000,
@@ -624,8 +665,26 @@ export const vertexModels = {
 		supportsImages: true,
 		supportsPromptCache: true,
 		supportsGlobalEndpoint: true,
+<<<<<<< HEAD
 		inputPrice: 0.3,
 		outputPrice: 2.5,
+=======
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		thinkingConfig: {
+			maxBudget: 24576,
+			outputPrice: 3.5,
+		},
+	},
+	"gemini-2.5-flash-preview-05-20": {
+		maxTokens: 65536,
+		contextWindow: 1_048_576,
+		supportsImages: true,
+		supportsPromptCache: true,
+		supportsGlobalEndpoint: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		thinkingConfig: {
 			maxBudget: 24576,
 			outputPrice: 3.5,
@@ -726,14 +785,21 @@ export const openAiModelInfoSaneDefaults: OpenAiCompatibleModelInfo = {
 export type GeminiModelId = keyof typeof geminiModels
 export const geminiDefaultModelId: GeminiModelId = "gemini-2.5-pro"
 export const geminiModels = {
+<<<<<<< HEAD
 	"gemini-2.5-pro": {
+=======
+	"gemini-2.5-pro-preview-05-06": {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		maxTokens: 65536,
 		contextWindow: 1_048_576,
 		supportsImages: true,
 		supportsPromptCache: true,
 		inputPrice: 2.5,
 		outputPrice: 15,
+<<<<<<< HEAD
 		cacheReadsPrice: 0.625,
+=======
+		cacheReadsPrice: 0.31,
 		tiers: [
 			{
 				contextWindow: 200000,
@@ -749,14 +815,60 @@ export const geminiModels = {
 			},
 		],
 	},
-	"gemini-2.5-flash": {
+	"gemini-2.5-pro-preview-06-05": {
 		maxTokens: 65536,
 		contextWindow: 1_048_576,
 		supportsImages: true,
 		supportsPromptCache: true,
+		supportsGlobalEndpoint: true,
+		inputPrice: 2.5,
+		outputPrice: 15,
+		cacheReadsPrice: 0.31,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
+		tiers: [
+			{
+				contextWindow: 200000,
+				inputPrice: 1.25,
+				outputPrice: 10,
+				cacheReadsPrice: 0.31,
+			},
+			{
+				contextWindow: Infinity,
+				inputPrice: 2.5,
+				outputPrice: 15,
+				cacheReadsPrice: 0.625,
+			},
+		],
+	},
+<<<<<<< HEAD
+	"gemini-2.5-flash": {
+=======
+	"gemini-2.5-flash-preview-05-20": {
+		maxTokens: 65536,
+		contextWindow: 1_048_576,
+		supportsImages: true,
+		supportsPromptCache: true,
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+		thinkingConfig: {
+			maxBudget: 24576,
+			outputPrice: 3.5,
+		},
+	},
+	"gemini-2.5-flash-preview-04-17": {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
+		maxTokens: 65536,
+		contextWindow: 1_048_576,
+		supportsImages: true,
+		supportsPromptCache: true,
+<<<<<<< HEAD
 		inputPrice: 0.3,
 		outputPrice: 2.5,
 		cacheReadsPrice: 0.075,
+=======
+		inputPrice: 0.15,
+		outputPrice: 0.6,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		thinkingConfig: {
 			maxBudget: 24576,
 			outputPrice: 3.5,

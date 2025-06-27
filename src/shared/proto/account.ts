@@ -5,6 +5,7 @@
 // source: account.proto
 
 /* eslint-disable */
+<<<<<<< HEAD
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { Empty, EmptyRequest, Metadata, String } from "./common";
 
@@ -727,6 +728,9 @@ export const PaymentTransaction: MessageFns<PaymentTransaction> = {
     return message;
   },
 };
+=======
+import { Empty, EmptyRequest, String } from "./common";
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 /** Service for account-related operations */
 export type AccountServiceDefinition = typeof AccountServiceDefinition;
@@ -768,6 +772,7 @@ export const AccountServiceDefinition = {
       responseStream: true,
       options: {},
     },
+<<<<<<< HEAD
     /**
      * Handles authentication state changes from the Firebase context.
      * Updates the user info in global state and returns the updated value.
@@ -816,3 +821,7 @@ interface MessageFns<T> {
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
   fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T;
 }
+=======
+  },
+} as const;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d

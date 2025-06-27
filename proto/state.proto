@@ -7,6 +7,7 @@ import "common.proto";
 
 service StateService {
   rpc getLatestState(EmptyRequest) returns (State);
+<<<<<<< HEAD
   rpc updateTerminalConnectionTimeout(Int64Request) returns (Int64);
   rpc updateTerminalReuseEnabled(BooleanRequest) returns (Empty);
   rpc updateDefaultTerminalProfile(StringRequest) returns (TerminalProfileUpdateResponse);
@@ -18,12 +19,21 @@ service StateService {
   rpc updateAutoApprovalSettings(AutoApprovalSettingsRequest) returns (Empty);
   rpc updateSettings(UpdateSettingsRequest) returns (Empty);
   rpc updateTelemetrySetting(TelemetrySettingRequest) returns (Empty);
+=======
+  rpc subscribeToState(EmptyRequest) returns (stream State);
+  rpc toggleFavoriteModel(StringRequest) returns (Empty);
+  rpc resetState(EmptyRequest) returns (Empty);
+  rpc togglePlanActMode(TogglePlanActModeRequest) returns (Empty);
+  rpc updateTerminalConnectionTimeout(Int64Request) returns (Int64);
+  rpc updateAutoApprovalSettings(AutoApprovalSettingsRequest) returns (Empty);
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 message State {
   string state_json = 1;
 }
 
+<<<<<<< HEAD
 message TerminalProfiles {
   repeated TerminalProfile profiles = 1;
 }
@@ -41,6 +51,8 @@ message TerminalProfileUpdateResponse {
   bool has_busy_terminals = 3;
 }
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 message TogglePlanActModeRequest {
   Metadata metadata = 1;
   ChatSettings chat_settings = 2;
@@ -64,6 +76,7 @@ message ChatContent {
   repeated string files = 3;
 }
 
+<<<<<<< HEAD
 message ResetStateRequest {
   Metadata metadata = 1;
   optional bool global = 2;
@@ -71,6 +84,12 @@ message ResetStateRequest {
 
 message AutoApprovalSettingsRequest {
   Metadata metadata = 1;
+=======
+// Message for auto approval settings
+message AutoApprovalSettingsRequest {
+  Metadata metadata = 1;
+
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   message Actions {
     bool read_files = 1;
     bool read_files_externally = 2;
@@ -81,6 +100,10 @@ message AutoApprovalSettingsRequest {
     bool use_browser = 7;
     bool use_mcp = 8;
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   int32 version = 2;
   bool enabled = 3;
   Actions actions = 4;
@@ -88,6 +111,7 @@ message AutoApprovalSettingsRequest {
   bool enable_notifications = 6;
   repeated string favorites = 7;
 }
+<<<<<<< HEAD
 
 enum TelemetrySettingEnum {
   UNSET = 0;
@@ -233,3 +257,5 @@ message ApiConfiguration {
   // Claude Code specific
   optional string claude_code_path = 77;
 }
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d

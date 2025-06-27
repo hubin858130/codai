@@ -88,6 +88,7 @@ export class ClineHandler implements ApiHandler {
 			}
 
 			if (!didOutputUsage && chunk.usage) {
+<<<<<<< HEAD
 				// @ts-ignore-next-line
 				let totalCost = (chunk.usage.cost || 0) + (chunk.usage.cost_details?.upstream_inference_cost || 0)
 				const modelId = this.getModel().id
@@ -118,6 +119,16 @@ export class ClineHandler implements ApiHandler {
 						// @ts-ignore-next-line
 						totalCost,
 					}
+=======
+				yield {
+					type: "usage",
+					cacheWriteTokens: 0,
+					cacheReadTokens: chunk.usage.prompt_tokens_details?.cached_tokens || 0,
+					inputTokens: chunk.usage.prompt_tokens || 0,
+					outputTokens: chunk.usage.completion_tokens || 0,
+					// @ts-ignore-next-line
+					totalCost: chunk.usage.cost || 0,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				}
 				didOutputUsage = true
 			}
@@ -143,6 +154,7 @@ export class ClineHandler implements ApiHandler {
 				})
 
 				const generation = response.data
+<<<<<<< HEAD
 				let modelId = this.options.openRouterModelId
 				if (modelId && modelId.includes("gemini")) {
 					return {
@@ -164,6 +176,15 @@ export class ClineHandler implements ApiHandler {
 						outputTokens: generation?.native_tokens_completion || 0,
 						totalCost: generation?.total_cost || 0,
 					}
+=======
+				return {
+					type: "usage",
+					cacheWriteTokens: 0,
+					cacheReadTokens: generation?.native_tokens_cached || 0,
+					inputTokens: generation?.native_tokens_prompt || 0,
+					outputTokens: generation?.native_tokens_completion || 0,
+					totalCost: generation?.total_cost || 0,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				}
 			} catch (error) {
 				// ignore if fails

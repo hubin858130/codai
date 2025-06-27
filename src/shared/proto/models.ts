@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+<<<<<<< HEAD
 import { Empty, EmptyRequest, Metadata, StringArray, StringRequest } from "./common";
 
 /** API Provider enumeration */
@@ -234,10 +235,26 @@ export interface ModelTier {
   outputPrice?: number | undefined;
   cacheWritesPrice?: number | undefined;
   cacheReadsPrice?: number | undefined;
+=======
+import { EmptyRequest, Metadata, StringArray, StringRequest } from "./common";
+
+/** List of VS Code LM models */
+export interface VsCodeLmModelsArray {
+  models: VsCodeLmModel[];
+}
+
+/** Structure representing a VS Code LM model */
+export interface VsCodeLmModel {
+  vendor: string;
+  family: string;
+  version: string;
+  id: string;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 /** For OpenRouterCompatibleModelInfo structure in OpenRouterModels */
 export interface OpenRouterModelInfo {
+<<<<<<< HEAD
   maxTokens?: number | undefined;
   contextWindow?: number | undefined;
   supportsImages?: boolean | undefined;
@@ -250,6 +267,17 @@ export interface OpenRouterModelInfo {
   thinkingConfig?: ThinkingConfig | undefined;
   supportsGlobalEndpoint?: boolean | undefined;
   tiers: ModelTier[];
+=======
+  maxTokens: number;
+  contextWindow: number;
+  supportsImages: boolean;
+  supportsPromptCache: boolean;
+  inputPrice: number;
+  outputPrice: number;
+  cacheWritesPrice: number;
+  cacheReadsPrice: number;
+  description: string;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 /** Shared response message for model information */
@@ -269,6 +297,7 @@ export interface OpenAiModelsRequest {
   apiKey: string;
 }
 
+<<<<<<< HEAD
 /** Request for updating API configuration */
 export interface UpdateApiConfigurationRequest {
   metadata?: Metadata | undefined;
@@ -395,6 +424,8 @@ export interface ModelsApiConfiguration_OpenAiHeadersEntry {
   value: string;
 }
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 function createBaseVsCodeLmModelsArray(): VsCodeLmModelsArray {
   return { models: [] };
 }
@@ -402,7 +433,11 @@ function createBaseVsCodeLmModelsArray(): VsCodeLmModelsArray {
 export const VsCodeLmModelsArray: MessageFns<VsCodeLmModelsArray> = {
   encode(message: VsCodeLmModelsArray, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.models) {
+<<<<<<< HEAD
       LanguageModelChatSelector.encode(v!, writer.uint32(10).fork()).join();
+=======
+      VsCodeLmModel.encode(v!, writer.uint32(10).fork()).join();
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     }
     return writer;
   },
@@ -419,7 +454,11 @@ export const VsCodeLmModelsArray: MessageFns<VsCodeLmModelsArray> = {
             break;
           }
 
+<<<<<<< HEAD
           message.models.push(LanguageModelChatSelector.decode(reader, reader.uint32()));
+=======
+          message.models.push(VsCodeLmModel.decode(reader, reader.uint32()));
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
           continue;
         }
       }
@@ -433,16 +472,24 @@ export const VsCodeLmModelsArray: MessageFns<VsCodeLmModelsArray> = {
 
   fromJSON(object: any): VsCodeLmModelsArray {
     return {
+<<<<<<< HEAD
       models: globalThis.Array.isArray(object?.models)
         ? object.models.map((e: any) => LanguageModelChatSelector.fromJSON(e))
         : [],
+=======
+      models: globalThis.Array.isArray(object?.models) ? object.models.map((e: any) => VsCodeLmModel.fromJSON(e)) : [],
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     };
   },
 
   toJSON(message: VsCodeLmModelsArray): unknown {
     const obj: any = {};
     if (message.models?.length) {
+<<<<<<< HEAD
       obj.models = message.models.map((e) => LanguageModelChatSelector.toJSON(e));
+=======
+      obj.models = message.models.map((e) => VsCodeLmModel.toJSON(e));
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     }
     return obj;
   },
@@ -452,11 +499,16 @@ export const VsCodeLmModelsArray: MessageFns<VsCodeLmModelsArray> = {
   },
   fromPartial<I extends Exact<DeepPartial<VsCodeLmModelsArray>, I>>(object: I): VsCodeLmModelsArray {
     const message = createBaseVsCodeLmModelsArray();
+<<<<<<< HEAD
     message.models = object.models?.map((e) => LanguageModelChatSelector.fromPartial(e)) || [];
+=======
+    message.models = object.models?.map((e) => VsCodeLmModel.fromPartial(e)) || [];
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return message;
   },
 };
 
+<<<<<<< HEAD
 function createBaseLanguageModelChatSelector(): LanguageModelChatSelector {
   return { vendor: undefined, family: undefined, version: undefined, id: undefined };
 }
@@ -473,15 +525,40 @@ export const LanguageModelChatSelector: MessageFns<LanguageModelChatSelector> = 
       writer.uint32(26).string(message.version);
     }
     if (message.id !== undefined) {
+=======
+function createBaseVsCodeLmModel(): VsCodeLmModel {
+  return { vendor: "", family: "", version: "", id: "" };
+}
+
+export const VsCodeLmModel: MessageFns<VsCodeLmModel> = {
+  encode(message: VsCodeLmModel, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.vendor !== "") {
+      writer.uint32(10).string(message.vendor);
+    }
+    if (message.family !== "") {
+      writer.uint32(18).string(message.family);
+    }
+    if (message.version !== "") {
+      writer.uint32(26).string(message.version);
+    }
+    if (message.id !== "") {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
       writer.uint32(34).string(message.id);
     }
     return writer;
   },
 
+<<<<<<< HEAD
   decode(input: BinaryReader | Uint8Array, length?: number): LanguageModelChatSelector {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseLanguageModelChatSelector();
+=======
+  decode(input: BinaryReader | Uint8Array, length?: number): VsCodeLmModel {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVsCodeLmModel();
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -526,6 +603,7 @@ export const LanguageModelChatSelector: MessageFns<LanguageModelChatSelector> = 
     return message;
   },
 
+<<<<<<< HEAD
   fromJSON(object: any): LanguageModelChatSelector {
     return {
       vendor: isSet(object.vendor) ? globalThis.String(object.vendor) : undefined,
@@ -547,11 +625,35 @@ export const LanguageModelChatSelector: MessageFns<LanguageModelChatSelector> = 
       obj.version = message.version;
     }
     if (message.id !== undefined) {
+=======
+  fromJSON(object: any): VsCodeLmModel {
+    return {
+      vendor: isSet(object.vendor) ? globalThis.String(object.vendor) : "",
+      family: isSet(object.family) ? globalThis.String(object.family) : "",
+      version: isSet(object.version) ? globalThis.String(object.version) : "",
+      id: isSet(object.id) ? globalThis.String(object.id) : "",
+    };
+  },
+
+  toJSON(message: VsCodeLmModel): unknown {
+    const obj: any = {};
+    if (message.vendor !== "") {
+      obj.vendor = message.vendor;
+    }
+    if (message.family !== "") {
+      obj.family = message.family;
+    }
+    if (message.version !== "") {
+      obj.version = message.version;
+    }
+    if (message.id !== "") {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
       obj.id = message.id;
     }
     return obj;
   },
 
+<<<<<<< HEAD
   create<I extends Exact<DeepPartial<LanguageModelChatSelector>, I>>(base?: I): LanguageModelChatSelector {
     return LanguageModelChatSelector.fromPartial(base ?? ({} as any));
   },
@@ -861,12 +963,24 @@ export const ModelTier: MessageFns<ModelTier> = {
     message.outputPrice = object.outputPrice ?? undefined;
     message.cacheWritesPrice = object.cacheWritesPrice ?? undefined;
     message.cacheReadsPrice = object.cacheReadsPrice ?? undefined;
+=======
+  create<I extends Exact<DeepPartial<VsCodeLmModel>, I>>(base?: I): VsCodeLmModel {
+    return VsCodeLmModel.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<VsCodeLmModel>, I>>(object: I): VsCodeLmModel {
+    const message = createBaseVsCodeLmModel();
+    message.vendor = object.vendor ?? "";
+    message.family = object.family ?? "";
+    message.version = object.version ?? "";
+    message.id = object.id ?? "";
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return message;
   },
 };
 
 function createBaseOpenRouterModelInfo(): OpenRouterModelInfo {
   return {
+<<<<<<< HEAD
     maxTokens: undefined,
     contextWindow: undefined,
     supportsImages: undefined,
@@ -879,11 +993,23 @@ function createBaseOpenRouterModelInfo(): OpenRouterModelInfo {
     thinkingConfig: undefined,
     supportsGlobalEndpoint: undefined,
     tiers: [],
+=======
+    maxTokens: 0,
+    contextWindow: 0,
+    supportsImages: false,
+    supportsPromptCache: false,
+    inputPrice: 0,
+    outputPrice: 0,
+    cacheWritesPrice: 0,
+    cacheReadsPrice: 0,
+    description: "",
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   };
 }
 
 export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
   encode(message: OpenRouterModelInfo, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+<<<<<<< HEAD
     if (message.maxTokens !== undefined) {
       writer.uint32(8).int32(message.maxTokens);
     }
@@ -891,11 +1017,21 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
       writer.uint32(16).int32(message.contextWindow);
     }
     if (message.supportsImages !== undefined) {
+=======
+    if (message.maxTokens !== 0) {
+      writer.uint32(8).int32(message.maxTokens);
+    }
+    if (message.contextWindow !== 0) {
+      writer.uint32(16).int32(message.contextWindow);
+    }
+    if (message.supportsImages !== false) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
       writer.uint32(24).bool(message.supportsImages);
     }
     if (message.supportsPromptCache !== false) {
       writer.uint32(32).bool(message.supportsPromptCache);
     }
+<<<<<<< HEAD
     if (message.inputPrice !== undefined) {
       writer.uint32(41).double(message.inputPrice);
     }
@@ -920,6 +1056,23 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
     for (const v of message.tiers) {
       ModelTier.encode(v!, writer.uint32(98).fork()).join();
     }
+=======
+    if (message.inputPrice !== 0) {
+      writer.uint32(41).double(message.inputPrice);
+    }
+    if (message.outputPrice !== 0) {
+      writer.uint32(49).double(message.outputPrice);
+    }
+    if (message.cacheWritesPrice !== 0) {
+      writer.uint32(57).double(message.cacheWritesPrice);
+    }
+    if (message.cacheReadsPrice !== 0) {
+      writer.uint32(65).double(message.cacheReadsPrice);
+    }
+    if (message.description !== "") {
+      writer.uint32(74).string(message.description);
+    }
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return writer;
   },
 
@@ -1002,6 +1155,7 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
           message.description = reader.string();
           continue;
         }
+<<<<<<< HEAD
         case 10: {
           if (tag !== 82) {
             break;
@@ -1026,6 +1180,8 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
           message.tiers.push(ModelTier.decode(reader, reader.uint32()));
           continue;
         }
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1037,6 +1193,7 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
 
   fromJSON(object: any): OpenRouterModelInfo {
     return {
+<<<<<<< HEAD
       maxTokens: isSet(object.maxTokens) ? globalThis.Number(object.maxTokens) : undefined,
       contextWindow: isSet(object.contextWindow) ? globalThis.Number(object.contextWindow) : undefined,
       supportsImages: isSet(object.supportsImages) ? globalThis.Boolean(object.supportsImages) : undefined,
@@ -1051,11 +1208,23 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
         ? globalThis.Boolean(object.supportsGlobalEndpoint)
         : undefined,
       tiers: globalThis.Array.isArray(object?.tiers) ? object.tiers.map((e: any) => ModelTier.fromJSON(e)) : [],
+=======
+      maxTokens: isSet(object.maxTokens) ? globalThis.Number(object.maxTokens) : 0,
+      contextWindow: isSet(object.contextWindow) ? globalThis.Number(object.contextWindow) : 0,
+      supportsImages: isSet(object.supportsImages) ? globalThis.Boolean(object.supportsImages) : false,
+      supportsPromptCache: isSet(object.supportsPromptCache) ? globalThis.Boolean(object.supportsPromptCache) : false,
+      inputPrice: isSet(object.inputPrice) ? globalThis.Number(object.inputPrice) : 0,
+      outputPrice: isSet(object.outputPrice) ? globalThis.Number(object.outputPrice) : 0,
+      cacheWritesPrice: isSet(object.cacheWritesPrice) ? globalThis.Number(object.cacheWritesPrice) : 0,
+      cacheReadsPrice: isSet(object.cacheReadsPrice) ? globalThis.Number(object.cacheReadsPrice) : 0,
+      description: isSet(object.description) ? globalThis.String(object.description) : "",
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     };
   },
 
   toJSON(message: OpenRouterModelInfo): unknown {
     const obj: any = {};
+<<<<<<< HEAD
     if (message.maxTokens !== undefined) {
       obj.maxTokens = Math.round(message.maxTokens);
     }
@@ -1063,11 +1232,21 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
       obj.contextWindow = Math.round(message.contextWindow);
     }
     if (message.supportsImages !== undefined) {
+=======
+    if (message.maxTokens !== 0) {
+      obj.maxTokens = Math.round(message.maxTokens);
+    }
+    if (message.contextWindow !== 0) {
+      obj.contextWindow = Math.round(message.contextWindow);
+    }
+    if (message.supportsImages !== false) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
       obj.supportsImages = message.supportsImages;
     }
     if (message.supportsPromptCache !== false) {
       obj.supportsPromptCache = message.supportsPromptCache;
     }
+<<<<<<< HEAD
     if (message.inputPrice !== undefined) {
       obj.inputPrice = message.inputPrice;
     }
@@ -1092,6 +1271,23 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
     if (message.tiers?.length) {
       obj.tiers = message.tiers.map((e) => ModelTier.toJSON(e));
     }
+=======
+    if (message.inputPrice !== 0) {
+      obj.inputPrice = message.inputPrice;
+    }
+    if (message.outputPrice !== 0) {
+      obj.outputPrice = message.outputPrice;
+    }
+    if (message.cacheWritesPrice !== 0) {
+      obj.cacheWritesPrice = message.cacheWritesPrice;
+    }
+    if (message.cacheReadsPrice !== 0) {
+      obj.cacheReadsPrice = message.cacheReadsPrice;
+    }
+    if (message.description !== "") {
+      obj.description = message.description;
+    }
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return obj;
   },
 
@@ -1100,6 +1296,7 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
   },
   fromPartial<I extends Exact<DeepPartial<OpenRouterModelInfo>, I>>(object: I): OpenRouterModelInfo {
     const message = createBaseOpenRouterModelInfo();
+<<<<<<< HEAD
     message.maxTokens = object.maxTokens ?? undefined;
     message.contextWindow = object.contextWindow ?? undefined;
     message.supportsImages = object.supportsImages ?? undefined;
@@ -1114,6 +1311,17 @@ export const OpenRouterModelInfo: MessageFns<OpenRouterModelInfo> = {
       : undefined;
     message.supportsGlobalEndpoint = object.supportsGlobalEndpoint ?? undefined;
     message.tiers = object.tiers?.map((e) => ModelTier.fromPartial(e)) || [];
+=======
+    message.maxTokens = object.maxTokens ?? 0;
+    message.contextWindow = object.contextWindow ?? 0;
+    message.supportsImages = object.supportsImages ?? false;
+    message.supportsPromptCache = object.supportsPromptCache ?? false;
+    message.inputPrice = object.inputPrice ?? 0;
+    message.outputPrice = object.outputPrice ?? 0;
+    message.cacheWritesPrice = object.cacheWritesPrice ?? 0;
+    message.cacheReadsPrice = object.cacheReadsPrice ?? 0;
+    message.description = object.description ?? "";
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return message;
   },
 };
@@ -1378,6 +1586,7 @@ export const OpenAiModelsRequest: MessageFns<OpenAiModelsRequest> = {
   },
 };
 
+<<<<<<< HEAD
 function createBaseUpdateApiConfigurationRequest(): UpdateApiConfigurationRequest {
   return { metadata: undefined, apiConfiguration: undefined };
 }
@@ -3484,6 +3693,8 @@ export const ModelsApiConfiguration_OpenAiHeadersEntry: MessageFns<ModelsApiConf
   },
 };
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 /** Service for model-related operations */
 export type ModelsServiceDefinition = typeof ModelsServiceDefinition;
 export const ModelsServiceDefinition = {
@@ -3544,6 +3755,7 @@ export const ModelsServiceDefinition = {
       responseStream: false,
       options: {},
     },
+<<<<<<< HEAD
     /** Subscribe to OpenRouter models updates */
     subscribeToOpenRouterModels: {
       name: "subscribeToOpenRouterModels",
@@ -3562,6 +3774,8 @@ export const ModelsServiceDefinition = {
       responseStream: false,
       options: {},
     },
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   },
 } as const;
 

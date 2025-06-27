@@ -1,10 +1,13 @@
 # Changelog
 
+<<<<<<< HEAD
 ## [1.2.3]
 
 -   Add enhanced prompt feature
 -   Synchronize Cline v3.18.0
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 ## [1.2.2]
 
 -   Synchronize Cline v3.17.10

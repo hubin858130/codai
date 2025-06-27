@@ -5,4 +5,7 @@ webview-ui/build/
 package-lock.json
 src/core/prompts/system.ts
 src/core/prompts/model_prompts/claude4.ts
+<<<<<<< HEAD
 evals/
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d

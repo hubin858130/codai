@@ -9,8 +9,11 @@ import styled from "styled-components"
 import AddRemoteServerForm from "./tabs/add-server/AddRemoteServerForm"
 import InstalledServersView from "./tabs/installed/InstalledServersView"
 import McpMarketplaceView from "./tabs/marketplace/McpMarketplaceView"
+<<<<<<< HEAD
 import { convertProtoMcpServersToMcpServers } from "@shared/proto-conversions/mcp/mcp-server-conversion"
 import { McpServers } from "@shared/proto/mcp"
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { useTranslation } from "react-i18next"
 
 type McpViewProps = {
@@ -41,12 +44,17 @@ const McpConfigurationView = ({ onDone, initialTab }: McpViewProps) => {
 		if (mcpMarketplaceEnabled) {
 			McpServiceClient.refreshMcpMarketplace(EmptyRequest.create({}))
 				.then((response) => {
+<<<<<<< HEAD
+=======
+					// Types are structurally identical, use response directly
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					setMcpMarketplaceCatalog(response)
 				})
 				.catch((error) => {
 					console.error("Error refreshing MCP marketplace:", error)
 				})
 
+<<<<<<< HEAD
 			McpServiceClient.getLatestMcpServers(EmptyRequest.create({}))
 				.then((response: McpServers) => {
 					if (response.mcpServers) {
@@ -57,6 +65,9 @@ const McpConfigurationView = ({ onDone, initialTab }: McpViewProps) => {
 				.catch((error) => {
 					console.error("Failed to fetch MCP servers:", error)
 				})
+=======
+			vscode.postMessage({ type: "fetchLatestMcpServersFromHub" })
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		}
 	}, [mcpMarketplaceEnabled])
 

@@ -16,13 +16,19 @@ import { EmptyRequest } from "@shared/proto/common"
 import McpMarketplaceCard from "./McpMarketplaceCard"
 import McpSubmitCard from "./McpSubmitCard"
 const McpMarketplaceView = () => {
+<<<<<<< HEAD
 	const { mcpServers, mcpMarketplaceCatalog, setMcpMarketplaceCatalog, mcpMarketplaceEnabled } = useExtensionState()
+=======
+	const { mcpServers, mcpMarketplaceCatalog } = useExtensionState()
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const [isLoading, setIsLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
 	const [isRefreshing, setIsRefreshing] = useState(false)
 	const [searchQuery, setSearchQuery] = useState("")
 	const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 	const [sortBy, setSortBy] = useState<"newest" | "stars" | "name" | "downloadCount">("newest")
+
+	const items = mcpMarketplaceCatalog?.items || []
 
 	const items = mcpMarketplaceCatalog?.items || []
 

@@ -39,6 +39,7 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 	}
 
 	return (
+<<<<<<< HEAD
 		<div className="flex-shrink-0">
 			<div
 				className="flex items-center gap-2 mx-5 my-2 cursor-pointer select-none text-[var(--vscode-descriptionForeground)] hover:opacity-80 transition-all duration-200 rounded-lg px-2 py-1 hover:bg-[var(--vscode-toolbar-hoverBackground)]"
@@ -52,6 +53,68 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 
 			{isExpanded && (
 				<div className="px-5 space-y-3">
+=======
+		<div style={{ flexShrink: 0 }}>
+			<style>
+				{`
+					.history-preview-item {
+						background-color: color-mix(in srgb, var(--vscode-toolbar-hoverBackground) 65%, transparent);
+						border-radius: 4px;
+						position: relative;
+						overflow: hidden;
+						opacity: 0.8;
+						cursor: pointer;
+						margin-bottom: 12px;
+					}
+					.history-preview-item:hover {
+						background-color: color-mix(in srgb, var(--vscode-toolbar-hoverBackground) 100%, transparent);
+						opacity: 1;
+						pointer-events: auto;
+					}
+					.history-header {
+						cursor: pointer;
+						user-select: none;
+					}
+					.history-header:hover {
+						opacity: 0.8;
+					}
+				`}
+			</style>
+
+			<div
+				className="history-header"
+				onClick={toggleExpanded}
+				style={{
+					color: "var(--vscode-descriptionForeground)",
+					margin: "10px 20px 10px 20px",
+					display: "flex",
+					alignItems: "center",
+				}}>
+				<span
+					className={`codicon codicon-chevron-${isExpanded ? "down" : "right"}`}
+					style={{
+						marginRight: "4px",
+						transform: "scale(0.9)",
+					}}></span>
+				<span
+					className="codicon codicon-comment-discussion"
+					style={{
+						marginRight: "4px",
+						transform: "scale(0.9)",
+					}}></span>
+				<span
+					style={{
+						fontWeight: 500,
+						fontSize: "0.85em",
+						textTransform: "uppercase",
+					}}>
+					Recent Tasks
+				</span>
+			</div>
+
+			{isExpanded && (
+				<div style={{ padding: "0px 20px 0 20px" }}>
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					{taskHistory.filter((item) => item.ts && item.task).length > 0 ? (
 						<>
 							{taskHistory
@@ -60,6 +123,7 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 								.map((item) => (
 									<div
 										key={item.id}
+<<<<<<< HEAD
 										className="relative rounded-xl p-3 cursor-pointer overflow-hidden transition-all duration-150 ease-out hover:scale-[1.02] hover:shadow-xl group hover:bg-[color-mix(in_srgb,var(--vscode-toolbar-hoverBackground)_50%,transparent)] hover:border-[color-mix(in_srgb,var(--vscode-panel-border)_80%,transparent)]"
 										style={{
 											backgroundColor:
@@ -144,16 +208,116 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 									<span className="codicon codicon-history scale-90"></span>
 									<span className="font-medium">View all history</span>
 								</button>
+=======
+										className="history-preview-item"
+										onClick={() => handleHistorySelect(item.id)}>
+										<div style={{ padding: "12px" }}>
+											<div style={{ marginBottom: "8px" }}>
+												<span
+													style={{
+														color: "var(--vscode-descriptionForeground)",
+														fontWeight: 500,
+														fontSize: "0.85em",
+														textTransform: "uppercase",
+													}}>
+													{formatDate(item.ts)}
+												</span>
+											</div>
+											{item.isFavorited && (
+												<div
+													style={{
+														position: "absolute",
+														top: "12px",
+														right: "12px",
+														color: "var(--vscode-button-background)",
+													}}>
+													<span className="codicon codicon-star-full" aria-label="Favorited" />
+												</div>
+											)}
+
+											<div
+												id={`history-preview-task-${item.id}`}
+												className="history-preview-task"
+												style={{
+													fontSize: "var(--vscode-font-size)",
+													color: "var(--vscode-descriptionForeground)",
+													marginBottom: "8px",
+													display: "-webkit-box",
+													WebkitLineClamp: 3,
+													WebkitBoxOrient: "vertical",
+													overflow: "hidden",
+													whiteSpace: "pre-wrap",
+													wordBreak: "break-word",
+													overflowWrap: "anywhere",
+												}}>
+												<span className="ph-no-capture">{item.task}</span>
+											</div>
+											<div
+												style={{
+													fontSize: "0.85em",
+													color: "var(--vscode-descriptionForeground)",
+												}}>
+												<span>
+													Tokens: ↑{formatLargeNumber(item.tokensIn || 0)} ↓
+													{formatLargeNumber(item.tokensOut || 0)}
+												</span>
+												{!!item.cacheWrites && (
+													<>
+														{" • "}
+														<span>
+															Cache: +{formatLargeNumber(item.cacheWrites || 0)} →{" "}
+															{formatLargeNumber(item.cacheReads || 0)}
+														</span>
+													</>
+												)}
+												{!!item.totalCost && (
+													<>
+														{" • "}
+														<span>API Cost: ${item.totalCost?.toFixed(4)}</span>
+													</>
+												)}
+											</div>
+										</div>
+									</div>
+								))}
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+								}}>
+								<VSCodeButton
+									appearance="icon"
+									onClick={() => showHistoryView()}
+									style={{
+										opacity: 0.9,
+									}}>
+									<div
+										style={{
+											fontSize: "var(--vscode-font-size)",
+											color: "var(--vscode-descriptionForeground)",
+										}}>
+										View all history
+									</div>
+								</VSCodeButton>
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							</div>
 						</>
 					) : (
 						<div
 							className="text-center text-[var(--vscode-descriptionForeground)] py-4 rounded-xl"
 							style={{
+<<<<<<< HEAD
 								fontSize: "var(--vscode-font-size)",
 								backgroundColor: "color-mix(in srgb, var(--vscode-toolbar-hoverBackground) 20%, transparent)",
 								border: "1px solid color-mix(in srgb, var(--vscode-panel-border) 30%, transparent)",
 								backdropFilter: "blur(8px)",
+=======
+								textAlign: "center",
+								color: "var(--vscode-descriptionForeground)",
+								fontSize: "var(--vscode-font-size)",
+								padding: "10px 0",
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							}}>
 							No recent tasks
 						</div>

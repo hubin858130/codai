@@ -20,14 +20,18 @@ service ModelsService {
   rpc refreshOpenAiModels(OpenAiModelsRequest) returns (StringArray);
   // Refreshes and returns Requesty models
   rpc refreshRequestyModels(EmptyRequest) returns (OpenRouterCompatibleModelInfo);
+<<<<<<< HEAD
   // Subscribe to OpenRouter models updates
   rpc subscribeToOpenRouterModels(EmptyRequest) returns (stream OpenRouterCompatibleModelInfo);
   // Updates API configuration
   rpc updateApiConfigurationProto(UpdateApiConfigurationRequest) returns (Empty);
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // List of VS Code LM models
 message VsCodeLmModelsArray {
+<<<<<<< HEAD
   repeated LanguageModelChatSelector models = 1;
 }
 
@@ -59,10 +63,22 @@ message ModelTier {
   optional double output_price = 3;
   optional double cache_writes_price = 4;
   optional double cache_reads_price = 5;
+=======
+  repeated VsCodeLmModel models = 1;
+}
+
+// Structure representing a VS Code LM model
+message VsCodeLmModel {
+  string vendor = 1;
+  string family = 2;
+  string version = 3;
+  string id = 4;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // For OpenRouterCompatibleModelInfo structure in OpenRouterModels
 message OpenRouterModelInfo {
+<<<<<<< HEAD
   optional int32 max_tokens = 1;
   optional int32 context_window = 2;
   optional bool supports_images = 3;
@@ -75,6 +91,17 @@ message OpenRouterModelInfo {
   optional ThinkingConfig thinking_config = 10;
   optional bool supports_global_endpoint = 11;
   repeated ModelTier tiers = 12;
+=======
+  int32 max_tokens = 1;
+  int32 context_window = 2;
+  bool supports_images = 3;
+  bool supports_prompt_cache = 4;
+  double input_price = 5;
+  double output_price = 6;
+  double cache_writes_price = 7;
+  double cache_reads_price = 8;
+  string description = 9;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // Shared response message for model information
@@ -85,6 +112,7 @@ message OpenRouterCompatibleModelInfo {
 // Request for fetching OpenAI models
 message OpenAiModelsRequest {
   Metadata metadata = 1;
+<<<<<<< HEAD
   string base_url = 2;
   string api_key = 3;
 }
@@ -239,4 +267,8 @@ message ModelsApiConfiguration {
   optional string claude_code_path = 73;
   optional string gemini_cli_oauth_path = 74;
   optional string gemini_cli_project_id = 75;
+=======
+  string baseUrl = 2;
+  string apiKey = 3;
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

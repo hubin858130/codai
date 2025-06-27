@@ -95,6 +95,7 @@ const AutoApproveMenuItem = ({
 				<HeroTooltip content={t(action.description)} delay={500}>
 					<CheckboxContainer isFavorited={favorited} onClick={onChange}>
 						<div className="left-content">
+<<<<<<< HEAD
 							{onToggleFavorite && !condensed && (
 								<HeroTooltip
 									delay={500}
@@ -112,10 +113,32 @@ const AutoApproveMenuItem = ({
 									/>
 								</HeroTooltip>
 							)}
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							<VSCodeCheckbox checked={checked} />
 							{showIcon && <span className={`codicon ${action.icon} icon`}></span>}
 							<span className="label">{condensed ? t(action.shortName) : t(action.label)}</span>
 						</div>
+<<<<<<< HEAD
+=======
+						{onToggleFavorite && !condensed && (
+							<HeroTooltip
+								delay={500}
+								content={favorited ? "Remove from quick-access menu" : "Add to quick-access menu"}>
+								<span
+									className={`p-0.5 codicon codicon-${favorited ? "star-full" : "star-empty"} star`}
+									style={{
+										cursor: "pointer",
+									}}
+									onClick={async (e) => {
+										e.stopPropagation()
+										if (action.id === "enableAll") return
+										await onToggleFavorite?.(action.id)
+									}}
+								/>
+							</HeroTooltip>
+						)}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					</CheckboxContainer>
 				</HeroTooltip>
 			</ActionButtonContainer>

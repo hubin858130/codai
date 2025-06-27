@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import { UpdateBrowserSettingsRequest } from "@shared/proto/browser"
+import { EmptyRequest, StringRequest } from "@shared/proto/common"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { VSCodeButton, VSCodeCheckbox, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import debounce from "debounce"
 import React, { useCallback, useEffect, useState } from "react"
@@ -56,12 +61,18 @@ const CollapsibleContent = styled.div<{ isOpen: boolean }>`
 	visibility: ${({ isOpen }) => (isOpen ? "visible" : "hidden")};
 `
 
+<<<<<<< HEAD
 export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 	localBrowserSettings,
 	onBrowserSettingsChange,
 }) => {
 	const { browserSettings } = useExtensionState()
 	const [localChromePath, setLocalChromePath] = useState(localBrowserSettings.chromeExecutablePath || "")
+=======
+export const BrowserSettingsSection: React.FC = () => {
+	const { browserSettings } = useExtensionState()
+	const [localChromePath, setLocalChromePath] = useState(browserSettings.chromeExecutablePath || "")
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const [isCheckingConnection, setIsCheckingConnection] = useState(false)
 	const [connectionStatus, setConnectionStatus] = useState<boolean | null>(null)
 	const [relaunchResult, setRelaunchResult] = useState<{ success: boolean; message: string } | null>(null)
@@ -94,12 +105,22 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 			})
 	}, [])
 
+<<<<<<< HEAD
 	// Sync localChromePath with prop changes
 	useEffect(() => {
 		if (localBrowserSettings.chromeExecutablePath !== localChromePath) {
 			setLocalChromePath(localBrowserSettings.chromeExecutablePath || "")
 		}
 	}, [localBrowserSettings.chromeExecutablePath])
+=======
+	// Sync localChromePath with global state
+	useEffect(() => {
+		if (browserSettings.chromeExecutablePath !== localChromePath) {
+			setLocalChromePath(browserSettings.chromeExecutablePath || "")
+		}
+		// Removed sync for local disableToolUse state
+	}, [browserSettings.chromeExecutablePath, browserSettings.disableToolUse])
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	// Debounced connection check function
 	const debouncedCheckConnection = useCallback(
@@ -109,9 +130,13 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 				setConnectionStatus(null)
 				if (localBrowserSettings.remoteBrowserHost) {
 					// Use gRPC for testBrowserConnection
+<<<<<<< HEAD
 					BrowserServiceClient.testBrowserConnection(
 						StringRequest.create({ value: localBrowserSettings.remoteBrowserHost }),
 					)
+=======
+					BrowserServiceClient.testBrowserConnection(StringRequest.create({ value: browserSettings.remoteBrowserHost }))
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 						.then((result) => {
 							setConnectionStatus(result.success)
 							setIsCheckingConnection(false)
@@ -151,6 +176,7 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 		const target = event.target as HTMLSelectElement
 		const selectedSize = BROWSER_VIEWPORT_PRESETS[target.value as keyof typeof BROWSER_VIEWPORT_PRESETS]
 		if (selectedSize) {
+<<<<<<< HEAD
 			onBrowserSettingsChange({
 				...localBrowserSettings,
 				viewport: {
@@ -158,10 +184,34 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 					height: selectedSize.height,
 				},
 			})
+=======
+			BrowserServiceClient.updateBrowserSettings(
+				UpdateBrowserSettingsRequest.create({
+					metadata: {},
+					viewport: {
+						width: selectedSize.width,
+						height: selectedSize.height,
+					},
+					remoteBrowserEnabled: browserSettings.remoteBrowserEnabled,
+					remoteBrowserHost: browserSettings.remoteBrowserHost,
+					chromeExecutablePath: browserSettings.chromeExecutablePath,
+					disableToolUse: browserSettings.disableToolUse,
+				}),
+			)
+				.then((response) => {
+					if (!response.value) {
+						console.error("Failed to update browser settings")
+					}
+				})
+				.catch((error) => {
+					console.error("Error updating browser settings:", error)
+				})
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		}
 	}
 
 	const updateRemoteBrowserEnabled = (enabled: boolean) => {
+<<<<<<< HEAD
 		onBrowserSettingsChange({
 			...localBrowserSettings,
 			remoteBrowserEnabled: enabled,
@@ -175,13 +225,110 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 			...localBrowserSettings,
 			remoteBrowserHost: host,
 		})
+=======
+		BrowserServiceClient.updateBrowserSettings(
+			UpdateBrowserSettingsRequest.create({
+				metadata: {},
+				viewport: {
+					width: browserSettings.viewport.width,
+					height: browserSettings.viewport.height,
+				},
+				remoteBrowserEnabled: enabled,
+				// If disabling, also clear the host
+				remoteBrowserHost: enabled ? browserSettings.remoteBrowserHost : undefined,
+				chromeExecutablePath: browserSettings.chromeExecutablePath,
+				disableToolUse: browserSettings.disableToolUse,
+			}),
+		)
+			.then((response) => {
+				if (!response.value) {
+					console.error("Failed to update browser settings")
+				}
+			})
+			.catch((error) => {
+				console.error("Error updating browser settings:", error)
+			})
+	}
+
+	const updateRemoteBrowserHost = (host: string | undefined) => {
+		BrowserServiceClient.updateBrowserSettings(
+			UpdateBrowserSettingsRequest.create({
+				metadata: {},
+				viewport: {
+					width: browserSettings.viewport.width,
+					height: browserSettings.viewport.height,
+				},
+				remoteBrowserEnabled: browserSettings.remoteBrowserEnabled,
+				remoteBrowserHost: host,
+				chromeExecutablePath: browserSettings.chromeExecutablePath,
+				disableToolUse: browserSettings.disableToolUse,
+			}),
+		)
+			.then((response) => {
+				if (!response.value) {
+					console.error("Failed to update browser settings")
+				}
+			})
+			.catch((error) => {
+				console.error("Error updating browser settings:", error)
+			})
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	}
 
 	const debouncedUpdateChromePath = useCallback(
 		debounce((newPath: string | undefined) => {
+<<<<<<< HEAD
 			onBrowserSettingsChange({
 				...localBrowserSettings,
 				chromeExecutablePath: newPath,
+=======
+			BrowserServiceClient.updateBrowserSettings(
+				UpdateBrowserSettingsRequest.create({
+					metadata: {},
+					viewport: {
+						width: browserSettings.viewport.width,
+						height: browserSettings.viewport.height,
+					},
+					remoteBrowserEnabled: browserSettings.remoteBrowserEnabled,
+					remoteBrowserHost: browserSettings.remoteBrowserHost,
+					chromeExecutablePath: newPath,
+					disableToolUse: browserSettings.disableToolUse,
+				}),
+			)
+				.then((response) => {
+					if (!response.value) {
+						console.error("Failed to update browser settings for chromeExecutablePath")
+					}
+				})
+				.catch((error) => {
+					console.error("Error updating browser settings for chromeExecutablePath:", error)
+				})
+		}, 500),
+		[browserSettings],
+	)
+
+	const updateChromeExecutablePath = (path: string | undefined) => {
+		BrowserServiceClient.updateBrowserSettings(
+			UpdateBrowserSettingsRequest.create({
+				metadata: {},
+				viewport: {
+					width: browserSettings.viewport.width,
+					height: browserSettings.viewport.height,
+				},
+				remoteBrowserEnabled: browserSettings.remoteBrowserEnabled,
+				remoteBrowserHost: browserSettings.remoteBrowserHost,
+				chromeExecutablePath: path,
+				disableToolUse: browserSettings.disableToolUse,
+			}),
+		)
+			.then((response) => {
+				if (!response.value) {
+					console.error("Failed to update browser settings")
+				}
+			})
+			.catch((error) => {
+				console.error("Error updating browser settings:", error)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			})
 		}, 500),
 		[localBrowserSettings, onBrowserSettingsChange],
@@ -198,7 +345,11 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 		// We'll rely on the response to update the connectionStatus
 		if (localBrowserSettings.remoteBrowserHost) {
 			// Use gRPC for testBrowserConnection
+<<<<<<< HEAD
 			BrowserServiceClient.testBrowserConnection(StringRequest.create({ value: localBrowserSettings.remoteBrowserHost }))
+=======
+			BrowserServiceClient.testBrowserConnection(StringRequest.create({ value: browserSettings.remoteBrowserHost }))
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				.then((result) => {
 					setConnectionStatus(result.success)
 				})
@@ -246,6 +397,30 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 		})
 	}
 
+	const updateDisableToolUse = (disabled: boolean) => {
+		BrowserServiceClient.updateBrowserSettings(
+			UpdateBrowserSettingsRequest.create({
+				metadata: {},
+				viewport: {
+					width: browserSettings.viewport.width,
+					height: browserSettings.viewport.height,
+				},
+				remoteBrowserEnabled: browserSettings.remoteBrowserEnabled,
+				remoteBrowserHost: browserSettings.remoteBrowserHost,
+				chromeExecutablePath: browserSettings.chromeExecutablePath,
+				disableToolUse: disabled,
+			}),
+		)
+			.then((response) => {
+				if (!response.value) {
+					console.error("Failed to update disableToolUse setting")
+				}
+			})
+			.catch((error) => {
+				console.error("Error updating disableToolUse setting:", error)
+			})
+	}
+
 	const relaunchChromeDebugMode = () => {
 		setDebugMode(true)
 		setRelaunchResult(null)
@@ -272,14 +447,22 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 	// Determine if we should show the relaunch button
 	const isRemoteEnabled = Boolean(localBrowserSettings.remoteBrowserEnabled)
 	const shouldShowRelaunchButton = isRemoteEnabled && connectionStatus === false
+<<<<<<< HEAD
 	const isSubSettingsOpen = !(localBrowserSettings.disableToolUse || false)
+=======
+	const isSubSettingsOpen = !(browserSettings.disableToolUse || false)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	return (
 		<div id="browser-settings-section" style={{ marginBottom: 20 }}>
 			{/* Master Toggle */}
 			<div style={{ marginBottom: isSubSettingsOpen ? 0 : 10 }}>
 				<VSCodeCheckbox
+<<<<<<< HEAD
 					checked={localBrowserSettings.disableToolUse || false}
+=======
+					checked={browserSettings.disableToolUse || false}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					onChange={(e) => updateDisableToolUse((e.target as HTMLInputElement).checked)}>
 					Disable browser tool usage
 				</VSCodeCheckbox>
@@ -289,7 +472,11 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 						color: "var(--vscode-descriptionForeground)",
 						margin: "4px 0 0 0px",
 					}}>
+<<<<<<< HEAD
 					Prevent codai from using browser actions (e.g. launch, click, type).
+=======
+					Prevent Cline from using browser actions (e.g. launch, click, type).
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				</p>
 			</div>
 
@@ -303,8 +490,13 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 								Object.entries(BROWSER_VIEWPORT_PRESETS).find(([_, size]) => {
 									const typedSize = size as { width: number; height: number }
 									return (
+<<<<<<< HEAD
 										typedSize.width === localBrowserSettings.viewport.width &&
 										typedSize.height === localBrowserSettings.viewport.height
+=======
+										typedSize.width === browserSettings.viewport.width &&
+										typedSize.height === browserSettings.viewport.height
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 									)
 								})?.[0]
 							}
@@ -331,14 +523,22 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 					{/* This div now contains Remote Connection & Chrome Path */}
 					<div style={{ marginBottom: 4, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 						<VSCodeCheckbox
+<<<<<<< HEAD
 							checked={localBrowserSettings.remoteBrowserEnabled}
+=======
+							checked={browserSettings.remoteBrowserEnabled}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							onChange={(e) => updateRemoteBrowserEnabled((e.target as HTMLInputElement).checked)}>
 							Use remote browser connection
 						</VSCodeCheckbox>
 						<ConnectionStatusIndicator
 							isChecking={isCheckingConnection}
 							isConnected={connectionStatus}
+<<<<<<< HEAD
 							remoteBrowserEnabled={localBrowserSettings.remoteBrowserEnabled}
+=======
+							remoteBrowserEnabled={browserSettings.remoteBrowserEnabled}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 						/>
 					</div>
 					<p
@@ -347,10 +547,17 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 							color: "var(--vscode-descriptionForeground)",
 							margin: "0 0 6px 0px",
 						}}>
+<<<<<<< HEAD
 						Enable codai to use your Chrome
 						{isBundled ? "(not detected on your machine)" : detectedChromePath ? ` (${detectedChromePath})` : ""}. You
 						can specify a custom path below. Using a remote browser connection requires starting Chrome in debug mode
 						{localBrowserSettings.remoteBrowserEnabled ? (
+=======
+						Enable Cline to use your Chrome
+						{isBundled ? "(not detected on your machine)" : detectedChromePath ? ` (${detectedChromePath})` : ""}. You
+						can specify a custom path below. Using a remote browser connection requires starting Chrome in debug mode
+						{browserSettings.remoteBrowserEnabled ? (
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							<>
 								{" "}
 								manually (<code>--remote-debugging-port=9222</code>) or using the button below. Enter the host
@@ -361,10 +568,17 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 						)}
 					</p>
 					{/* Moved remote-specific settings to appear directly after enabling remote connection */}
+<<<<<<< HEAD
 					{localBrowserSettings.remoteBrowserEnabled && (
 						<div style={{ marginLeft: 0, marginTop: 8 }}>
 							<VSCodeTextField
 								value={localBrowserSettings.remoteBrowserHost || ""}
+=======
+					{browserSettings.remoteBrowserEnabled && (
+						<div style={{ marginLeft: 0, marginTop: 8 }}>
+							<VSCodeTextField
+								value={browserSettings.remoteBrowserHost || ""}
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 								placeholder="http://localhost:9222"
 								style={{ width: "100%", marginBottom: 8 }}
 								onChange={(e: any) => updateRemoteBrowserHost(e.target.value || undefined)}
@@ -416,7 +630,12 @@ export const BrowserSettingsSection: React.FC<BrowserSettingsSectionProps> = ({
 							style={{ width: "100%" }}
 							onChange={(e: any) => {
 								const newValue = e.target.value || ""
+<<<<<<< HEAD
 								updateChromeExecutablePath(newValue)
+=======
+								setLocalChromePath(newValue)
+								debouncedUpdateChromePath(newValue) // Send "" if empty, not undefined
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							}}
 						/>
 						<p

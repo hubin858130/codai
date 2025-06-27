@@ -44,7 +44,11 @@ const collectSystemInfo = () => {
 		os: `${os.arch()}; ${os.version()}`,
 		nodeVersion: execSync("node -v").toString().trim(),
 		npmVersion: execSync("npm -v").toString().trim(),
+<<<<<<< HEAD
 		codaiVersion: getClineVersion(),
+=======
+		clineVersion: getClineVersion(),
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	}
 }
 
@@ -66,7 +70,11 @@ const createIssueUrl = (systemInfo, issueTitle) => {
 		`https://github.com/cline/cline/issues/new?template=bug_report.yml` +
 		`&title=${issueTitle}` +
 		`&operating-system=${systemInfo.os}` +
+<<<<<<< HEAD
 		`&cline-version=${systemInfo.codaiVersion}` +
+=======
+		`&cline-version=${systemInfo.clineVersion}` +
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		`&system-info=${
 			`Node: ${systemInfo.nodeVersion}\n` +
 			`npm: ${systemInfo.npmVersion}\n` +

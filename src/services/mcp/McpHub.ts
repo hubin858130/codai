@@ -1,5 +1,9 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js"
+<<<<<<< HEAD
 import { StdioClientTransport, getDefaultEnvironment } from "@modelcontextprotocol/sdk/client/stdio.js"
+=======
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { SSEClientTransport } from "@modelcontextprotocol/sdk/client/sse.js"
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
 import ReconnectingEventSource from "reconnecting-eventsource"
@@ -19,6 +23,10 @@ import * as fs from "fs/promises"
 import * as path from "path"
 import * as vscode from "vscode"
 import { z } from "zod"
+<<<<<<< HEAD
+=======
+import { WatchServiceClient } from "../../standalone/services/host-grpc-client"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { FileChangeEvent_ChangeType, SubscribeToFileRequest } from "../../shared/proto/host/watch"
 import { Metadata } from "../../shared/proto/common"
 import {
@@ -40,7 +48,10 @@ import { ExtensionMessage } from "@shared/ExtensionMessage"
 import { DEFAULT_REQUEST_TIMEOUT_MS } from "./constants"
 import { Transport, McpConnection, McpTransportType, McpServerConfig } from "./types"
 import { BaseConfigSchema, ServerConfigSchema, McpSettingsSchema } from "./schemas"
+<<<<<<< HEAD
 import { getHostBridgeProvider } from "@/hosts/host-providers"
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 export class McpHub {
 	getMcpServersPath: () => Promise<string>
@@ -137,7 +148,11 @@ export class McpHub {
 
 		// Subscribe to file changes using the gRPC WatchService
 		console.log("[DEBUG] subscribing to mcp file changes")
+<<<<<<< HEAD
 		const cancelSubscription = getHostBridgeProvider().watchServiceClient.subscribeToFile(
+=======
+		const cancelSubscription = WatchServiceClient.subscribeToFile(
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			SubscribeToFileRequest.create({
 				metadata: Metadata.create({}),
 				path: settingsPath,
@@ -153,6 +168,10 @@ export class McpHub {
 						const settings = await this.readAndValidateMcpSettingsFile()
 						if (settings) {
 							try {
+<<<<<<< HEAD
+=======
+								vscode.window.showInformationMessage("Updating MCP servers...")
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 								await this.updateServerConnections(settings.mcpServers)
 								vscode.window.showInformationMessage("MCP servers updated")
 							} catch (error) {
@@ -206,7 +225,10 @@ export class McpHub {
 			)
 
 			let transport: StdioClientTransport | SSEClientTransport | StreamableHTTPClientTransport
+<<<<<<< HEAD
 			console.log("@@@@,config.type:",config.type)
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 			switch (config.type) {
 				case "stdio": {
@@ -216,8 +238,13 @@ export class McpHub {
 						cwd: config.cwd,
 						env: {
 							// ...(config.env ? await injectEnv(config.env) : {}), // Commented out as injectEnv is not found
+<<<<<<< HEAD
 							...getDefaultEnvironment(),
 							...(config.env || {}), // Use config.env directly or an empty object
+=======
+							...(config.env || {}), // Use config.env directly or an empty object
+							...(process.env.PATH ? { PATH: process.env.PATH } : {}),
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 						},
 						stderr: "pipe",
 					})
@@ -701,6 +728,7 @@ export class McpHub {
 		const content = await fs.readFile(settingsPath, "utf-8")
 		const config = JSON.parse(content)
 		const serverOrder = Object.keys(config.mcpServers || {})
+<<<<<<< HEAD
 
 		// Get sorted servers
 		const sortedServers = this.getSortedMcpServers(serverOrder)
@@ -708,6 +736,11 @@ export class McpHub {
 		// Send update using gRPC stream
 		await sendMcpServersUpdate({
 			mcpServers: convertMcpServersToProtoMcpServers(sortedServers),
+=======
+		await this.postMessageToWebview({
+			type: "mcpServers",
+			mcpServers: this.getSortedMcpServers(serverOrder),
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		})
 	}
 
@@ -828,8 +861,11 @@ export class McpHub {
 				timeout,
 			},
 		)
+<<<<<<< HEAD
 		//huqb
 		console.log('@@@ Tool call result content:', JSON.stringify(result.content, null, 2))
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 		return {
 			...result,

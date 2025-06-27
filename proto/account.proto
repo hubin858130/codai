@@ -19,6 +19,7 @@ service AccountService {
 
     // Subscribe to auth callback events (when authentication tokens are received)
     rpc subscribeToAuthCallback(EmptyRequest) returns (stream String);
+<<<<<<< HEAD
     
     // Handles authentication state changes from the Firebase context.
     // Updates the user info in global state and returns the updated value.
@@ -73,4 +74,6 @@ message PaymentTransaction {
     string creator_id = 2;
     int32 amount_cents = 3;
     double credits = 4;
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

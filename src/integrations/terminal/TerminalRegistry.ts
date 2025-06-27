@@ -5,8 +5,11 @@ export interface TerminalInfo {
 	busy: boolean
 	lastCommand: string
 	id: number
+<<<<<<< HEAD
 	shellPath?: string
 	lastActive: number
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	pendingCwdChange?: string
 	cwdResolved?: {
 		resolve: () => void

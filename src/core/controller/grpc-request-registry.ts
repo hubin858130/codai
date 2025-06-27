@@ -64,6 +64,7 @@ export class GrpcRequestRegistry {
 	 */
 	public cancelRequest(requestId: string): boolean {
 		const requestInfo = this.activeRequests.get(requestId)
+<<<<<<< HEAD
 		if (!requestInfo) {
 			return false
 		}
@@ -75,6 +76,19 @@ export class GrpcRequestRegistry {
 		}
 		this.activeRequests.delete(requestId)
 		return true
+=======
+		if (requestInfo) {
+			try {
+				requestInfo.cleanup()
+				console.log(`[DEBUG] Cleaned up request: ${requestId}`)
+			} catch (error) {
+				console.error(`Error cleaning up request ${requestId}:`, error)
+			}
+			this.activeRequests.delete(requestId)
+			return true
+		}
+		return false
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	}
 
 	/**

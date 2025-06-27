@@ -1,5 +1,5 @@
 import * as vscode from "vscode"
-import { DEFAULT_CHAT_SETTINGS } from "@shared/ChatSettings"
+import { DEFAULT_CHAT_SETTINGS, OpenAIReasoningEffort } from "@shared/ChatSettings"
 import { DEFAULT_BROWSER_SETTINGS } from "@shared/BrowserSettings"
 import { DEFAULT_AUTO_APPROVAL_SETTINGS } from "@shared/AutoApprovalSettings"
 import { GlobalStateKey, SecretKey } from "./state-keys"
@@ -52,9 +52,37 @@ export async function getWorkspaceState(context: vscode.ExtensionContext, key: s
 	return await context.workspaceState.get(key)
 }
 
+async function migrateMcpMarketplaceEnableSetting(mcpMarketplaceEnabledRaw: boolean | undefined): Promise<boolean> {
+	const config = vscode.workspace.getConfiguration("codai")
+	const mcpMarketplaceEnabled = config.get<boolean>("mcpMarketplace.enabled")
+	if (mcpMarketplaceEnabled !== undefined) {
+		// Remove from VSCode configuration
+		await config.update("mcpMarketplace.enabled", undefined, true)
+
+		return !mcpMarketplaceEnabled
+	}
+	return mcpMarketplaceEnabledRaw ?? true
+}
+
+async function migrateEnableCheckpointsSetting(enableCheckpointsSettingRaw: boolean | undefined): Promise<boolean> {
+	const config = vscode.workspace.getConfiguration("codai")
+	const enableCheckpoints = config.get<boolean>("enableCheckpoints")
+	if (enableCheckpoints !== undefined) {
+		// Remove from VSCode configuration
+		await config.update("enableCheckpoints", undefined, true)
+		return enableCheckpoints
+	}
+	return enableCheckpointsSettingRaw ?? true
+}
+
 export async function getAllExtensionState(context: vscode.ExtensionContext) {
 	const [
 		isNewUser,
+<<<<<<< HEAD
+=======
+		storedApiProvider,
+		apiModelId,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		apiKey,
 		openRouterApiKey,
 		clineApiKey,
@@ -67,6 +95,8 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		awsBedrockEndpoint,
 		awsProfile,
 		awsUseProfile,
+		awsBedrockCustomSelected,
+		awsBedrockCustomModelBaseId,
 		vertexProjectId,
 		vertexRegion,
 		openAiBaseUrl,
@@ -92,11 +122,30 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		autoApprovalSettings,
 		browserSettings,
 		liteLlmBaseUrl,
+<<<<<<< HEAD
 		liteLlmUsePromptCache,
 		fireworksApiKey,
 		fireworksModelMaxCompletionTokens,
 		fireworksModelMaxTokens,
 		userInfo,
+=======
+		liteLlmModelId,
+		liteLlmModelInfo,
+		liteLlmUsePromptCache,
+		fireworksApiKey,
+		fireworksModelId,
+		fireworksModelMaxCompletionTokens,
+		fireworksModelMaxTokens,
+		userInfo,
+		previousModeApiProvider,
+		previousModeModelId,
+		previousModeModelInfo,
+		previousModeVsCodeLmModelSelector,
+		previousModeThinkingBudgetTokens,
+		previousModeReasoningEffort,
+		previousModeAwsBedrockCustomSelected,
+		previousModeAwsBedrockCustomModelBaseId,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		qwenApiLine,
 		liteLlmApiKey,
 		telemetrySetting,
@@ -113,6 +162,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		shellIntegrationTimeout,
 		enableCheckpointsSettingRaw,
 		mcpMarketplaceEnabledRaw,
+<<<<<<< HEAD
 		mcpRichDisplayEnabled,
 		mcpResponsesCollapsedRaw,
 		globalWorkflowToggles,
@@ -128,6 +178,14 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		claudeCodePath,
 	] = await Promise.all([
 		getGlobalState(context, "isNewUser") as Promise<boolean | undefined>,
+=======
+		globalWorkflowToggles,
+		terminalReuseEnabled,
+	] = await Promise.all([
+		getGlobalState(context, "isNewUser") as Promise<boolean | undefined>,
+		getGlobalState(context, "apiProvider") as Promise<ApiProvider | undefined>,
+		getGlobalState(context, "apiModelId") as Promise<string | undefined>,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		getSecret(context, "apiKey") as Promise<string | undefined>,
 		getSecret(context, "openRouterApiKey") as Promise<string | undefined>,
 		getSecret(context, "clineApiKey") as Promise<string | undefined>,
@@ -140,6 +198,8 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getGlobalState(context, "awsBedrockEndpoint") as Promise<string | undefined>,
 		getGlobalState(context, "awsProfile") as Promise<string | undefined>,
 		getGlobalState(context, "awsUseProfile") as Promise<boolean | undefined>,
+		getGlobalState(context, "awsBedrockCustomSelected") as Promise<boolean | undefined>,
+		getGlobalState(context, "awsBedrockCustomModelBaseId") as Promise<BedrockModelId | undefined>,
 		getGlobalState(context, "vertexProjectId") as Promise<string | undefined>,
 		getGlobalState(context, "vertexRegion") as Promise<string | undefined>,
 		getGlobalState(context, "openAiBaseUrl") as Promise<string | undefined>,
@@ -165,11 +225,30 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getGlobalState(context, "autoApprovalSettings") as Promise<AutoApprovalSettings | undefined>,
 		getGlobalState(context, "browserSettings") as Promise<BrowserSettings | undefined>,
 		getGlobalState(context, "liteLlmBaseUrl") as Promise<string | undefined>,
+<<<<<<< HEAD
 		getGlobalState(context, "liteLlmUsePromptCache") as Promise<boolean | undefined>,
 		getSecret(context, "fireworksApiKey") as Promise<string | undefined>,
 		getGlobalState(context, "fireworksModelMaxCompletionTokens") as Promise<number | undefined>,
 		getGlobalState(context, "fireworksModelMaxTokens") as Promise<number | undefined>,
 		getGlobalState(context, "userInfo") as Promise<UserInfo | undefined>,
+=======
+		getGlobalState(context, "liteLlmModelId") as Promise<string | undefined>,
+		getGlobalState(context, "liteLlmModelInfo") as Promise<ModelInfo | undefined>,
+		getGlobalState(context, "liteLlmUsePromptCache") as Promise<boolean | undefined>,
+		getSecret(context, "fireworksApiKey") as Promise<string | undefined>,
+		getGlobalState(context, "fireworksModelId") as Promise<string | undefined>,
+		getGlobalState(context, "fireworksModelMaxCompletionTokens") as Promise<number | undefined>,
+		getGlobalState(context, "fireworksModelMaxTokens") as Promise<number | undefined>,
+		getGlobalState(context, "userInfo") as Promise<UserInfo | undefined>,
+		getGlobalState(context, "previousModeApiProvider") as Promise<ApiProvider | undefined>,
+		getGlobalState(context, "previousModeModelId") as Promise<string | undefined>,
+		getGlobalState(context, "previousModeModelInfo") as Promise<ModelInfo | undefined>,
+		getGlobalState(context, "previousModeVsCodeLmModelSelector") as Promise<vscode.LanguageModelChatSelector | undefined>,
+		getGlobalState(context, "previousModeThinkingBudgetTokens") as Promise<number | undefined>,
+		getGlobalState(context, "previousModeReasoningEffort") as Promise<string | undefined>,
+		getGlobalState(context, "previousModeAwsBedrockCustomSelected") as Promise<boolean | undefined>,
+		getGlobalState(context, "previousModeAwsBedrockCustomModelBaseId") as Promise<BedrockModelId | undefined>,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		getGlobalState(context, "qwenApiLine") as Promise<string | undefined>,
 		getSecret(context, "liteLlmApiKey") as Promise<string | undefined>,
 		getGlobalState(context, "telemetrySetting") as Promise<TelemetrySetting | undefined>,
@@ -186,6 +265,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getGlobalState(context, "shellIntegrationTimeout") as Promise<number | undefined>,
 		getGlobalState(context, "enableCheckpointsSetting") as Promise<boolean | undefined>,
 		getGlobalState(context, "mcpMarketplaceEnabled") as Promise<boolean | undefined>,
+<<<<<<< HEAD
 		getGlobalState(context, "mcpRichDisplayEnabled") as Promise<boolean | undefined>,
 		getGlobalState(context, "mcpResponsesCollapsed") as Promise<boolean | undefined>,
 		getGlobalState(context, "globalWorkflowToggles") as Promise<ClineRulesToggles | undefined>,
@@ -273,6 +353,10 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getWorkspaceState(context, "previousModeSapAiCoreTokenUrl") as Promise<string | undefined>,
 		getWorkspaceState(context, "previousModeSapAiCoreResourceGroup") as Promise<string | undefined>,
 		getWorkspaceState(context, "previousModeSapAiCoreModelId") as Promise<string | undefined>,
+=======
+		getGlobalState(context, "globalWorkflowToggles") as Promise<ClineRulesToggles | undefined>,
+		getGlobalState(context, "terminalReuseEnabled") as Promise<boolean | undefined>,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	])
 
 	let apiProvider: ApiProvider
@@ -289,9 +373,16 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		}
 	}
 
+<<<<<<< HEAD
 	const mcpMarketplaceEnabled = await migrateMcpMarketplaceEnableSetting(mcpMarketplaceEnabledRaw)
 	const enableCheckpointsSetting = await migrateEnableCheckpointsSetting(enableCheckpointsSettingRaw)
 	const mcpResponsesCollapsed = mcpResponsesCollapsedRaw ?? false
+=======
+	const localClineRulesToggles = (await getWorkspaceState(context, "localClineRulesToggles")) as ClineRulesToggles
+
+	const mcpMarketplaceEnabled = await migrateMcpMarketplaceEnableSetting(mcpMarketplaceEnabledRaw)
+	const enableCheckpointsSetting = await migrateEnableCheckpointsSetting(enableCheckpointsSettingRaw)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	// Plan/Act separate models setting is a boolean indicating whether the user wants to use different models for plan and act. Existing users expect this to be enabled, while we want new users to opt in to this being disabled by default.
 	// On win11 state sometimes initializes as empty string instead of undefined
@@ -380,12 +471,15 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 			nebiusApiKey,
 			favoritedModelIds,
 			requestTimeoutMs,
+<<<<<<< HEAD
 			sapAiCoreClientId,
 			sapAiCoreClientSecret,
 			sapAiCoreBaseUrl,
 			sapAiCoreTokenUrl,
 			sapAiResourceGroup,
 			sapAiCoreModelId,
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		},
 		isNewUser: isNewUser ?? true,
 		lastShownAnnouncementId,
@@ -407,6 +501,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		previousModeReasoningEffort,
 		previousModeAwsBedrockCustomSelected,
 		previousModeAwsBedrockCustomModelBaseId,
+<<<<<<< HEAD
 		previousModeSapAiCoreClientId,
 		previousModeSapAiCoreClientSecret,
 		previousModeSapAiCoreBaseUrl,
@@ -416,13 +511,19 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		mcpMarketplaceEnabled: mcpMarketplaceEnabled,
 		mcpRichDisplayEnabled: mcpRichDisplayEnabled ?? true,
 		mcpResponsesCollapsed: mcpResponsesCollapsed,
+=======
+		mcpMarketplaceEnabled: mcpMarketplaceEnabled,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		telemetrySetting: telemetrySetting || "unset",
 		planActSeparateModelsSetting,
 		enableCheckpointsSetting: enableCheckpointsSetting,
 		shellIntegrationTimeout: shellIntegrationTimeout || 4000,
 		terminalReuseEnabled: terminalReuseEnabled ?? true,
+<<<<<<< HEAD
 		terminalOutputLineLimit: terminalOutputLineLimit ?? 500,
 		defaultTerminalProfile: defaultTerminalProfile ?? "default",
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		globalWorkflowToggles: globalWorkflowToggles || {},
 	}
 }
@@ -530,6 +631,8 @@ export async function updateApiConfiguration(context: vscode.ExtensionContext, a
 	await updateGlobalState(context, "awsBedrockEndpoint", awsBedrockEndpoint)
 	await updateGlobalState(context, "awsProfile", awsProfile)
 	await updateGlobalState(context, "awsUseProfile", awsUseProfile)
+	await updateGlobalState(context, "awsBedrockCustomSelected", awsBedrockCustomSelected)
+	await updateGlobalState(context, "awsBedrockCustomModelBaseId", awsBedrockCustomModelBaseId)
 	await updateGlobalState(context, "vertexProjectId", vertexProjectId)
 	await updateGlobalState(context, "vertexRegion", vertexRegion)
 	await updateGlobalState(context, "openAiBaseUrl", openAiBaseUrl)
@@ -574,14 +677,36 @@ export async function updateApiConfiguration(context: vscode.ExtensionContext, a
 	await storeSecret(context, "doubaoApiKey", doubaoApiKey)
 	await storeSecret(context, "mistralApiKey", mistralApiKey)
 	await storeSecret(context, "liteLlmApiKey", liteLlmApiKey)
+<<<<<<< HEAD
 	await storeSecret(context, "fireworksApiKey", fireworksApiKey)
+=======
+	await storeSecret(context, "xaiApiKey", xaiApiKey)
+	await updateGlobalState(context, "azureApiVersion", azureApiVersion)
+	await updateGlobalState(context, "openRouterModelId", openRouterModelId)
+	await updateGlobalState(context, "openRouterModelInfo", openRouterModelInfo)
+	await updateGlobalState(context, "openRouterProviderSorting", openRouterProviderSorting)
+	await updateGlobalState(context, "vsCodeLmModelSelector", vsCodeLmModelSelector)
+	await updateGlobalState(context, "liteLlmBaseUrl", liteLlmBaseUrl)
+	await updateGlobalState(context, "liteLlmModelId", liteLlmModelId)
+	await updateGlobalState(context, "liteLlmModelInfo", liteLlmModelInfo)
+	await updateGlobalState(context, "liteLlmUsePromptCache", liteLlmUsePromptCache)
+	await updateGlobalState(context, "qwenApiLine", qwenApiLine)
+	await updateGlobalState(context, "requestyModelId", requestyModelId)
+	await updateGlobalState(context, "requestyModelInfo", requestyModelInfo)
+	await updateGlobalState(context, "togetherModelId", togetherModelId)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	await storeSecret(context, "asksageApiKey", asksageApiKey)
 	await storeSecret(context, "xaiApiKey", xaiApiKey)
 	await storeSecret(context, "sambanovaApiKey", sambanovaApiKey)
 	await storeSecret(context, "cerebrasApiKey", cerebrasApiKey)
 	await storeSecret(context, "nebiusApiKey", nebiusApiKey)
+<<<<<<< HEAD
 	await storeSecret(context, "sapAiCoreClientId", sapAiCoreClientId)
 	await storeSecret(context, "sapAiCoreClientSecret", sapAiCoreClientSecret)
+=======
+	await updateGlobalState(context, "favoritedModelIds", favoritedModelIds)
+	await updateGlobalState(context, "requestTimeoutMs", apiConfiguration.requestTimeoutMs)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 export async function resetWorkspaceState(context: vscode.ExtensionContext) {

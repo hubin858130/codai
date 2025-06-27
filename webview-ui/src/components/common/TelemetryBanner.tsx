@@ -2,8 +2,13 @@ import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import { memo, useState } from "react"
 import styled from "styled-components"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+<<<<<<< HEAD
 import { StateServiceClient } from "@/services/grpc-client"
 import { TelemetrySettingEnum, TelemetrySettingRequest } from "@shared/proto/state"
+=======
+import { vscode } from "@/utils/vscode"
+import { TelemetrySetting } from "@shared/TelemetrySetting"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 const BannerContainer = styled.div`
 	background-color: var(--vscode-banner-background);
@@ -53,6 +58,7 @@ const TelemetryBanner = () => {
 		navigateToSettings()
 	}
 
+<<<<<<< HEAD
 	const handleClose = async () => {
 		try {
 			await StateServiceClient.updateTelemetrySetting(
@@ -63,6 +69,10 @@ const TelemetryBanner = () => {
 		} catch (error) {
 			console.error("Error updating telemetry setting:", error)
 		}
+=======
+	const handleClose = () => {
+		vscode.postMessage({ type: "telemetrySetting", telemetrySetting: "enabled" satisfies TelemetrySetting })
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	}
 
 	return (
@@ -77,7 +87,11 @@ const TelemetryBanner = () => {
 					(and access experimental features)
 				</i>
 				<div style={{ marginTop: 4 }}>
+<<<<<<< HEAD
 					codai collects anonymous error and usage data to help us fix bugs and improve the extension. No code, prompts,
+=======
+					Cline collects anonymous error and usage data to help us fix bugs and improve the extension. No code, prompts,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					or personal information is ever sent.
 					<div style={{ marginTop: 4 }}>
 						You can turn this setting off in{" "}

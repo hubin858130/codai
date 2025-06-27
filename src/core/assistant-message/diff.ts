@@ -4,6 +4,7 @@ const REPLACE_BLOCK_END = "+++++++ REPLACE"
 
 const SEARCH_BLOCK_CHAR = "-"
 const REPLACE_BLOCK_CHAR = "+"
+<<<<<<< HEAD
 const LEGACY_SEARCH_BLOCK_CHAR = "<"
 const LEGACY_REPLACE_BLOCK_CHAR = ">"
 
@@ -28,6 +29,8 @@ function isSearchBlockEnd(line: string): boolean {
 function isReplaceBlockEnd(line: string): boolean {
 	return REPLACE_BLOCK_END_REGEX.test(line) || LEGACY_REPLACE_BLOCK_END_REGEX.test(line)
 }
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 /**
  * Attempts a line-trimmed fallback match for the given search content in the original content.
@@ -275,6 +278,7 @@ async function constructNewFileContentV1(diffContent: string, originalContent: s
 	const lastLine = lines[lines.length - 1]
 	if (
 		lines.length > 0 &&
+<<<<<<< HEAD
 		(lastLine.startsWith(SEARCH_BLOCK_CHAR) ||
 			lastLine.startsWith(LEGACY_SEARCH_BLOCK_CHAR) ||
 			lastLine.startsWith("=") ||
@@ -283,19 +287,33 @@ async function constructNewFileContentV1(diffContent: string, originalContent: s
 		!isSearchBlockStart(lastLine) &&
 		!isSearchBlockEnd(lastLine) &&
 		!isReplaceBlockEnd(lastLine)
+=======
+		(lastLine.startsWith(SEARCH_BLOCK_CHAR) || lastLine.startsWith("=") || lastLine.startsWith(REPLACE_BLOCK_CHAR)) &&
+		lastLine !== SEARCH_BLOCK_START &&
+		lastLine !== SEARCH_BLOCK_END &&
+		lastLine !== REPLACE_BLOCK_END
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	) {
 		lines.pop()
 	}
 
 	for (const line of lines) {
+<<<<<<< HEAD
 		if (isSearchBlockStart(line)) {
+=======
+		if (line === SEARCH_BLOCK_START) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			inSearch = true
 			currentSearchContent = ""
 			currentReplaceContent = ""
 			continue
 		}
 
+<<<<<<< HEAD
 		if (isSearchBlockEnd(line)) {
+=======
+		if (line === SEARCH_BLOCK_END) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			inSearch = false
 			inReplace = true
 
@@ -377,7 +395,11 @@ async function constructNewFileContentV1(diffContent: string, originalContent: s
 			continue
 		}
 
+<<<<<<< HEAD
 		if (isReplaceBlockEnd(line)) {
+=======
+		if (line === REPLACE_BLOCK_END) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			// Finished one replace block
 
 			// Store this replacement
@@ -583,7 +605,11 @@ class NewFileContentConstructor {
 		pendingNonStandardLineLimit: number,
 	): number {
 		let removeLineCount = 0
+<<<<<<< HEAD
 		if (isSearchBlockStart(line)) {
+=======
+		if (line === SEARCH_BLOCK_START) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			removeLineCount = this.trimPendingNonStandardTrailingEmptyLines(pendingNonStandardLineLimit)
 			if (removeLineCount > 0) {
 				pendingNonStandardLineLimit = pendingNonStandardLineLimit - removeLineCount
@@ -593,7 +619,11 @@ class NewFileContentConstructor {
 				canWritependingNonStandardLines && (this.pendingNonStandardLines.length = 0)
 			}
 			this.activateSearchState()
+<<<<<<< HEAD
 		} else if (isSearchBlockEnd(line)) {
+=======
+		} else if (line === SEARCH_BLOCK_END) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			// 校验非标内容
 			if (!this.isSearchingActive()) {
 				this.tryFixSearchBlock(pendingNonStandardLineLimit)
@@ -601,7 +631,11 @@ class NewFileContentConstructor {
 			}
 			this.activateReplaceState()
 			this.beforeReplace()
+<<<<<<< HEAD
 		} else if (isReplaceBlockEnd(line)) {
+=======
+		} else if (line === REPLACE_BLOCK_END) {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			if (!this.isReplacingActive()) {
 				this.tryFixReplaceBlock(pendingNonStandardLineLimit)
 				canWritependingNonStandardLines && (this.pendingNonStandardLines.length = 0)
@@ -708,7 +742,11 @@ class NewFileContentConstructor {
 		if (!lineLimit) {
 			throw new Error("Invalid SEARCH/REPLACE block structure - no lines available to process")
 		}
+<<<<<<< HEAD
 		let searchTagRegexp = /^([-]{3,}|[<]{3,}) SEARCH$/
+=======
+		let searchTagRegexp = /^[-]{3,} SEARCH$/
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		const searchTagIndex = this.findLastMatchingLineIndex(searchTagRegexp, lineLimit)
 		if (searchTagIndex !== -1) {
 			let fixLines = this.pendingNonStandardLines.slice(searchTagIndex, lineLimit)
@@ -759,7 +797,11 @@ class NewFileContentConstructor {
 			throw new Error()
 		}
 
+<<<<<<< HEAD
 		let replaceEndTagRegexp = /^([+]{3,}|[>]{3,}) REPLACE$/
+=======
+		let replaceEndTagRegexp = /^[+]{3,} REPLACE$/
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		const replaceEndTagIndex = this.findLastMatchingLineIndex(replaceEndTagRegexp, lineLimit)
 		const likeReplaceEndTag = replaceEndTagIndex === lineLimit - 1
 		if (likeReplaceEndTag) {
@@ -808,11 +850,15 @@ export async function constructNewFileContentV2(diffContent: string, originalCon
 	const lastLine = lines[lines.length - 1]
 	if (
 		lines.length > 0 &&
+<<<<<<< HEAD
 		(lastLine.startsWith(SEARCH_BLOCK_CHAR) ||
 			lastLine.startsWith(LEGACY_SEARCH_BLOCK_CHAR) ||
 			lastLine.startsWith("=") ||
 			lastLine.startsWith(REPLACE_BLOCK_CHAR) ||
 			lastLine.startsWith(LEGACY_REPLACE_BLOCK_CHAR)) &&
+=======
+		(lastLine.startsWith(SEARCH_BLOCK_CHAR) || lastLine.startsWith("=") || lastLine.startsWith(REPLACE_BLOCK_CHAR)) &&
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		lastLine !== SEARCH_BLOCK_START &&
 		lastLine !== SEARCH_BLOCK_END &&
 		lastLine !== REPLACE_BLOCK_END

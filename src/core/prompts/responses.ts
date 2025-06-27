@@ -241,6 +241,7 @@ Otherwise, if you have not completed the task and do not need additional informa
 
 	cursorRulesLocalDirectoryInstructions: (cwd: string, content: string) =>
 		`# .cursor/rules\n\nThe following is provided by a root-level .cursor/rules directory where the user has specified instructions for this working directory (${cwd.toPosix()})\n\n${content}`,
+<<<<<<< HEAD
 
 	fileContextWarning: (editedFiles: string[]): string => {
 		const fileCount = editedFiles.length
@@ -254,6 +255,8 @@ Otherwise, if you have not completed the task and do not need additional informa
 			`Failure to re-read before editing will result in replace_in_file edit errors, requiring subsequent attempts and wasting tokens. You DO NOT need to re-read these files after subsequent edits, unless instructed to do so.\n</explicit_instructions>`
 		)
 	},
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // to avoid circular dependency

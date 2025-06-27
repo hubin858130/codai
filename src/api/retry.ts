@@ -57,7 +57,11 @@ export function withRetry(options: RetryOptions = {}) {
 					const handlerInstance = this as any
 					if (handlerInstance.options?.onRetryAttempt) {
 						try {
+<<<<<<< HEAD
 							await handlerInstance.options.onRetryAttempt(attempt + 1, maxRetries, delay, error)
+=======
+							handlerInstance.options.onRetryAttempt(attempt + 1, maxRetries, delay, error)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 						} catch (e) {
 							console.error("Error in onRetryAttempt callback:", e)
 						}

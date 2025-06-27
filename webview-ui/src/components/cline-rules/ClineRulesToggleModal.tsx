@@ -10,7 +10,10 @@ import {
 	ToggleClineRuleRequest,
 	ToggleCursorRuleRequest,
 	ToggleWindsurfRuleRequest,
+<<<<<<< HEAD
 	ToggleWorkflowRequest,
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 } from "@shared/proto/file"
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import React, { useEffect, useRef, useState } from "react"
@@ -141,12 +144,19 @@ const ClineRulesToggleModal: React.FC = () => {
 	}
 
 	const toggleWindsurfRule = (rulePath: string, enabled: boolean) => {
+<<<<<<< HEAD
 		FileServiceClient.toggleWindsurfRule(
 			ToggleWindsurfRuleRequest.create({
 				rulePath,
 				enabled,
 			} as ToggleWindsurfRuleRequest),
 		)
+=======
+		FileServiceClient.toggleWindsurfRule({
+			rulePath,
+			enabled,
+		} as ToggleWindsurfRuleRequest)
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			.then((response: ClineRulesToggles) => {
 				if (response.toggles) {
 					setLocalWindsurfRulesToggles(response.toggles)
@@ -158,6 +168,7 @@ const ClineRulesToggleModal: React.FC = () => {
 	}
 
 	const toggleWorkflow = (isGlobal: boolean, workflowPath: string, enabled: boolean) => {
+<<<<<<< HEAD
 		FileServiceClient.toggleWorkflow(
 			ToggleWorkflowRequest.create({
 				workflowPath,
@@ -177,6 +188,14 @@ const ClineRulesToggleModal: React.FC = () => {
 			.catch((err: Error) => {
 				console.error("Failed to toggle workflow:", err)
 			})
+=======
+		vscode.postMessage({
+			type: "toggleWorkflow",
+			workflowPath,
+			enabled,
+			isGlobal,
+		})
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	}
 
 	// Close modal when clicking outside

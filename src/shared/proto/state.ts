@@ -6,7 +6,11 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+<<<<<<< HEAD
 import { Boolean, BooleanRequest, Empty, EmptyRequest, Int64, Int64Request, Metadata, StringRequest } from "./common";
+=======
+import { Empty, EmptyRequest, Int64, Int64Request, Metadata, StringRequest } from "./common";
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 export enum PlanActMode {
   PLAN = 0,
@@ -41,6 +45,7 @@ export function planActModeToJSON(object: PlanActMode): string {
   }
 }
 
+<<<<<<< HEAD
 export enum TelemetrySettingEnum {
   UNSET = 0,
   ENABLED = 1,
@@ -80,10 +85,13 @@ export function telemetrySettingEnumToJSON(object: TelemetrySettingEnum): string
   }
 }
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 export interface State {
   stateJson: string;
 }
 
+<<<<<<< HEAD
 export interface TerminalProfiles {
   profiles: TerminalProfile[];
 }
@@ -101,6 +109,8 @@ export interface TerminalProfileUpdateResponse {
   hasBusyTerminals: boolean;
 }
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 export interface TogglePlanActModeRequest {
   metadata?: Metadata | undefined;
   chatSettings?: ChatSettings | undefined;
@@ -119,11 +129,15 @@ export interface ChatContent {
   files: string[];
 }
 
+<<<<<<< HEAD
 export interface ResetStateRequest {
   metadata?: Metadata | undefined;
   global?: boolean | undefined;
 }
 
+=======
+/** Message for auto approval settings */
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 export interface AutoApprovalSettingsRequest {
   metadata?: Metadata | undefined;
   version: number;
@@ -145,6 +159,7 @@ export interface AutoApprovalSettingsRequest_Actions {
   useMcp: boolean;
 }
 
+<<<<<<< HEAD
 export interface TelemetrySettingRequest {
   metadata?: Metadata | undefined;
   setting: TelemetrySettingEnum;
@@ -303,6 +318,8 @@ export interface ApiConfiguration {
   claudeCodePath?: string | undefined;
 }
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 function createBaseState(): State {
   return { stateJson: "" };
 }
@@ -361,6 +378,7 @@ export const State: MessageFns<State> = {
   },
 };
 
+<<<<<<< HEAD
 function createBaseTerminalProfiles(): TerminalProfiles {
   return { profiles: [] };
 }
@@ -625,6 +643,8 @@ export const TerminalProfileUpdateResponse: MessageFns<TerminalProfileUpdateResp
   },
 };
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 function createBaseTogglePlanActModeRequest(): TogglePlanActModeRequest {
   return { metadata: undefined, chatSettings: undefined, chatContent: undefined };
 }
@@ -909,6 +929,7 @@ export const ChatContent: MessageFns<ChatContent> = {
   },
 };
 
+<<<<<<< HEAD
 function createBaseResetStateRequest(): ResetStateRequest {
   return { metadata: undefined, global: undefined };
 }
@@ -987,6 +1008,8 @@ export const ResetStateRequest: MessageFns<ResetStateRequest> = {
   },
 };
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 function createBaseAutoApprovalSettingsRequest(): AutoApprovalSettingsRequest {
   return {
     metadata: undefined,
@@ -1342,6 +1365,7 @@ export const AutoApprovalSettingsRequest_Actions: MessageFns<AutoApprovalSetting
   },
 };
 
+<<<<<<< HEAD
 function createBaseTelemetrySettingRequest(): TelemetrySettingRequest {
   return { metadata: undefined, setting: 0 };
 }
@@ -3073,6 +3097,8 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
   },
 };
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 export type StateServiceDefinition = typeof StateServiceDefinition;
 export const StateServiceDefinition = {
   name: "StateService",
@@ -3086,6 +3112,7 @@ export const StateServiceDefinition = {
       responseStream: false,
       options: {},
     },
+<<<<<<< HEAD
     updateTerminalConnectionTimeout: {
       name: "updateTerminalConnectionTimeout",
       requestType: Int64Request,
@@ -3118,6 +3145,8 @@ export const StateServiceDefinition = {
       responseStream: false,
       options: {},
     },
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     subscribeToState: {
       name: "subscribeToState",
       requestType: EmptyRequest,
@@ -3136,7 +3165,11 @@ export const StateServiceDefinition = {
     },
     resetState: {
       name: "resetState",
+<<<<<<< HEAD
       requestType: ResetStateRequest,
+=======
+      requestType: EmptyRequest,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
       requestStream: false,
       responseType: Empty,
       responseStream: false,
@@ -3146,7 +3179,19 @@ export const StateServiceDefinition = {
       name: "togglePlanActMode",
       requestType: TogglePlanActModeRequest,
       requestStream: false,
+<<<<<<< HEAD
       responseType: Boolean,
+=======
+      responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+    updateTerminalConnectionTimeout: {
+      name: "updateTerminalConnectionTimeout",
+      requestType: Int64Request,
+      requestStream: false,
+      responseType: Int64,
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
       responseStream: false,
       options: {},
     },
@@ -3158,6 +3203,7 @@ export const StateServiceDefinition = {
       responseStream: false,
       options: {},
     },
+<<<<<<< HEAD
     updateSettings: {
       name: "updateSettings",
       requestType: UpdateSettingsRequest,
@@ -3174,6 +3220,8 @@ export const StateServiceDefinition = {
       responseStream: false,
       options: {},
     },
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   },
 } as const;
 
@@ -3189,6 +3237,7 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
+<<<<<<< HEAD
 function longToNumber(int64: { toString(): string }): number {
   const num = globalThis.Number(int64.toString());
   if (num > globalThis.Number.MAX_SAFE_INTEGER) {
@@ -3200,6 +3249,8 @@ function longToNumber(int64: { toString(): string }): number {
   return num;
 }
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }

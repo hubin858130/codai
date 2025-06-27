@@ -65,11 +65,14 @@ export interface StringArray {
 export interface StringArrays {
   values1: string[];
   values2: string[];
+<<<<<<< HEAD
 }
 
 export interface KeyValuePair {
   key: string;
   value: string;
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 function createBaseMetadata(): Metadata {
@@ -976,6 +979,7 @@ export const StringArrays: MessageFns<StringArrays> = {
   },
 };
 
+<<<<<<< HEAD
 function createBaseKeyValuePair(): KeyValuePair {
   return { key: "", value: "" };
 }
@@ -1052,6 +1056,8 @@ export const KeyValuePair: MessageFns<KeyValuePair> = {
   },
 };
 
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 function bytesFromBase64(b64: string): Uint8Array {
   return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
 }

@@ -1,6 +1,7 @@
 import "should"
 import { AwsBedrockHandler } from "../bedrock"
 import { ApiHandlerOptions } from "@shared/api"
+<<<<<<< HEAD
 import { ConverseStreamCommand } from "@aws-sdk/client-bedrock-runtime"
 import { Readable } from "stream"
 
@@ -44,6 +45,10 @@ describe("AwsBedrockHandler", () => {
 		}
 	}
 
+=======
+
+describe("AwsBedrockHandler", () => {
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	describe("withTempEnv", () => {
 		// Store original env vars for cleanup
 		const originalEnv: Record<string, string | undefined> = {}
@@ -183,6 +188,7 @@ describe("AwsBedrockHandler", () => {
 			process.env["AWS_PROFILE"]!.should.equal(preAWSProfile)
 		})
 	})
+<<<<<<< HEAD
 
 	const mockOptions: ApiHandlerOptions = {
 		apiModelId: "anthropic.claude-3-7-sonnet-20250219-v1:0",
@@ -690,4 +696,6 @@ describe("AwsBedrockHandler", () => {
 			modelId.should.not.match(/%3A/)
 		})
 	})
+=======
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 })
