@@ -1,6 +1,8 @@
 import { VSCodeBadge, VSCodeButton, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react"
 import deepEqual from "fast-deep-equal"
 import React, { memo, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import styled from "styled-components"
+import { useEvent, useSize } from "react-use"
 
 import CreditLimitError from "@/components/chat/CreditLimitError"
 import { OptionsButtons } from "@/components/chat/OptionsButtons"
@@ -9,11 +11,13 @@ import { CheckmarkControl } from "@/components/common/CheckmarkControl"
 import CodeBlock, { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
 import MarkdownBlock from "@/components/common/MarkdownBlock"
 import SuccessButton from "@/components/common/SuccessButton"
+import { WithCopyButton } from "@/components/common/CopyButton"
+import Thumbnails from "@/components/common/Thumbnails"
 import McpResponseDisplay from "@/components/mcp/chat-display/McpResponseDisplay"
 import McpResourceRow from "@/components/mcp/configuration/tabs/installed/server-row/McpResourceRow"
 import McpToolRow from "@/components/mcp/configuration/tabs/installed/server-row/McpToolRow"
 import { useExtensionState } from "@/context/ExtensionStateContext"
-import { FileServiceClient, TaskServiceClient } from "@/services/grpc-client"
+import { FileServiceClient, TaskServiceClient, UiServiceClient } from "@/services/grpc-client"
 import { findMatchingResourceOrTemplate, getMcpServerDisplayName } from "@/utils/mcp"
 import { vscode } from "@/utils/vscode"
 import {
@@ -28,75 +32,18 @@ import {
 } from "@shared/ExtensionMessage"
 import { COMMAND_OUTPUT_STRING, COMMAND_REQ_APP_STRING } from "@shared/combineCommandSequences"
 import { Int64Request, StringRequest } from "@shared/proto/common"
-import { useEvent, useSize } from "react-use"
-import styled from "styled-components"
-import { CheckpointControls } from "../common/CheckpointControls"
+
 import CodeAccordian, { cleanPathPrefix } from "../common/CodeAccordian"
+import { CheckpointControls } from "../common/CheckpointControls"
 import NewTaskPreview from "./NewTaskPreview"
-import QuoteButton from "./QuoteButton"
 import ReportBugPreview from "./ReportBugPreview"
 import UserMessage from "./UserMessage"
-
-interface CopyButtonProps {
-	textToCopy: string | undefined
-}
+import QuoteButton from "./QuoteButton"
 
 const normalColor = "var(--vscode-foreground)"
 const errorColor = "var(--vscode-errorForeground)"
 const successColor = "var(--vscode-charts-green)"
 const cancelledColor = "var(--vscode-descriptionForeground)"
-
-const CopyButtonStyled = styled(VSCodeButton)`
-	position: absolute;
-	bottom: 2px;
-	right: 2px;
-	z-index: 1;
-	opacity: 0;
-`
-
-interface WithCopyButtonProps {
-	children: React.ReactNode
-	textToCopy?: string
-	style?: React.CSSProperties
-	ref?: React.Ref<HTMLDivElement>
-	onMouseUp?: (event: MouseEvent<HTMLDivElement>) => void
-}
-
-const StyledContainer = styled.div`
-	position: relative;
-
-	&:hover ${CopyButtonStyled} {
-		opacity: 1;
-	}
-`
-
-const WithCopyButton = React.forwardRef<HTMLDivElement, WithCopyButtonProps>(
-	({ children, textToCopy, style, onMouseUp, ...props }, ref) => {
-		const [copied, setCopied] = useState(false)
-
-		const handleCopy = () => {
-			if (!textToCopy) return
-
-			navigator.clipboard.writeText(textToCopy).then(() => {
-				setCopied(true)
-				setTimeout(() => {
-					setCopied(false)
-				}, 1500)
-			})
-		}
-
-		return (
-			<StyledContainer ref={ref} onMouseUp={onMouseUp} style={style} {...props}>
-				{children}
-				{textToCopy && (
-					<CopyButtonStyled appearance="icon" onClick={handleCopy} aria-label={copied ? "Copied" : "Copy"}>
-						<span className={`codicon codicon-${copied ? "check" : "copy"}`}></span>
-					</CopyButtonStyled>
-				)}
-			</StyledContainer>
-		)
-	},
-)
 
 const ChatRowContainer = styled.div`
 	padding: 10px 6px 10px 15px;
@@ -237,7 +184,7 @@ export const ChatRowContent = ({
 	sendMessageFromChatRow,
 	onSetQuote,
 }: ChatRowContentProps) => {
-	const { mcpServers, mcpMarketplaceCatalog } = useExtensionState()
+	const { mcpServers, mcpMarketplaceCatalog, onRelinquishControl, apiConfiguration } = useExtensionState()
 	const [seeNewChangesDisabled, setSeeNewChangesDisabled] = useState(false)
 	const [quoteButtonState, setQuoteButtonState] = useState<QuoteButtonState>({
 		visible: false,
@@ -269,17 +216,12 @@ export const ChatRowContent = ({
 
 	const type = message.type === "ask" ? message.ask : message.say
 
-	const handleMessage = useCallback((event: MessageEvent) => {
-		const message: ExtensionMessage = event.data
-		switch (message.type) {
-			case "relinquishControl": {
-				setSeeNewChangesDisabled(false)
-				break
-			}
-		}
-	}, [])
-
-	useEvent("message", handleMessage)
+	// Use the onRelinquishControl hook instead of message event
+	useEffect(() => {
+		return onRelinquishControl(() => {
+			setSeeNewChangesDisabled(false)
+		})
+	}, [onRelinquishControl])
 
 	// --- Quote Button Logic ---
 	// MOVE handleQuoteClick INSIDE ChatRowContent
@@ -737,8 +679,8 @@ export const ChatRowContent = ({
 								toolIcon("sign-out", "yellow", -90, "This URL is external")}
 							<span style={{ fontWeight: "bold" }}>
 								{message.type === "ask"
-									? "Cline wants to fetch content from this URL:"
-									: "Cline fetched content from this URL:"}
+									? "codai wants to fetch content from this URL:"
+									: "codai fetched content from this URL:"}
 							</span>
 						</div>
 						<div
@@ -755,15 +697,13 @@ export const ChatRowContent = ({
 								msUserSelect: "none",
 							}}
 							onClick={() => {
-								// Attempt to open the URL in the default browser
+								// Open the URL in the default browser using gRPC
 								if (tool.path) {
-									// Assuming 'openUrl' is a valid action the extension can handle.
-									// If not, this might need adjustment based on how other external link openings are handled.
-									vscode.postMessage({
-										type: "action", // This should be a valid MessageType from WebviewMessage
-										action: "openUrl", // This should be a valid WebviewAction from WebviewMessage
-										url: tool.path,
-									} as any) // Using 'as any' for now if 'openUrl' isn't strictly typed yet
+									UiServiceClient.openUrl(StringRequest.create({ value: tool.path }))
+
+										.catch((err) => {
+											console.error("Failed to open URL:", err)
+										})
 								}
 							}}>
 							<span
@@ -1013,6 +953,88 @@ export const ChatRowContent = ({
 											}
 										}
 
+										// Check for rate limit errors (status code 429)
+										const isRateLimitError =
+											apiRequestFailedMessage?.includes("status code 429") ||
+											apiRequestFailedMessage?.toLowerCase().includes("rate limit") ||
+											apiRequestFailedMessage?.toLowerCase().includes("too many requests") ||
+											apiRequestFailedMessage?.toLowerCase().includes("quota exceeded") ||
+											apiRequestFailedMessage?.toLowerCase().includes("resource exhausted")
+
+										if (isRateLimitError) {
+											// Check if current provider is Gemini CLI to show specific message
+											const isGeminiCliProvider = apiConfiguration?.apiProvider === "gemini-cli"
+
+											if (isGeminiCliProvider) {
+												return (
+													<div
+														style={{
+															backgroundColor: "rgba(255, 191, 0, 0.1)",
+															padding: "12px",
+															borderRadius: "4px",
+															border: "1px solid rgba(255, 191, 0, 0.3)",
+														}}>
+														<div
+															style={{
+																display: "flex",
+																alignItems: "center",
+																marginBottom: "8px",
+															}}>
+															<i
+																className="codicon codicon-warning"
+																style={{
+																	marginRight: "8px",
+																	fontSize: "16px",
+																	color: "#FFA500",
+																}}></i>
+															<span
+																style={{
+																	fontWeight: "bold",
+																	color: "#FFA500",
+																}}>
+																Rate Limit Exceeded
+															</span>
+														</div>
+														<p style={{ margin: 0, fontSize: "14px", lineHeight: "1.4" }}>
+															You've hit the API rate limit. This is likely due to free tier limits.
+														</p>
+														<p style={{ margin: "8px 0 0 0", fontSize: "12px", lineHeight: "1.4" }}>
+															You can read about the tier limits{" "}
+															<a
+																href="https://codeassist.google/"
+																style={{
+																	color: "inherit",
+																	textDecoration: "underline",
+																}}
+																onClick={(e) => {
+																	e.preventDefault()
+																	UiServiceClient.openUrl(
+																		StringRequest.create({
+																			value: "https://codeassist.google/",
+																		}),
+																	).catch((err) => console.error("Failed to open URL:", err))
+																}}>
+																here
+															</a>
+															, or alternatively, you can use the Gemini Flash Model that will give
+															you better limits.
+														</p>
+													</div>
+												)
+											} else {
+												// Generic rate limit error for other providers
+												return (
+													<p
+														style={{
+															...pStyle,
+															color: "var(--vscode-errorForeground)",
+														}}>
+														{apiRequestFailedMessage || apiReqStreamingFailedMessage}
+													</p>
+												)
+											}
+										}
+
 										// Default error display
 										return (
 											<p
@@ -1059,9 +1081,43 @@ export const ChatRowContent = ({
 					return null // we should never see this message type
 				case "mcp_server_response":
 					return <McpResponseDisplay responseText={message.text || ""} />
+				case "mcp_notification":
+					return (
+						<div
+							style={{
+								display: "flex",
+								alignItems: "flex-start",
+								gap: "8px",
+								padding: "8px 12px",
+								backgroundColor: "var(--vscode-textBlockQuote-background)",
+								borderRadius: "4px",
+								fontSize: "13px",
+								color: "var(--vscode-foreground)",
+								opacity: 0.9,
+								marginBottom: "8px",
+							}}>
+							<i
+								className="codicon codicon-bell"
+								style={{
+									marginTop: "2px",
+									fontSize: "14px",
+									color: "var(--vscode-notificationsInfoIcon-foreground)",
+									flexShrink: 0,
+								}}
+							/>
+							<div style={{ flex: 1, wordBreak: "break-word" }}>
+								<span style={{ fontWeight: 500 }}>MCP Notification: </span>
+								<span className="ph-no-capture">{message.text}</span>
+							</div>
+						</div>
+					)
 				case "text":
 					return (
-						<WithCopyButton ref={contentRef} onMouseUp={handleMouseUp} textToCopy={message.text}>
+						<WithCopyButton
+							ref={contentRef}
+							onMouseUp={handleMouseUp}
+							textToCopy={message.text}
+							position="bottom-right">
 							<Markdown markdown={message.text} />
 							{quoteButtonState.visible && (
 								<QuoteButton
@@ -1298,6 +1354,7 @@ export const ChatRowContent = ({
 								ref={contentRef}
 								onMouseUp={handleMouseUp}
 								textToCopy={text}
+								position="bottom-right"
 								style={{
 									color: "var(--vscode-charts-green)",
 									paddingTop: 10,
@@ -1462,6 +1519,7 @@ export const ChatRowContent = ({
 									ref={contentRef}
 									onMouseUp={handleMouseUp}
 									textToCopy={text}
+									position="bottom-right"
 									style={{
 										color: "var(--vscode-charts-green)",
 										paddingTop: 10,
@@ -1532,6 +1590,7 @@ export const ChatRowContent = ({
 								ref={contentRef}
 								onMouseUp={handleMouseUp}
 								textToCopy={question}
+								position="bottom-right"
 								style={{ paddingTop: 10 }}>
 								<Markdown markdown={question} />
 								<OptionsButtons
@@ -1615,7 +1674,7 @@ export const ChatRowContent = ({
 						response = message.text
 					}
 					return (
-						<WithCopyButton ref={contentRef} onMouseUp={handleMouseUp} textToCopy={response}>
+						<WithCopyButton ref={contentRef} onMouseUp={handleMouseUp} textToCopy={response} position="bottom-right">
 							<Markdown markdown={response} />
 							<OptionsButtons
 								options={options}

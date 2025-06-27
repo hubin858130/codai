@@ -4,12 +4,14 @@ import SlashCommandMenu from "@/components/chat/SlashCommandMenu"
 import { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
 import Thumbnails from "@/components/common/Thumbnails"
 import Tooltip from "@/components/common/Tooltip"
-import ApiOptions, { normalizeApiConfiguration } from "@/components/settings/ApiOptions"
+import ApiOptions from "@/components/settings/ApiOptions"
+import { normalizeApiConfiguration } from "@/components/settings/utils/providerUtils"
 import { useExtensionState } from "@/context/ExtensionStateContext"
-import { FileServiceClient, StateServiceClient } from "@/services/grpc-client"
+import { FileServiceClient, StateServiceClient, ModelsServiceClient } from "@/services/grpc-client"
 import {
 	ContextMenuOptionType,
 	getContextMenuOptions,
+	getContextMenuOptionIndex,
 	insertMention,
 	insertMentionDirectly,
 	removeMention,
@@ -33,6 +35,8 @@ import { mentionRegex, mentionRegexGlobal } from "@shared/context-mentions"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
 import { EmptyRequest, StringRequest } from "@shared/proto/common"
 import { FileSearchRequest, RelativePathsRequest } from "@shared/proto/file"
+import { UpdateApiConfigurationRequest } from "@shared/proto/models"
+import { convertApiConfigurationToProto } from "@shared/proto-conversions/models/api-configuration-conversion"
 import { PlanActMode, TogglePlanActModeRequest } from "@shared/proto/state"
 import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
 import React, { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
@@ -60,6 +64,9 @@ const getImageDimensions = (dataUrl: string): Promise<{ width: number; height: n
 		img.src = dataUrl
 	})
 }
+
+// Set to "File" option by default
+const DEFAULT_CONTEXT_MENU_OPTION = getContextMenuOptionIndex(ContextMenuOptionType.File)
 
 interface ChatTextAreaProps {
 	inputValue: string
@@ -316,6 +323,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		const [fileSearchResults, setFileSearchResults] = useState<SearchResult[]>([])
 		const [searchLoading, setSearchLoading] = useState(false)
 		const [, metaKeyChar] = useMetaKeyDetection(platform)
+		const [isEnhancing, setIsEnhancing] = useState(false) //wangyuan
 
 		// Add a ref to track previous menu state
 		const prevShowModelSelector = useRef(showModelSelector)
@@ -342,15 +350,18 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					})
 			}
 		}, [selectedType, searchQuery])
-
 		const handleMessage = useCallback((event: MessageEvent) => {
 			const message: ExtensionMessage = event.data
 			switch (message.type) {
-				case "fileSearchResults": {
-					// Only update results if they match the current query or if there's no mentionsRequestId - better UX
-					if (!message.mentionsRequestId || message.mentionsRequestId === currentSearchQueryRef.current) {
-						setFileSearchResults(message.results || [])
-						setSearchLoading(false)
+				case "enhancedPromptResult": {
+					if (message.text) {
+						// Remove <think> and <thinking> tags (case insensitive) and their contents
+						// console.log("原始文本:", message.text);
+						// console.log("正则表达式:", /<think>.*?<\/think>|<thinking>.*?<\/thinking>/gis);
+						const cleanedText = message.text.replace(/<think>.*?<\/think>|<thinking>.*?<\/thinking>/gis, "")
+						// console.log("处理后文本:", cleanedText);
+						setInputValue(cleanedText)
+						setIsEnhancing(false)
 					}
 					break
 				}
@@ -532,7 +543,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					if (event.key === "Escape") {
 						// event.preventDefault()
 						setSelectedType(null)
-						setSelectedMenuIndex(3) // File by default
+						setSelectedMenuIndex(DEFAULT_CONTEXT_MENU_OPTION)
 						return
 					}
 
@@ -772,7 +783,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 								})
 						}, 200) // 200ms debounce
 					} else {
-						setSelectedMenuIndex(3) // Set to "File" option by default
+						setSelectedMenuIndex(DEFAULT_CONTEXT_MENU_OPTION)
 					}
 				} else {
 					setSearchQuery("")
@@ -976,12 +987,20 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		)
 
 		// Separate the API config submission logic
-		const submitApiConfig = useCallback(() => {
+		const submitApiConfig = useCallback(async () => {
 			const apiValidationResult = validateApiConfiguration(apiConfiguration)
 			const modelIdValidationResult = validateModelId(apiConfiguration, openRouterModels)
 
-			if (!apiValidationResult && !modelIdValidationResult) {
-				vscode.postMessage({ type: "apiConfiguration", apiConfiguration })
+			if (!apiValidationResult && !modelIdValidationResult && apiConfiguration) {
+				try {
+					await ModelsServiceClient.updateApiConfigurationProto(
+						UpdateApiConfigurationRequest.create({
+							apiConfiguration: convertApiConfigurationToProto(apiConfiguration),
+						}),
+					)
+				} catch (error) {
+					console.error("Failed to update API configuration:", error)
+				}
 			} else {
 				StateServiceClient.getLatestState(EmptyRequest.create())
 					.then(() => {
@@ -1001,9 +1020,9 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 				submitApiConfig()
 				changeModeDelay = 250 // necessary to let the api config update (we send message and wait for it to be saved) FIXME: this is a hack and we ideally should check for api config changes, then wait for it to be saved, before switching modes
 			}
-			setTimeout(() => {
+			setTimeout(async () => {
 				const newMode = chatSettings.mode === "plan" ? PlanActMode.ACT : PlanActMode.PLAN
-				StateServiceClient.togglePlanActMode(
+				const response = await StateServiceClient.togglePlanActMode(
 					TogglePlanActModeRequest.create({
 						chatSettings: {
 							mode: newMode,
@@ -1019,6 +1038,9 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 				)
 				// Focus the textarea after mode toggle with slight delay
 				setTimeout(() => {
+					if (response.value) {
+						setInputValue("")
+					}
 					textAreaRef.current?.focus()
 				}, 100)
 			}, changeModeDelay)
@@ -1373,6 +1395,16 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 			)
 		}
 
+		const handleEnhancePrompt = useCallback(() => {
+			if (!inputValue.trim() || isEnhancing) return
+
+			setIsEnhancing(true)
+			vscode.postMessage({
+				type: "enhancePrompt",
+				text: inputValue.trim(),
+			})
+		}, [inputValue, isEnhancing])
+
 		return (
 			<div>
 				<div
@@ -1580,7 +1612,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					/>
 					{!inputValue && selectedImages.length === 0 && selectedFiles.length === 0 && (
 						<div className="absolute bottom-4 left-[25px] right-[60px] text-[10px] text-[var(--vscode-input-placeholderForeground)] opacity-70 whitespace-nowrap overflow-hidden text-ellipsis pointer-events-none z-[1]">
-							Type @ for context, / for slash commands & workflows
+							Type @ for context, / for slash commands & workflows, hold shift to drag in files/images
 						</div>
 					)}
 					{(selectedImages.length > 0 || selectedFiles.length > 0) && (
@@ -1629,6 +1661,18 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 									fontSize: 16.5,
 								}}
 							/> */}
+							
+							<div
+								data-testid="enhance-button"
+								className={`input-icon-button ${
+									!inputValue.trim() || isEnhancing || sendingDisabled ? "disabled" : ""
+								} codicon codicon-sparkle ${isEnhancing ? "loading" : ""}`}
+								onClick={handleEnhancePrompt}
+								style={{
+									marginRight: 5.5,
+									fontSize: 16.5,
+								}}
+							/>
 							<div
 								data-testid="send-button"
 								className={`input-icon-button ${sendingDisabled ? "disabled" : ""} codicon codicon-send`}
@@ -1738,18 +1782,22 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					<Tooltip
 						style={{ zIndex: 1000 }}
 						visible={shownTooltipMode !== null}
-						tipText={shownTooltipMode === "act" ? t("chat.actModeTooltip") : t("chat.planModeTooltip")}
+						tipText={`In ${shownTooltipMode === "act" ? t("chat.actModeTooltip") : t("chat.planModeTooltip")}  mode, codai will ${shownTooltipMode === "act" ? "complete the task immediately" : "gather information to architect a plan"}`}
 						hintText={t("chat.toggleModeHint", { metaKey: metaKeyChar })}>
 						<SwitchContainer data-testid="mode-switch" disabled={false} onClick={onModeToggle}>
 							<Slider isAct={chatSettings.mode === "act"} isPlan={chatSettings.mode === "plan"} />
 							<SwitchOption
 								isActive={chatSettings.mode === "plan"}
+								role="switch"
+								aria-checked={chatSettings.mode === "plan"}
 								onMouseOver={() => setShownTooltipMode("plan")}
 								onMouseLeave={() => setShownTooltipMode(null)}>
 								{t("chat.planMode")}
 							</SwitchOption>
 							<SwitchOption
 								isActive={chatSettings.mode === "act"}
+								role="switch"
+								aria-checked={chatSettings.mode === "act"}
 								onMouseOver={() => setShownTooltipMode("act")}
 								onMouseLeave={() => setShownTooltipMode(null)}>
 								{t("chat.actMode")}

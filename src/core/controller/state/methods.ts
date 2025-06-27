@@ -3,13 +3,18 @@
 
 // Import all method implementations
 import { registerMethod } from "./index"
+import { getAvailableTerminalProfiles } from "./getAvailableTerminalProfiles"
 import { getLatestState } from "./getLatestState"
 import { resetState } from "./resetState"
 import { subscribeToState } from "./subscribeToState"
 import { toggleFavoriteModel } from "./toggleFavoriteModel"
 import { togglePlanActMode } from "./togglePlanActMode"
 import { updateAutoApprovalSettings } from "./updateAutoApprovalSettings"
+import { updateDefaultTerminalProfile } from "./updateDefaultTerminalProfile"
+import { updateSettings } from "./updateSettings"
+import { updateTelemetrySetting } from "./updateTelemetrySetting"
 import { updateTerminalConnectionTimeout } from "./updateTerminalConnectionTimeout"
+import { updateTerminalReuseEnabled } from "./updateTerminalReuseEnabled"
 
 // Streaming methods for this service
 export const streamingMethods = [
@@ -19,11 +24,16 @@ export const streamingMethods = [
 // Register all state service methods
 export function registerAllMethods(): void {
 	// Register each method with the registry
+	registerMethod("getAvailableTerminalProfiles", getAvailableTerminalProfiles)
 	registerMethod("getLatestState", getLatestState)
 	registerMethod("resetState", resetState)
 	registerMethod("subscribeToState", subscribeToState, { isStreaming: true })
 	registerMethod("toggleFavoriteModel", toggleFavoriteModel)
 	registerMethod("togglePlanActMode", togglePlanActMode)
 	registerMethod("updateAutoApprovalSettings", updateAutoApprovalSettings)
+	registerMethod("updateDefaultTerminalProfile", updateDefaultTerminalProfile)
+	registerMethod("updateSettings", updateSettings)
+	registerMethod("updateTelemetrySetting", updateTelemetrySetting)
 	registerMethod("updateTerminalConnectionTimeout", updateTerminalConnectionTimeout)
+	registerMethod("updateTerminalReuseEnabled", updateTerminalReuseEnabled)
 }

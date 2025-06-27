@@ -15,10 +15,16 @@ import { refreshRules } from "./refreshRules"
 import { searchCommits } from "./searchCommits"
 import { searchFiles } from "./searchFiles"
 import { selectFiles } from "./selectFiles"
-import { selectImages } from "./selectImages"
+import { subscribeToWorkspaceUpdates } from "./subscribeToWorkspaceUpdates"
 import { toggleClineRule } from "./toggleClineRule"
 import { toggleCursorRule } from "./toggleCursorRule"
 import { toggleWindsurfRule } from "./toggleWindsurfRule"
+import { toggleWorkflow } from "./toggleWorkflow"
+
+// Streaming methods for this service
+export const streamingMethods = [
+  "subscribeToWorkspaceUpdates"
+]
 
 // Register all file service methods
 export function registerAllMethods(): void {
@@ -35,8 +41,9 @@ export function registerAllMethods(): void {
 	registerMethod("searchCommits", searchCommits)
 	registerMethod("searchFiles", searchFiles)
 	registerMethod("selectFiles", selectFiles)
-	registerMethod("selectImages", selectImages)
+	registerMethod("subscribeToWorkspaceUpdates", subscribeToWorkspaceUpdates, { isStreaming: true })
 	registerMethod("toggleClineRule", toggleClineRule)
 	registerMethod("toggleCursorRule", toggleCursorRule)
 	registerMethod("toggleWindsurfRule", toggleWindsurfRule)
+	registerMethod("toggleWorkflow", toggleWorkflow)
 }

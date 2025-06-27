@@ -1621,6 +1621,23 @@ export const McpServiceDefinition = {
       responseStream: true,
       options: {},
     },
+    getLatestMcpServers: {
+      name: "getLatestMcpServers",
+      requestType: Empty,
+      requestStream: false,
+      responseType: McpServers,
+      responseStream: false,
+      options: {},
+    },
+    /** Subscribe to MCP server updates */
+    subscribeToMcpServers: {
+      name: "subscribeToMcpServers",
+      requestType: EmptyRequest,
+      requestStream: false,
+      responseType: McpServers,
+      responseStream: true,
+      options: {},
+    },
   },
 } as const;
 

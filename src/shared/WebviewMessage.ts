@@ -9,30 +9,19 @@ import { CodeeConfig } from "@continuedev/core/util/codaiConfigUtil"
 
 export interface WebviewMessage {
 	type:
-		| "apiConfiguration"
-		| "webviewDidLaunch"
-		| "newTask"
-		| "condense"
-		| "reportBug"
 		| "requestVsCodeLmModels"
-		| "authStateChanged"
 		| "fetchMcpMarketplace"
 		| "searchCommits"
-		| "fetchLatestMcpServersFromHub"
 		| "telemetrySetting"
-		| "updateSettings"
-		| "clearAllTaskHistory"
-		| "fetchUserCreditsData"
-		| "searchFiles"
 		| "grpc_request"
 		| "grpc_request_cancel"
-		| "toggleWorkflow"
-		| "executeQuickWin"
+		| "updateAutocompleteConfig"
 		| "getAutocompleteConfig"
 		| "autocompleteConfig"
 		| "getLanguageConfig"
 		| "updateLanguageConfig"
 		| "languageConfig"
+		| "enhancePrompt"
 	text?: string
 	disabled?: boolean
 	apiConfiguration?: ApiConfiguration
@@ -58,8 +47,9 @@ export interface WebviewMessage {
 	planActSeparateModelsSetting?: boolean
 	enableCheckpointsSetting?: boolean
 	mcpMarketplaceEnabled?: boolean
+	mcpResponsesCollapsed?: boolean
 	telemetrySetting?: TelemetrySetting
-	customInstructionsSetting?: string
+	mcpRichDisplayEnabled?: boolean
 	mentionsRequestId?: string
 	query?: string
 	// For toggleFavoriteModel
@@ -81,11 +71,10 @@ export interface WebviewMessage {
 	enabled?: boolean
 	filename?: string
 
-	payload?: { command: string; title: string }
-
 	offset?: number
 	shellIntegrationTimeout?: number
 	terminalReuseEnabled?: boolean
+	defaultTerminalProfile?: string
 	// For autocomplete config
 	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string

@@ -67,6 +67,11 @@ export interface StringArrays {
   values2: string[];
 }
 
+export interface KeyValuePair {
+  key: string;
+  value: string;
+}
+
 function createBaseMetadata(): Metadata {
   return {};
 }
@@ -967,6 +972,82 @@ export const StringArrays: MessageFns<StringArrays> = {
     const message = createBaseStringArrays();
     message.values1 = object.values1?.map((e) => e) || [];
     message.values2 = object.values2?.map((e) => e) || [];
+    return message;
+  },
+};
+
+function createBaseKeyValuePair(): KeyValuePair {
+  return { key: "", value: "" };
+}
+
+export const KeyValuePair: MessageFns<KeyValuePair> = {
+  encode(message: KeyValuePair, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): KeyValuePair {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseKeyValuePair();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): KeyValuePair {
+    return {
+      key: isSet(object.key) ? globalThis.String(object.key) : "",
+      value: isSet(object.value) ? globalThis.String(object.value) : "",
+    };
+  },
+
+  toJSON(message: KeyValuePair): unknown {
+    const obj: any = {};
+    if (message.key !== "") {
+      obj.key = message.key;
+    }
+    if (message.value !== "") {
+      obj.value = message.value;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<KeyValuePair>, I>>(base?: I): KeyValuePair {
+    return KeyValuePair.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<KeyValuePair>, I>>(object: I): KeyValuePair {
+    const message = createBaseKeyValuePair();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
     return message;
   },
 };
