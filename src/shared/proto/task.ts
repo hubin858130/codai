@@ -6,7 +6,16 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { Empty, EmptyRequest, Int64, Int64Request, Metadata, StringArrayRequest, StringRequest } from "./common";
+import {
+  BooleanRequest,
+  Empty,
+  EmptyRequest,
+  Int64,
+  Int64Request,
+  Metadata,
+  StringArrayRequest,
+  StringRequest,
+} from "./common";
 
 /** Request message for creating a new task */
 export interface NewTaskRequest {
@@ -79,6 +88,18 @@ export interface AskResponseRequest {
   text: string;
   images: string[];
   files: string[];
+}
+
+/** Request for executing a quick win task */
+export interface ExecuteQuickWinRequest {
+  metadata?: Metadata | undefined;
+  command: string;
+  title: string;
+}
+
+/** Results returned when deleting all task history */
+export interface DeleteAllTaskHistoryCount {
+  tasksDeleted: number;
 }
 
 function createBaseNewTaskRequest(): NewTaskRequest {
@@ -1123,6 +1144,158 @@ export const AskResponseRequest: MessageFns<AskResponseRequest> = {
   },
 };
 
+function createBaseExecuteQuickWinRequest(): ExecuteQuickWinRequest {
+  return { metadata: undefined, command: "", title: "" };
+}
+
+export const ExecuteQuickWinRequest: MessageFns<ExecuteQuickWinRequest> = {
+  encode(message: ExecuteQuickWinRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.metadata !== undefined) {
+      Metadata.encode(message.metadata, writer.uint32(10).fork()).join();
+    }
+    if (message.command !== "") {
+      writer.uint32(18).string(message.command);
+    }
+    if (message.title !== "") {
+      writer.uint32(26).string(message.title);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ExecuteQuickWinRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseExecuteQuickWinRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.metadata = Metadata.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.command = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.title = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ExecuteQuickWinRequest {
+    return {
+      metadata: isSet(object.metadata) ? Metadata.fromJSON(object.metadata) : undefined,
+      command: isSet(object.command) ? globalThis.String(object.command) : "",
+      title: isSet(object.title) ? globalThis.String(object.title) : "",
+    };
+  },
+
+  toJSON(message: ExecuteQuickWinRequest): unknown {
+    const obj: any = {};
+    if (message.metadata !== undefined) {
+      obj.metadata = Metadata.toJSON(message.metadata);
+    }
+    if (message.command !== "") {
+      obj.command = message.command;
+    }
+    if (message.title !== "") {
+      obj.title = message.title;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ExecuteQuickWinRequest>, I>>(base?: I): ExecuteQuickWinRequest {
+    return ExecuteQuickWinRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ExecuteQuickWinRequest>, I>>(object: I): ExecuteQuickWinRequest {
+    const message = createBaseExecuteQuickWinRequest();
+    message.metadata = (object.metadata !== undefined && object.metadata !== null)
+      ? Metadata.fromPartial(object.metadata)
+      : undefined;
+    message.command = object.command ?? "";
+    message.title = object.title ?? "";
+    return message;
+  },
+};
+
+function createBaseDeleteAllTaskHistoryCount(): DeleteAllTaskHistoryCount {
+  return { tasksDeleted: 0 };
+}
+
+export const DeleteAllTaskHistoryCount: MessageFns<DeleteAllTaskHistoryCount> = {
+  encode(message: DeleteAllTaskHistoryCount, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.tasksDeleted !== 0) {
+      writer.uint32(8).int32(message.tasksDeleted);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeleteAllTaskHistoryCount {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteAllTaskHistoryCount();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.tasksDeleted = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DeleteAllTaskHistoryCount {
+    return { tasksDeleted: isSet(object.tasksDeleted) ? globalThis.Number(object.tasksDeleted) : 0 };
+  },
+
+  toJSON(message: DeleteAllTaskHistoryCount): unknown {
+    const obj: any = {};
+    if (message.tasksDeleted !== 0) {
+      obj.tasksDeleted = Math.round(message.tasksDeleted);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DeleteAllTaskHistoryCount>, I>>(base?: I): DeleteAllTaskHistoryCount {
+    return DeleteAllTaskHistoryCount.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<DeleteAllTaskHistoryCount>, I>>(object: I): DeleteAllTaskHistoryCount {
+    const message = createBaseDeleteAllTaskHistoryCount();
+    message.tasksDeleted = object.tasksDeleted ?? 0;
+    return message;
+  },
+};
+
 export type TaskServiceDefinition = typeof TaskServiceDefinition;
 export const TaskServiceDefinition = {
   name: "TaskService",
@@ -1242,6 +1415,24 @@ export const TaskServiceDefinition = {
       requestType: Int64Request,
       requestStream: false,
       responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+    /** Executes a quick win task with command and title */
+    executeQuickWin: {
+      name: "executeQuickWin",
+      requestType: ExecuteQuickWinRequest,
+      requestStream: false,
+      responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+    /** Deletes all task history */
+    deleteAllTaskHistory: {
+      name: "deleteAllTaskHistory",
+      requestType: BooleanRequest,
+      requestStream: false,
+      responseType: DeleteAllTaskHistoryCount,
       responseStream: false,
       options: {},
     },

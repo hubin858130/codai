@@ -156,6 +156,14 @@ export interface ToggleCursorRuleRequest {
   enabled: boolean;
 }
 
+/** Request to toggle a workflow on or off */
+export interface ToggleWorkflowRequest {
+  metadata?: Metadata | undefined;
+  workflowPath: string;
+  enabled: boolean;
+  isGlobal: boolean;
+}
+
 function createBaseRefreshedRules(): RefreshedRules {
   return {
     globalClineRulesToggles: undefined,
@@ -1689,6 +1697,116 @@ export const ToggleCursorRuleRequest: MessageFns<ToggleCursorRuleRequest> = {
   },
 };
 
+function createBaseToggleWorkflowRequest(): ToggleWorkflowRequest {
+  return { metadata: undefined, workflowPath: "", enabled: false, isGlobal: false };
+}
+
+export const ToggleWorkflowRequest: MessageFns<ToggleWorkflowRequest> = {
+  encode(message: ToggleWorkflowRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.metadata !== undefined) {
+      Metadata.encode(message.metadata, writer.uint32(10).fork()).join();
+    }
+    if (message.workflowPath !== "") {
+      writer.uint32(18).string(message.workflowPath);
+    }
+    if (message.enabled !== false) {
+      writer.uint32(24).bool(message.enabled);
+    }
+    if (message.isGlobal !== false) {
+      writer.uint32(32).bool(message.isGlobal);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): ToggleWorkflowRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseToggleWorkflowRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.metadata = Metadata.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.workflowPath = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.enabled = reader.bool();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.isGlobal = reader.bool();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ToggleWorkflowRequest {
+    return {
+      metadata: isSet(object.metadata) ? Metadata.fromJSON(object.metadata) : undefined,
+      workflowPath: isSet(object.workflowPath) ? globalThis.String(object.workflowPath) : "",
+      enabled: isSet(object.enabled) ? globalThis.Boolean(object.enabled) : false,
+      isGlobal: isSet(object.isGlobal) ? globalThis.Boolean(object.isGlobal) : false,
+    };
+  },
+
+  toJSON(message: ToggleWorkflowRequest): unknown {
+    const obj: any = {};
+    if (message.metadata !== undefined) {
+      obj.metadata = Metadata.toJSON(message.metadata);
+    }
+    if (message.workflowPath !== "") {
+      obj.workflowPath = message.workflowPath;
+    }
+    if (message.enabled !== false) {
+      obj.enabled = message.enabled;
+    }
+    if (message.isGlobal !== false) {
+      obj.isGlobal = message.isGlobal;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ToggleWorkflowRequest>, I>>(base?: I): ToggleWorkflowRequest {
+    return ToggleWorkflowRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ToggleWorkflowRequest>, I>>(object: I): ToggleWorkflowRequest {
+    const message = createBaseToggleWorkflowRequest();
+    message.metadata = (object.metadata !== undefined && object.metadata !== null)
+      ? Metadata.fromPartial(object.metadata)
+      : undefined;
+    message.workflowPath = object.workflowPath ?? "";
+    message.enabled = object.enabled ?? false;
+    message.isGlobal = object.isGlobal ?? false;
+    return message;
+  },
+};
+
 /** Service for file-related operations */
 export type FileServiceDefinition = typeof FileServiceDefinition;
 export const FileServiceDefinition = {
@@ -1755,15 +1873,6 @@ export const FileServiceDefinition = {
       requestType: StringRequest,
       requestStream: false,
       responseType: GitCommits,
-      responseStream: false,
-      options: {},
-    },
-    /** Select images from the file system and return as data URLs */
-    selectImages: {
-      name: "selectImages",
-      requestType: EmptyRequest,
-      requestStream: false,
-      responseType: StringArray,
       responseStream: false,
       options: {},
     },
@@ -1837,6 +1946,24 @@ export const FileServiceDefinition = {
       requestStream: false,
       responseType: Empty,
       responseStream: false,
+      options: {},
+    },
+    /** Toggles a workflow on or off */
+    toggleWorkflow: {
+      name: "toggleWorkflow",
+      requestType: ToggleWorkflowRequest,
+      requestStream: false,
+      responseType: ClineRulesToggles,
+      responseStream: false,
+      options: {},
+    },
+    /** Subscribe to workspace file updates */
+    subscribeToWorkspaceUpdates: {
+      name: "subscribeToWorkspaceUpdates",
+      requestType: EmptyRequest,
+      requestStream: false,
+      responseType: StringArray,
+      responseStream: true,
       options: {},
     },
   },

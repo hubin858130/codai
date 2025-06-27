@@ -4,7 +4,7 @@ import { TaskServiceClient } from "@/services/grpc-client"
 import { formatLargeNumber, formatSize } from "@/utils/format"
 import { vscode } from "@/utils/vscode"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
-import { EmptyRequest, StringArrayRequest, StringRequest } from "@shared/proto/common"
+import { BooleanRequest, EmptyRequest, StringArrayRequest, StringRequest } from "@shared/proto/common"
 import { GetTaskHistoryRequest, TaskFavoriteRequest } from "@shared/proto/task"
 import { VSCodeButton, VSCodeCheckbox, VSCodeRadio, VSCodeRadioGroup, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import Fuse, { FuseResult } from "fuse.js"
@@ -49,7 +49,7 @@ const CustomFilterRadio = ({ checked, onChange, icon, label }: CustomFilterRadio
 
 const HistoryView = ({ onDone }: HistoryViewProps) => {
 	const extensionStateContext = useExtensionState()
-	const { taskHistory, filePaths } = extensionStateContext
+	const { taskHistory, filePaths, onRelinquishControl } = extensionStateContext
 	const [searchQuery, setSearchQuery] = useState("")
 	const [sortOption, setSortOption] = useState<SortOption>("newest")
 	const [lastNonRelevantSort, setLastNonRelevantSort] = useState<SortOption | null>("newest")
@@ -130,12 +130,12 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 		[showFavoritesOnly, loadTaskHistory],
 	)
 
-	const handleMessage = useCallback((event: MessageEvent<ExtensionMessage>) => {
-		if (event.data.type === "relinquishControl") {
+	// Use the onRelinquishControl hook instead of message event
+	useEffect(() => {
+		return onRelinquishControl(() => {
 			setDeleteAllDisabled(false)
-		}
-	}, [])
-	useEvent("message", handleMessage)
+		})
+	}, [onRelinquishControl])
 
 	const { totalTasksSize, setTotalTasksSize } = extensionStateContext
 
@@ -727,7 +727,17 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 							disabled={deleteAllDisabled || taskHistory.length === 0}
 							onClick={() => {
 								setDeleteAllDisabled(true)
-								vscode.postMessage({ type: "clearAllTaskHistory" })
+								const confirmDelete = window.confirm("Are you sure you want to delete all task history?")
+								if (confirmDelete) {
+									const preserveFavorites = window.confirm(
+										"Would you like to preserve favorited tasks?\n\nClick 'OK' to preserve favorites, or 'Cancel' to delete everything.",
+									)
+									TaskServiceClient.deleteAllTaskHistory(BooleanRequest.create({ value: preserveFavorites }))
+										.catch((error) => console.error("Error deleting task history:", error))
+										.finally(() => setDeleteAllDisabled(false))
+								} else {
+									setDeleteAllDisabled(false)
+								}
 							}}>
 							Delete All History{totalTasksSize !== null ? ` (${formatSize(totalTasksSize)})` : ""}
 						</DangerButton>

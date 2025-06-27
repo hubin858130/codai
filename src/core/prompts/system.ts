@@ -12,14 +12,14 @@ export const SYSTEM_PROMPT = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-	isClaude4ModelFamily: boolean = false,
+	isNextGenModel: boolean = false,
 ) => {
 
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
+	if (isNextGenModel && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
 		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
 	}
 
-  if (isClaude4ModelFamily) {
+  if (isNextGenModel) {
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 
@@ -466,7 +466,10 @@ ${
 					const config = JSON.parse(server.config)
 
 					return (
-						`## ${server.name} (\`${config.command}${config.args && Array.isArray(config.args) ? ` ${config.args.join(" ")}` : ""}\`)` +
+						`## ${server.name}` +
+						(config.command
+							? ` (\`${config.command}${config.args && Array.isArray(config.args) ? ` ${config.args.join(" ")}` : ""}\`)`
+							: "") +
 						(tools ? `\n\n### Available Tools\n${tools}` : "") +
 						(templates ? `\n\n### Resource Templates\n${templates}` : "") +
 						(resources ? `\n\n### Direct Resources\n${resources}` : "")
@@ -548,7 +551,6 @@ You have access to two tools for working with files: **write_to_file** and **rep
 2. For targeted edits, apply replace_in_file with carefully crafted SEARCH/REPLACE blocks. If you need multiple changes, you can stack multiple SEARCH/REPLACE blocks within a single replace_in_file call.
 3. For major overhauls or initial file creation, rely on write_to_file.
 4. Once the file has been edited with either write_to_file or replace_in_file, the system will provide you with the final state of the modified file. Use this updated content as the reference point for any subsequent SEARCH/REPLACE operations, since it reflects any auto-formatting or user-applied changes.
-
 By thoughtfully selecting between write_to_file and replace_in_file, you can make your file editing process smoother, safer, and more efficient.
 
 ====
@@ -655,14 +657,14 @@ export const SYSTEM_PROMPT_WITHOUT_MCP = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-	isClaude4ModelFamily: boolean = false,
+	isNextGenModel: boolean = false,
 ) => {
 
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
+	if (isNextGenModel && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
 		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
 	}
 
-  if (isClaude4ModelFamily) {
+  if (isNextGenModel) {
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 
@@ -1180,14 +1182,14 @@ export const SYSTEM_PROMPT_TALK = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-	isClaude4ModelFamily: boolean = false,
+	isNextGenModel: boolean = false,
 ) => {
 
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
+	if (isNextGenModel && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
 		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
 	}
 
-  if (isClaude4ModelFamily) {
+  if (isNextGenModel) {
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 
@@ -1441,7 +1443,10 @@ ${
 					const config = JSON.parse(server.config)
 
 					return (
-						`## ${server.name} (\`${config.command}${config.args && Array.isArray(config.args) ? ` ${config.args.join(" ")}` : ""}\`)` +
+						`## ${server.name}` +
+						(config.command
+							? ` (\`${config.command}${config.args && Array.isArray(config.args) ? ` ${config.args.join(" ")}` : ""}\`)`
+							: "") +
 						(tools ? `\n\n### Available Tools\n${tools}` : "") +
 						(templates ? `\n\n### Resource Templates\n${templates}` : "") +
 						(resources ? `\n\n### Direct Resources\n${resources}` : "")
@@ -1550,14 +1555,14 @@ export const SYSTEM_PROMPT_TALK_WITHOUT_MCP = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-	isClaude4ModelFamily: boolean = false,
+	isNextGenModel: boolean = false,
 ) => {
 
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
+	if (isNextGenModel && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
 		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
 	}
 
-  if (isClaude4ModelFamily) {
+  if (isNextGenModel) {
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 

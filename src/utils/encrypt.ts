@@ -26,8 +26,8 @@ export class EncryptUtil {
 }
 
 // 工具函数示例//huqb
-// export function getPluginVersion() {
-//   const extension = vscode.extensions.getExtension('Codai.codai');
-//   console.log("@@@,extension:"+extension)
-//   return extension?.packageJSON.version || 'unknown';
-// }
+export function getPluginVersion() {
+  const extension = vscode.extensions.getExtension('beandao.codai-top');
+  console.log("@@@,extension:"+extension)
+  return extension?.packageJSON.version || 'unknown';
+}

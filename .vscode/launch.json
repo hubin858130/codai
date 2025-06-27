@@ -42,7 +42,11 @@
 		{
 			"type": "node",
 			"request": "launch",
+<<<<<<< HEAD
+			"name": "Run Standalone Service",
+=======
 			"name": "Run Standalone Extension",
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			"skipFiles": ["<node_internals>/**"],
 			"sourceMaps": true,
 			"resolveSourceMapLocations": ["${workspaceFolder}/**", "!**/node_modules/**"],
@@ -50,9 +54,18 @@
 			"outFiles": ["${workspaceFolder}/dist-standalone/**/*.js"],
 			"preLaunchTask": "compile-standalone",
 			"env": {
+<<<<<<< HEAD
+				// Turns on grpc debug log.
+				//"GRPC_TRACE": "all",
+				//"GRPC_VERBOSITY": "DEBUG",
+				"NODE_PATH": "${workspaceFolder}/dist-standalone/node_modules",
+
+				"HOST_BRIDGE_ADDRESS": "localhost:50052"
+=======
 				"GRPC_TRACE": "all",
 				"GRPC_VERBOSITY": "DEBUG",
 				"NODE_PATH": "${workspaceFolder}/dist-standalone/node_modules"
+>>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			},
 			"program": "standalone.js"
 		}

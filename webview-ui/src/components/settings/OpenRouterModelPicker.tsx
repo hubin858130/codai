@@ -10,7 +10,8 @@ import { useRemark } from "react-remark"
 import { useMount } from "react-use"
 import styled from "styled-components"
 import { highlight } from "../history/HistoryView"
-import { ModelInfoView, normalizeApiConfiguration } from "./ApiOptions"
+import { ModelInfoView } from "./ApiOptions"
+import { normalizeApiConfiguration } from "./utils/providerUtils"
 import FeaturedModelCard from "./FeaturedModelCard"
 import ThinkingBudgetSlider from "./ThinkingBudgetSlider"
 
@@ -39,22 +40,22 @@ export interface OpenRouterModelPickerProps {
 	isPopup?: boolean
 }
 
-// Featured models for Cline provider
+// Featured models for codai provider
 const featuredModels = [
 	{
-		id: "anthropic/claude-3.7-sonnet",
+		id: "anthropic/claude-sonnet-4",
 		description: "Recommended for agentic coding in Cline",
 		label: "Best",
 	},
 	{
-		id: "google/gemini-2.5-pro-preview",
+		id: "google/gemini-2.5-pro",
 		description: "Large 1M context window, great value",
 		label: "Trending",
 	},
 	{
-		id: "openai/gpt-4.1",
-		description: "1M context window, blazing fast",
-		label: "New",
+		id: "x-ai/grok-3",
+		description: "Latest flagship model from xAI, free for now!",
+		label: "Free",
 	},
 ]
 
@@ -330,11 +331,11 @@ const OpenRouterModelPicker: React.FC<OpenRouterModelPickerProps> = ({ isPopup }
 						<VSCodeLink style={{ display: "inline", fontSize: "inherit" }} href="https://openrouter.ai/models">
 							OpenRouter.
 						</VSCodeLink>
-						If you're unsure which model to choose, Cline works best with{" "}
+						If you're unsure which model to choose, codai works best with{" "}
 						<VSCodeLink
 							style={{ display: "inline", fontSize: "inherit" }}
-							onClick={() => handleModelChange("anthropic/claude-3.7-sonnet")}>
-							anthropic/claude-3.7-sonnet.
+							onClick={() => handleModelChange("anthropic/claude-sonnet-4")}>
+							anthropic/claude-sonnet-4.
 						</VSCodeLink>
 						You can also try searching "free" for no-cost options currently available.
 					</>
