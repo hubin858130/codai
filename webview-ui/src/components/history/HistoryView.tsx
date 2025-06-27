@@ -4,11 +4,7 @@ import { TaskServiceClient } from "@/services/grpc-client"
 import { formatLargeNumber, formatSize } from "@/utils/format"
 import { vscode } from "@/utils/vscode"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
-<<<<<<< HEAD
 import { BooleanRequest, EmptyRequest, StringArrayRequest, StringRequest } from "@shared/proto/common"
-=======
-import { EmptyRequest, StringArrayRequest, StringRequest } from "@shared/proto/common"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { GetTaskHistoryRequest, TaskFavoriteRequest } from "@shared/proto/task"
 import { VSCodeButton, VSCodeCheckbox, VSCodeRadio, VSCodeRadioGroup, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import Fuse, { FuseResult } from "fuse.js"
@@ -53,11 +49,7 @@ const CustomFilterRadio = ({ checked, onChange, icon, label }: CustomFilterRadio
 
 const HistoryView = ({ onDone }: HistoryViewProps) => {
 	const extensionStateContext = useExtensionState()
-<<<<<<< HEAD
 	const { taskHistory, filePaths, onRelinquishControl } = extensionStateContext
-=======
-	const { taskHistory, filePaths } = extensionStateContext
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const [searchQuery, setSearchQuery] = useState("")
 	const [sortOption, setSortOption] = useState<SortOption>("newest")
 	const [lastNonRelevantSort, setLastNonRelevantSort] = useState<SortOption | null>("newest")
@@ -65,81 +57,6 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 	const [selectedItems, setSelectedItems] = useState<string[]>([])
 	const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
 	const [showCurrentWorkspaceOnly, setShowCurrentWorkspaceOnly] = useState(false)
-<<<<<<< HEAD
-=======
-
-	// Keep track of pending favorite toggle operations
-	const [pendingFavoriteToggles, setPendingFavoriteToggles] = useState<Record<string, boolean>>({})
-
-	// Load filtered task history with gRPC
-	const [filteredTasks, setFilteredTasks] = useState<any[]>([])
-
-	// Load and refresh task history
-	const loadTaskHistory = useCallback(async () => {
-		try {
-			const response = await TaskServiceClient.getTaskHistory(
-				GetTaskHistoryRequest.create({
-					favoritesOnly: showFavoritesOnly,
-					searchQuery: searchQuery || undefined,
-					sortBy: sortOption,
-					currentWorkspaceOnly: showCurrentWorkspaceOnly,
-				}),
-			)
-			setFilteredTasks(response.tasks || [])
-		} catch (error) {
-			console.error("Error loading task history:", error)
-		}
-	}, [showFavoritesOnly, showCurrentWorkspaceOnly, searchQuery, sortOption, taskHistory])
-
-	// Load when filters change
-	useEffect(() => {
-		// Force a complete refresh when both filters are active
-		// to ensure proper combined filtering
-		if (showFavoritesOnly && showCurrentWorkspaceOnly) {
-			setFilteredTasks([])
-		}
-		loadTaskHistory()
-	}, [loadTaskHistory, showFavoritesOnly, showCurrentWorkspaceOnly])
-
-	const toggleFavorite = useCallback(
-		async (taskId: string, currentValue: boolean) => {
-			// Optimistic UI update
-			setPendingFavoriteToggles((prev) => ({ ...prev, [taskId]: !currentValue }))
-
-			try {
-				await TaskServiceClient.toggleTaskFavorite(
-					TaskFavoriteRequest.create({
-						taskId,
-						isFavorited: !currentValue,
-					}),
-				)
-
-				// Refresh if either filter is active to ensure proper combined filtering
-				if (showFavoritesOnly || showCurrentWorkspaceOnly) {
-					loadTaskHistory()
-				}
-			} catch (err) {
-				console.error(`[FAVORITE_TOGGLE_UI] Error for task ${taskId}:`, err)
-				// Revert optimistic update
-				setPendingFavoriteToggles((prev) => {
-					const updated = { ...prev }
-					delete updated[taskId]
-					return updated
-				})
-			} finally {
-				// Clean up pending state after 1 second
-				setTimeout(() => {
-					setPendingFavoriteToggles((prev) => {
-						const updated = { ...prev }
-						delete updated[taskId]
-						return updated
-					})
-				}, 1000)
-			}
-		},
-		[showFavoritesOnly, loadTaskHistory],
-	)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	// Keep track of pending favorite toggle operations
 	const [pendingFavoriteToggles, setPendingFavoriteToggles] = useState<Record<string, boolean>>({})
@@ -219,19 +136,6 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 			setDeleteAllDisabled(false)
 		})
 	}, [onRelinquishControl])
-
-	const { totalTasksSize, setTotalTasksSize } = extensionStateContext
-
-	const fetchTotalTasksSize = useCallback(async () => {
-		try {
-			const response = await TaskServiceClient.getTotalTasksSize(EmptyRequest.create({}))
-			if (response && typeof response.value === "number") {
-				setTotalTasksSize?.(response.value || 0)
-			}
-		} catch (error) {
-			console.error("Error getting total tasks size:", error)
-		}
-	}, [setTotalTasksSize])
 
 	const { totalTasksSize, setTotalTasksSize } = extensionStateContext
 
@@ -823,7 +727,6 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 							disabled={deleteAllDisabled || taskHistory.length === 0}
 							onClick={() => {
 								setDeleteAllDisabled(true)
-<<<<<<< HEAD
 								const confirmDelete = window.confirm("Are you sure you want to delete all task history?")
 								if (confirmDelete) {
 									const preserveFavorites = window.confirm(
@@ -835,9 +738,6 @@ const HistoryView = ({ onDone }: HistoryViewProps) => {
 								} else {
 									setDeleteAllDisabled(false)
 								}
-=======
-								vscode.postMessage({ type: "clearAllTaskHistory" })
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							}}>
 							Delete All History{totalTasksSize !== null ? ` (${formatSize(totalTasksSize)})` : ""}
 						</DangerButton>

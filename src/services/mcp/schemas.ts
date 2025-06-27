@@ -16,15 +16,11 @@ const createServerTypeSchema = () => {
 		// Stdio config (has command field)
 		BaseConfigSchema.extend({
 			type: z.literal("stdio").optional(),
-<<<<<<< HEAD
 			transportType: z.string().optional(), // Support legacy field
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			command: z.string(),
 			args: z.array(z.string()).optional(),
 			cwd: z.string().optional(),
 			env: z.record(z.string()).optional(),
-<<<<<<< HEAD
 			// Allow other fields for backward compatibility
 			url: z.string().optional(),
 			headers: z.record(z.string()).optional(),
@@ -85,47 +81,6 @@ const createServerTypeSchema = () => {
 				}
 			})
 			.refine((data) => data.type === "streamableHttp", {
-=======
-			// Explicitly disallow other types' fields
-			url: z.undefined().optional(),
-			headers: z.undefined().optional(),
-		})
-			.transform((data) => ({
-				...data,
-				type: "stdio" as const,
-			}))
-			.refine((data) => data.type === undefined || data.type === "stdio", { message: TYPE_ERROR_MESSAGE }),
-		// SSE config (has url field)
-		BaseConfigSchema.extend({
-			type: z.literal("sse").optional(),
-			url: z.string().url("URL must be a valid URL format"),
-			headers: z.record(z.string()).optional(),
-			// Explicitly disallow other types' fields
-			command: z.undefined().optional(),
-			args: z.undefined().optional(),
-			env: z.undefined().optional(),
-		})
-			.transform((data) => ({
-				...data,
-				type: "sse" as const,
-			}))
-			.refine((data) => data.type === undefined || data.type === "sse", { message: TYPE_ERROR_MESSAGE }),
-		// Streamable HTTP config (has url field)
-		BaseConfigSchema.extend({
-			type: z.literal("streamableHttp").optional(),
-			url: z.string().url("URL must be a valid URL format"),
-			headers: z.record(z.string()).optional(),
-			// Explicitly disallow other types' fields
-			command: z.undefined().optional(),
-			args: z.undefined().optional(),
-			env: z.undefined().optional(),
-		})
-			.transform((data) => ({
-				...data,
-				type: "streamableHttp" as const,
-			}))
-			.refine((data) => data.type === undefined || data.type === "streamableHttp", {
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				message: TYPE_ERROR_MESSAGE,
 			}),
 	])

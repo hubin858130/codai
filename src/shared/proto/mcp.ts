@@ -1621,7 +1621,6 @@ export const McpServiceDefinition = {
       responseStream: true,
       options: {},
     },
-<<<<<<< HEAD
     getLatestMcpServers: {
       name: "getLatestMcpServers",
       requestType: Empty,
@@ -1639,8 +1638,6 @@ export const McpServiceDefinition = {
       responseStream: true,
       options: {},
     },
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   },
 } as const;
 

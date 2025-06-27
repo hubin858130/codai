@@ -120,151 +120,8 @@ export class AwsBedrockHandler implements ApiHandler {
 			return
 		}
 
-<<<<<<< HEAD
 		// Default: Use Anthropic Converse API for all Anthropic models
 		yield* this.createAnthropicMessage(systemPrompt, messages, modelId, model)
-=======
-		const budget_tokens = this.options.thinkingBudgetTokens || 0
-		const reasoningOn =
-			(baseModelId.includes("3-7") || baseModelId.includes("sonnet-4") || baseModelId.includes("opus-4")) &&
-			budget_tokens !== 0
-				? true
-				: false
-
-		// Get model info and message indices for caching
-		const userMsgIndices = messages.reduce((acc, msg, index) => (msg.role === "user" ? [...acc, index] : acc), [] as number[])
-		const lastUserMsgIndex = userMsgIndices[userMsgIndices.length - 1] ?? -1
-		const secondLastMsgUserIndex = userMsgIndices[userMsgIndices.length - 2] ?? -1
-
-		// Create anthropic client, using sessions created or renewed after this handler's
-		// initialization, and allowing for session renewal if necessary as well
-		const client = await this.getAnthropicClient()
-
-		// Use withTempEnv to ensure environment variables are properly restored
-		const stream = await AwsBedrockHandler.withTempEnv(
-			() => {
-				// AWS SDK prioritizes AWS_PROFILE over AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY pair
-				// If this is set as an env variable already (ie. from ~/.zshrc) it will override credentials configured by Cline
-				// Temporarily remove AWS_PROFILE to ensure our credentials are used
-				delete process.env["AWS_PROFILE"]
-			},
-			async () => {
-				return await client.messages.create({
-					model: modelId,
-					max_tokens: model.info.maxTokens || 8192,
-					thinking: reasoningOn ? { type: "enabled", budget_tokens: budget_tokens } : undefined,
-					temperature: reasoningOn ? undefined : 0,
-					system: [
-						{
-							text: systemPrompt,
-							type: "text",
-							...(this.options.awsBedrockUsePromptCache === true && {
-								cache_control: { type: "ephemeral" },
-							}),
-						},
-					],
-					messages: messages.map((message, index) => {
-						if (index === lastUserMsgIndex || index === secondLastMsgUserIndex) {
-							return {
-								...message,
-								content:
-									typeof message.content === "string"
-										? [
-												{
-													type: "text",
-													text: message.content,
-													...(this.options.awsBedrockUsePromptCache === true && {
-														cache_control: { type: "ephemeral" },
-													}),
-												},
-											]
-										: message.content.map((content, contentIndex) =>
-												contentIndex === message.content.length - 1
-													? {
-															...content,
-															...(this.options.awsBedrockUsePromptCache === true && {
-																cache_control: { type: "ephemeral" },
-															}),
-														}
-													: content,
-											),
-							}
-						}
-						return message
-					}),
-					stream: true,
-				})
-			},
-		)
-
-		for await (const chunk of stream) {
-			switch (chunk?.type) {
-				case "message_start":
-					const usage = chunk.message.usage
-					yield {
-						type: "usage",
-						inputTokens: usage.input_tokens || 0,
-						outputTokens: usage.output_tokens || 0,
-						cacheWriteTokens: usage.cache_creation_input_tokens || undefined,
-						cacheReadTokens: usage.cache_read_input_tokens || undefined,
-					}
-					break
-				case "message_delta":
-					yield {
-						type: "usage",
-						inputTokens: 0,
-						outputTokens: chunk.usage.output_tokens || 0,
-					}
-					break
-				case "content_block_start":
-					switch (chunk.content_block.type) {
-						case "thinking":
-							yield {
-								type: "reasoning",
-								reasoning: chunk.content_block.thinking || "",
-							}
-							break
-						case "redacted_thinking":
-							// Handle redacted thinking blocks - we still mark it as reasoning
-							// but note that the content is encrypted
-							yield {
-								type: "reasoning",
-								reasoning: "[Redacted thinking block]",
-							}
-							break
-						case "text":
-							if (chunk.index > 0) {
-								yield {
-									type: "text",
-									text: "\n",
-								}
-							}
-							yield {
-								type: "text",
-								text: chunk.content_block.text,
-							}
-							break
-					}
-					break
-				case "content_block_delta":
-					switch (chunk.delta.type) {
-						case "thinking_delta":
-							yield {
-								type: "reasoning",
-								reasoning: chunk.delta.thinking,
-							}
-							break
-						case "text_delta":
-							yield {
-								type: "text",
-								text: chunk.delta.text,
-							}
-							break
-					}
-					break
-			}
-		}
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	}
 
 	getModel(): { id: string; info: ModelInfo } {
@@ -276,7 +133,6 @@ export class AwsBedrockHandler implements ApiHandler {
 
 		const customSelected = this.options.awsBedrockCustomSelected
 		const baseModel = this.options.awsBedrockCustomModelBaseId
-<<<<<<< HEAD
 
 		// Handle custom models
 		if (customSelected && modelId) {
@@ -291,13 +147,6 @@ export class AwsBedrockHandler implements ApiHandler {
 			return {
 				id: modelId,
 				info: bedrockModels[bedrockDefaultModelId],
-=======
-		if (customSelected && modelId && baseModel && baseModel in bedrockModels) {
-			// Use the user-input model ID but inherit capabilities from the base model
-			return {
-				id: modelId,
-				info: bedrockModels[baseModel],
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			}
 		}
 
@@ -320,11 +169,7 @@ export class AwsBedrockHandler implements ApiHandler {
 		sessionToken?: string
 	}> {
 		// Configure provider options
-<<<<<<< HEAD
 		const providerOptions: ProviderChainOptions = {}
-=======
-		const providerOptions: any = {}
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		if (this.options.awsUseProfile) {
 			// For profile-based auth, always use ignoreCache to detect credential file changes
 			// This solves the AWS Identity Manager issue where credential files change externally
@@ -377,36 +222,10 @@ export class AwsBedrockHandler implements ApiHandler {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Gets the appropriate model ID, accounting for cross-region inference if enabled.
 	 * For custom models, returns the raw model ID without any encoding.
 	 */
 	async getModelId(): Promise<string> {
-=======
-	 * Creates an AnthropicBedrock client with the appropriate credentials
-	 */
-	private async getAnthropicClient(): Promise<AnthropicBedrock> {
-		const credentials = await this.getAwsCredentials()
-
-		// Return an AnthropicBedrock client with the resolved/assumed credentials.
-		return new AnthropicBedrock({
-			awsAccessKey: credentials.accessKeyId,
-			awsSecretKey: credentials.secretAccessKey,
-			awsSessionToken: credentials.sessionToken,
-			awsRegion: this.getRegion(),
-			...(this.options.awsBedrockEndpoint && { baseURL: this.options.awsBedrockEndpoint }),
-		})
-	}
-
-	/**
-	 * Gets the appropriate model ID, accounting for cross-region inference if enabled.
-	 * If the model ID is an ARN that contains a slash, you will get the URL encoded ARN.
-	 */
-	async getModelId(): Promise<string> {
-		if (this.options.awsBedrockCustomSelected && this.getModel().id.includes("/")) {
-			return encodeURIComponent(this.getModel().id)
-		}
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		if (!this.options.awsBedrockCustomSelected && this.options.awsUseCrossRegionInference) {
 			const regionPrefix = this.getRegion().slice(0, 3)
 			switch (regionPrefix) {
@@ -643,41 +462,10 @@ export class AwsBedrockHandler implements ApiHandler {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Executes a Converse API stream command and handles the response
 	 * Common implementation for both Anthropic and Nova models
 	 */
 	private async *executeConverseStream(command: ConverseStreamCommand, modelInfo: ModelInfo): ApiStream {
-=======
-	 * Creates a message using Amazon Nova models through AWS Bedrock
-	 * Implements support for Amazon Nova models
-	 */
-	private async *createNovaMessage(
-		systemPrompt: string,
-		messages: Anthropic.Messages.MessageParam[],
-		modelId: string,
-		model: { id: string; info: ModelInfo },
-	): ApiStream {
-		// Get Bedrock client with proper credentials
-		const client = await this.getBedrockClient()
-
-		// Format messages for Nova model
-		const formattedMessages = this.formatNovaMessages(messages)
-
-		// Prepare request for Nova model
-		const command = new ConverseStreamCommand({
-			modelId: modelId,
-			messages: formattedMessages,
-			system: systemPrompt ? [{ text: systemPrompt }] : undefined,
-			inferenceConfig: {
-				maxTokens: model.info.maxTokens || 5000,
-				temperature: 0,
-				// topP: 0.9, // Alternative: use topP instead of temperature
-			},
-		})
-
-		// Execute the streaming request and handle response
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		try {
 			const client = await this.getBedrockClient()
 			const response = await client.send(command)

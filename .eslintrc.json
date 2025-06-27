@@ -21,7 +21,6 @@
 		"semi": "off",
 		"react-hooks/exhaustive-deps": "off",
 		"eslint-rules/no-protobuf-object-literals": "error",
-<<<<<<< HEAD
 		"eslint-rules/no-grpc-client-object-literals": "error",
 		"no-restricted-syntax": [
 			"error",
@@ -30,9 +29,6 @@
 				"message": "Use process.env.VARIABLE_NAME directly instead of destructuring"
 			}
 		]
-=======
-		"eslint-rules/no-grpc-client-object-literals": "error"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	},
 	"ignorePatterns": ["out", "dist", "**/*.d.ts"]
 }

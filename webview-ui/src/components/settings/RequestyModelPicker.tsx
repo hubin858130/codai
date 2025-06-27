@@ -10,12 +10,8 @@ import { useExtensionState } from "../../context/ExtensionStateContext"
 import { ModelsServiceClient } from "../../services/grpc-client"
 import { CODE_BLOCK_BG_COLOR } from "../common/CodeBlock"
 import { highlight } from "../history/HistoryView"
-<<<<<<< HEAD
 import { ModelInfoView } from "./ApiOptions"
 import { normalizeApiConfiguration } from "./utils/providerUtils"
-=======
-import { ModelInfoView, normalizeApiConfiguration } from "./ApiOptions"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import ThinkingBudgetSlider from "./ThinkingBudgetSlider"
 
 export interface RequestyModelPickerProps {
@@ -49,7 +45,6 @@ const RequestyModelPicker: React.FC<RequestyModelPickerProps> = ({ isPopup }) =>
 	}, [apiConfiguration])
 
 	useMount(() => {
-<<<<<<< HEAD
 		ModelsServiceClient.refreshRequestyModels(EmptyRequest.create({}))
 			.then((response) => {
 				setRequestyModels({
@@ -60,11 +55,6 @@ const RequestyModelPicker: React.FC<RequestyModelPickerProps> = ({ isPopup }) =>
 			.catch((err) => {
 				console.error("Failed to refresh Requesty models:", err)
 			})
-=======
-		ModelsServiceClient.refreshRequestyModels(EmptyRequest.create({})).catch((err) => {
-			console.error("Failed to refresh Requesty models:", err)
-		})
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	})
 
 	useEffect(() => {

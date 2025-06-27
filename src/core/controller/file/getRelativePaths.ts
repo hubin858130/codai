@@ -3,13 +3,8 @@ import { RelativePathsRequest, RelativePaths } from "@shared/proto/file"
 import { FileMethodHandler } from "./index"
 import * as vscode from "vscode"
 import * as path from "path"
-<<<<<<< HEAD
 import { Metadata, StringRequest } from "@shared/proto/common"
 import { getHostBridgeProvider } from "@hosts/host-providers"
-=======
-import { UriServiceClient } from "../../../standalone/services/host-grpc-client"
-import { Metadata, StringRequest } from "@shared/proto/common"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 /**
  * Converts a list of URIs to workspace-relative paths
@@ -25,11 +20,7 @@ export const getRelativePaths: FileMethodHandler = async (
 		request.uris.map(async (uriString) => {
 			try {
 				// Use the host URI service client instead of directly using vscode.Uri.parse
-<<<<<<< HEAD
 				const parseResponse = await getHostBridgeProvider().uriServiceClient.parse(
-=======
-				const parseResponse = await UriServiceClient.parse(
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					StringRequest.create({
 						metadata: Metadata.create({}),
 						value: uriString,

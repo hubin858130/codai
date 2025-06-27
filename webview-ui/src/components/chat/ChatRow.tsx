@@ -1,11 +1,8 @@
 import { VSCodeBadge, VSCodeButton, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react"
 import deepEqual from "fast-deep-equal"
 import React, { memo, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from "react"
-<<<<<<< HEAD
 import styled from "styled-components"
 import { useEvent, useSize } from "react-use"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 import CreditLimitError from "@/components/chat/CreditLimitError"
 import { OptionsButtons } from "@/components/chat/OptionsButtons"
@@ -14,20 +11,13 @@ import { CheckmarkControl } from "@/components/common/CheckmarkControl"
 import CodeBlock, { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
 import MarkdownBlock from "@/components/common/MarkdownBlock"
 import SuccessButton from "@/components/common/SuccessButton"
-<<<<<<< HEAD
 import { WithCopyButton } from "@/components/common/CopyButton"
 import Thumbnails from "@/components/common/Thumbnails"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import McpResponseDisplay from "@/components/mcp/chat-display/McpResponseDisplay"
 import McpResourceRow from "@/components/mcp/configuration/tabs/installed/server-row/McpResourceRow"
 import McpToolRow from "@/components/mcp/configuration/tabs/installed/server-row/McpToolRow"
 import { useExtensionState } from "@/context/ExtensionStateContext"
-<<<<<<< HEAD
 import { FileServiceClient, TaskServiceClient, UiServiceClient } from "@/services/grpc-client"
-=======
-import { FileServiceClient, TaskServiceClient } from "@/services/grpc-client"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { findMatchingResourceOrTemplate, getMcpServerDisplayName } from "@/utils/mcp"
 import { vscode } from "@/utils/vscode"
 import {
@@ -42,19 +32,10 @@ import {
 } from "@shared/ExtensionMessage"
 import { COMMAND_OUTPUT_STRING, COMMAND_REQ_APP_STRING } from "@shared/combineCommandSequences"
 import { Int64Request, StringRequest } from "@shared/proto/common"
-<<<<<<< HEAD
 
 import CodeAccordian, { cleanPathPrefix } from "../common/CodeAccordian"
 import { CheckpointControls } from "../common/CheckpointControls"
 import NewTaskPreview from "./NewTaskPreview"
-=======
-import { useEvent, useSize } from "react-use"
-import styled from "styled-components"
-import { CheckpointControls } from "../common/CheckpointControls"
-import CodeAccordian, { cleanPathPrefix } from "../common/CodeAccordian"
-import NewTaskPreview from "./NewTaskPreview"
-import QuoteButton from "./QuoteButton"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import ReportBugPreview from "./ReportBugPreview"
 import UserMessage from "./UserMessage"
 import QuoteButton from "./QuoteButton"
@@ -63,67 +44,6 @@ const normalColor = "var(--vscode-foreground)"
 const errorColor = "var(--vscode-errorForeground)"
 const successColor = "var(--vscode-charts-green)"
 const cancelledColor = "var(--vscode-descriptionForeground)"
-
-interface CopyButtonProps {
-	textToCopy: string | undefined
-}
-
-const normalColor = "var(--vscode-foreground)"
-const errorColor = "var(--vscode-errorForeground)"
-const successColor = "var(--vscode-charts-green)"
-const cancelledColor = "var(--vscode-descriptionForeground)"
-
-const CopyButtonStyled = styled(VSCodeButton)`
-	position: absolute;
-	bottom: 2px;
-	right: 2px;
-	z-index: 1;
-	opacity: 0;
-`
-
-interface WithCopyButtonProps {
-	children: React.ReactNode
-	textToCopy?: string
-	style?: React.CSSProperties
-	ref?: React.Ref<HTMLDivElement>
-	onMouseUp?: (event: MouseEvent<HTMLDivElement>) => void
-}
-
-const StyledContainer = styled.div`
-	position: relative;
-
-	&:hover ${CopyButtonStyled} {
-		opacity: 1;
-	}
-`
-
-const WithCopyButton = React.forwardRef<HTMLDivElement, WithCopyButtonProps>(
-	({ children, textToCopy, style, onMouseUp, ...props }, ref) => {
-		const [copied, setCopied] = useState(false)
-
-		const handleCopy = () => {
-			if (!textToCopy) return
-
-			navigator.clipboard.writeText(textToCopy).then(() => {
-				setCopied(true)
-				setTimeout(() => {
-					setCopied(false)
-				}, 1500)
-			})
-		}
-
-		return (
-			<StyledContainer ref={ref} onMouseUp={onMouseUp} style={style} {...props}>
-				{children}
-				{textToCopy && (
-					<CopyButtonStyled appearance="icon" onClick={handleCopy} aria-label={copied ? "Copied" : "Copy"}>
-						<span className={`codicon codicon-${copied ? "check" : "copy"}`}></span>
-					</CopyButtonStyled>
-				)}
-			</StyledContainer>
-		)
-	},
-)
 
 const ChatRowContainer = styled.div`
 	padding: 10px 6px 10px 15px;
@@ -296,92 +216,12 @@ export const ChatRowContent = ({
 
 	const type = message.type === "ask" ? message.ask : message.say
 
-<<<<<<< HEAD
 	// Use the onRelinquishControl hook instead of message event
 	useEffect(() => {
 		return onRelinquishControl(() => {
 			setSeeNewChangesDisabled(false)
 		})
 	}, [onRelinquishControl])
-
-	// --- Quote Button Logic ---
-	// MOVE handleQuoteClick INSIDE ChatRowContent
-	const handleQuoteClick = useCallback(() => {
-		onSetQuote(quoteButtonState.selectedText)
-		window.getSelection()?.removeAllRanges() // Clear the browser selection
-		setQuoteButtonState({ visible: false, top: 0, left: 0, selectedText: "" })
-	}, [onSetQuote, quoteButtonState.selectedText]) // <-- Use onSetQuote from props
-
-	const handleMouseUp = useCallback((event: MouseEvent<HTMLDivElement>) => {
-		// Get the target element immediately, before the timeout
-		const targetElement = event.target as Element
-		const isClickOnButton = !!targetElement.closest(".quote-button-class")
-
-		// Delay the selection check slightly
-		setTimeout(() => {
-			// Now, check the selection state *after* the browser has likely updated it
-			const selection = window.getSelection()
-			const selectedText = selection?.toString().trim() ?? ""
-
-			let shouldShowButton = false
-			let buttonTop = 0
-			let buttonLeft = 0
-			let textToQuote = ""
-
-			// Condition 1: Check if there's a valid, non-collapsed selection within bounds
-			// Ensure contentRef.current still exists in case component unmounted during timeout
-			if (selectedText && contentRef.current && selection && selection.rangeCount > 0 && !selection.isCollapsed) {
-				const range = selection.getRangeAt(0)
-				const rangeRect = range.getBoundingClientRect()
-				// Re-check ref inside timeout and ensure containerRect is valid
-				const containerRect = contentRef.current?.getBoundingClientRect()
-
-				if (containerRect) {
-					// Check if containerRect was successfully obtained
-					const tolerance = 5 // Allow for a small pixel overflow (e.g., for margins)
-					const isSelectionWithin =
-						rangeRect.top >= containerRect.top &&
-						rangeRect.left >= containerRect.left &&
-						rangeRect.bottom <= containerRect.bottom + tolerance && // Added tolerance
-						rangeRect.right <= containerRect.right
-
-					if (isSelectionWithin) {
-						shouldShowButton = true // Mark that we should show the button
-						const buttonHeight = 30
-						// Calculate the raw top position relative to the container, placing it above the selection
-						const calculatedTop = rangeRect.top - containerRect.top - buttonHeight - 5 // Subtract button height and a small margin
-						// Allow the button to potentially have a negative top value
-						buttonTop = calculatedTop
-						buttonLeft = Math.max(0, rangeRect.left - containerRect.left) // Still prevent going left of container
-						textToQuote = selectedText
-					}
-				}
-=======
-	const handleMessage = useCallback((event: MessageEvent) => {
-		const message: ExtensionMessage = event.data
-		switch (message.type) {
-			case "relinquishControl": {
-				setSeeNewChangesDisabled(false)
-				break
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
-			}
-
-			// Decision: Set the state based on whether we should show or hide
-			if (shouldShowButton) {
-				// Scenario A: Valid selection exists -> Show button
-				setQuoteButtonState({
-					visible: true,
-					top: buttonTop,
-					left: buttonLeft,
-					selectedText: textToQuote,
-				})
-			} else if (!isClickOnButton) {
-				// Scenario B: No valid selection AND click was NOT on button -> Hide button
-				setQuoteButtonState({ visible: false, top: 0, left: 0, selectedText: "" })
-			}
-			// Scenario C (Click WAS on button): Do nothing here, handleQuoteClick takes over.
-		}, 0) // Delay of 0ms pushes execution after current event cycle
-	}, []) // Dependencies remain empty
 
 	// --- Quote Button Logic ---
 	// MOVE handleQuoteClick INSIDE ChatRowContent
@@ -839,13 +679,8 @@ export const ChatRowContent = ({
 								toolIcon("sign-out", "yellow", -90, "This URL is external")}
 							<span style={{ fontWeight: "bold" }}>
 								{message.type === "ask"
-<<<<<<< HEAD
 									? "codai wants to fetch content from this URL:"
 									: "codai fetched content from this URL:"}
-=======
-									? "Cline wants to fetch content from this URL:"
-									: "Cline fetched content from this URL:"}
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							</span>
 						</div>
 						<div
@@ -862,7 +697,6 @@ export const ChatRowContent = ({
 								msUserSelect: "none",
 							}}
 							onClick={() => {
-<<<<<<< HEAD
 								// Open the URL in the default browser using gRPC
 								if (tool.path) {
 									UiServiceClient.openUrl(StringRequest.create({ value: tool.path }))
@@ -870,17 +704,6 @@ export const ChatRowContent = ({
 										.catch((err) => {
 											console.error("Failed to open URL:", err)
 										})
-=======
-								// Attempt to open the URL in the default browser
-								if (tool.path) {
-									// Assuming 'openUrl' is a valid action the extension can handle.
-									// If not, this might need adjustment based on how other external link openings are handled.
-									vscode.postMessage({
-										type: "action", // This should be a valid MessageType from WebviewMessage
-										action: "openUrl", // This should be a valid WebviewAction from WebviewMessage
-										url: tool.path,
-									} as any) // Using 'as any' for now if 'openUrl' isn't strictly typed yet
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 								}
 							}}>
 							<span
@@ -1290,15 +1113,11 @@ export const ChatRowContent = ({
 					)
 				case "text":
 					return (
-<<<<<<< HEAD
 						<WithCopyButton
 							ref={contentRef}
 							onMouseUp={handleMouseUp}
 							textToCopy={message.text}
 							position="bottom-right">
-=======
-						<WithCopyButton ref={contentRef} onMouseUp={handleMouseUp} textToCopy={message.text}>
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							<Markdown markdown={message.text} />
 							{quoteButtonState.visible && (
 								<QuoteButton
@@ -1535,10 +1354,7 @@ export const ChatRowContent = ({
 								ref={contentRef}
 								onMouseUp={handleMouseUp}
 								textToCopy={text}
-<<<<<<< HEAD
 								position="bottom-right"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 								style={{
 									color: "var(--vscode-charts-green)",
 									paddingTop: 10,
@@ -1703,10 +1519,7 @@ export const ChatRowContent = ({
 									ref={contentRef}
 									onMouseUp={handleMouseUp}
 									textToCopy={text}
-<<<<<<< HEAD
 									position="bottom-right"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 									style={{
 										color: "var(--vscode-charts-green)",
 										paddingTop: 10,
@@ -1777,10 +1590,7 @@ export const ChatRowContent = ({
 								ref={contentRef}
 								onMouseUp={handleMouseUp}
 								textToCopy={question}
-<<<<<<< HEAD
 								position="bottom-right"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 								style={{ paddingTop: 10 }}>
 								<Markdown markdown={question} />
 								<OptionsButtons
@@ -1864,11 +1674,7 @@ export const ChatRowContent = ({
 						response = message.text
 					}
 					return (
-<<<<<<< HEAD
 						<WithCopyButton ref={contentRef} onMouseUp={handleMouseUp} textToCopy={response} position="bottom-right">
-=======
-						<WithCopyButton ref={contentRef} onMouseUp={handleMouseUp} textToCopy={response}>
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							<Markdown markdown={response} />
 							<OptionsButtons
 								options={options}

@@ -2,11 +2,7 @@
 	"name": "codai-top",
 	"displayName": "Codai-Top",
 	"description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser,autocomplete, and more with your permission every step of the way.",
-<<<<<<< HEAD
 	"version": "1.2.3",
-=======
-	"version": "1.2.2",
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	"icon": "assets/icons/logo.png",
 	"engines": {
 		"vscode": "^1.84.0"
@@ -114,17 +110,7 @@
 					"id": "codai-ActivityBar",
 					"title": "Codai (Ctrl+')",
 					"icon": "assets/icons/icon.png",
-<<<<<<< HEAD
 					"when": "!isMac"
-=======
-					"when": "isWindows"
-				},
-				{
-					"id": "codai-ActivityBar",
-					"title": "Codai (Ctrl+')",
-					"icon": "assets/icons/icon.png",
-					"when": "isLinux || !isMac && !isWindows"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				}
 			]
 		},
@@ -344,23 +330,14 @@
 		"watch:esbuild": "node esbuild.js --watch",
 		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
 		"package": "npm run build:continue_core && npm run check-types && npm run build:webview && npm run lint && node esbuild.js --production",
-<<<<<<< HEAD
 		"protos": "node proto/build-proto.js && node scripts/generate-server-setup.mjs && node scripts/generate-host-bridge-client.mjs",
 		"postprotos": "prettier src/shared/proto src/core/controller src/hosts/ webview-ui/src/services src/generated --write --log-level warn",
 		"clean": "rimraf dist dist-standalone webview-ui/build src/generated",
-=======
-		"protos": "node proto/build-proto.js && node scripts/generate-server-setup.mjs",
-		"postprotos": "prettier src/shared/proto src/core/controller webview-ui/src/services src/standalone/server-setup.ts --write --log-level silent",
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		"compile-tests": "node ./scripts/build-tests.js",
 		"watch-tests": "tsc -p . -w --outDir out",
 		"pretest": "npm run compile-tests && npm run compile && npm run compile-standalone && npm run lint",
 		"check-types": "npm run protos && tsc --noEmit",
-<<<<<<< HEAD
 		"lint": "eslint src --ext ts && eslint webview-ui/src --ext ts && buf lint && cd webview-ui && npm run lint",
-=======
-		"lint": "eslint src --ext ts && eslint webview-ui/src --ext ts && cd webview-ui && npm run lint",
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		"format": "prettier . --check",
 		"format:fix": "prettier . --write",
 		"test": "npm-run-all test:unit test:integration",
@@ -417,10 +394,7 @@
 		"eslint-plugin-eslint-rules": "file:eslint-rules",
 		"grpc-tools": "^1.13.0",
 		"husky": "^9.1.7",
-<<<<<<< HEAD
 		"lint-staged": "^16.1.0",
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		"mintlify": "^4.0.515",
 		"npm-run-all": "^4.1.5",
 		"prettier": "^3.3.3",
@@ -443,20 +417,12 @@
 		"@anthropic-ai/bedrock-sdk": "^0.12.4",
 		"@anthropic-ai/sdk": "^0.37.0",
 		"@anthropic-ai/vertex-sdk": "^0.6.4",
-<<<<<<< HEAD
 		"@aws-sdk/client-bedrock-runtime": "^3.826.0",
 		"@aws-sdk/credential-providers": "^3.826.0",
 		"@bufbuild/protobuf": "^2.2.5",
 		"@cerebras/cerebras_cloud_sdk": "^1.35.0",
 		"@google-cloud/vertexai": "^1.9.3",
 		"@google/genai": "1.0.0",
-=======
-		"@aws-sdk/client-bedrock-runtime": "^3.821.0",
-		"@bufbuild/protobuf": "^2.2.5",
-		"@cerebras/cerebras_cloud_sdk": "^1.35.0",
-		"@google-cloud/vertexai": "^1.9.3",
-		"@google/genai": "^0.13.0",
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		"@grpc/grpc-js": "^1.9.15",
 		"@grpc/reflection": "^1.0.4",
 		"@mistralai/mistralai": "^1.5.0",
@@ -485,10 +451,7 @@
 		"fzf": "^0.5.2",
 		"get-folder-size": "^5.0.0",
 		"globby": "^14.0.2",
-<<<<<<< HEAD
 		"google-auth-library": "^10.1.0",
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		"grpc-health-check": "^2.0.2",
 		"iconv-lite": "^0.6.3",
 		"ignore": "^7.0.3",

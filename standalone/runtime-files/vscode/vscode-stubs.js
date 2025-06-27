@@ -816,11 +816,7 @@ vscode.TextDocumentSaveReason = { Manual: 0, AfterDelay: 0, FocusOut: 0 }
 vscode.workspace = {}
 vscode.workspace.fs = createStub("vscode.workspace.fs")
 vscode.workspace.rootPath = createStub("vscode.workspace.rootPath")
-<<<<<<< HEAD
 vscode.workspace.workspaceFolders = []
-=======
-vscode.workspace.workspaceFolders = createStub("vscode.workspace.workspaceFolders")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 vscode.workspace.name = createStub("vscode.workspace.name")
 vscode.workspace.workspaceFile = createStub("vscode.workspace.workspaceFile")
 vscode.workspace.onDidChangeWorkspaceFolders = createStub("vscode.workspace.onDidChangeWorkspaceFolders")
@@ -898,7 +894,6 @@ vscode.workspace.onWillDeleteFiles = createStub("vscode.workspace.onWillDeleteFi
 vscode.workspace.onDidDeleteFiles = createStub("vscode.workspace.onDidDeleteFiles")
 vscode.workspace.onWillRenameFiles = createStub("vscode.workspace.onWillRenameFiles")
 vscode.workspace.onDidRenameFiles = createStub("vscode.workspace.onDidRenameFiles")
-<<<<<<< HEAD
 
 const workspaceConfigStore = {}
 vscode.workspace.getConfiguration = function (section) {
@@ -915,12 +910,6 @@ vscode.workspace.getConfiguration = function (section) {
 	}
 }
 
-=======
-vscode.workspace.getConfiguration = function (section, scope) {
-	console.log("Called stubbed function: vscode.workspace.getConfiguration")
-	return createStub("unknown")
-}
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 vscode.workspace.onDidChangeConfiguration = createStub("vscode.workspace.onDidChangeConfiguration")
 vscode.workspace.registerTaskProvider = function (type, provider) {
 	console.log("Called stubbed function: vscode.workspace.registerTaskProvider")

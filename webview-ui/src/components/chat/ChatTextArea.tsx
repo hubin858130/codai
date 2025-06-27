@@ -4,7 +4,6 @@ import SlashCommandMenu from "@/components/chat/SlashCommandMenu"
 import { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
 import Thumbnails from "@/components/common/Thumbnails"
 import Tooltip from "@/components/common/Tooltip"
-<<<<<<< HEAD
 import ApiOptions from "@/components/settings/ApiOptions"
 import { normalizeApiConfiguration } from "@/components/settings/utils/providerUtils"
 import { useExtensionState } from "@/context/ExtensionStateContext"
@@ -13,14 +12,6 @@ import {
 	ContextMenuOptionType,
 	getContextMenuOptions,
 	getContextMenuOptionIndex,
-=======
-import ApiOptions, { normalizeApiConfiguration } from "@/components/settings/ApiOptions"
-import { useExtensionState } from "@/context/ExtensionStateContext"
-import { FileServiceClient, StateServiceClient } from "@/services/grpc-client"
-import {
-	ContextMenuOptionType,
-	getContextMenuOptions,
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	insertMention,
 	insertMentionDirectly,
 	removeMention,
@@ -44,11 +35,8 @@ import { mentionRegex, mentionRegexGlobal } from "@shared/context-mentions"
 import { ExtensionMessage } from "@shared/ExtensionMessage"
 import { EmptyRequest, StringRequest } from "@shared/proto/common"
 import { FileSearchRequest, RelativePathsRequest } from "@shared/proto/file"
-<<<<<<< HEAD
 import { UpdateApiConfigurationRequest } from "@shared/proto/models"
 import { convertApiConfigurationToProto } from "@shared/proto-conversions/models/api-configuration-conversion"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { PlanActMode, TogglePlanActModeRequest } from "@shared/proto/state"
 import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
 import React, { forwardRef, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
@@ -77,12 +65,9 @@ const getImageDimensions = (dataUrl: string): Promise<{ width: number; height: n
 	})
 }
 
-<<<<<<< HEAD
 // Set to "File" option by default
 const DEFAULT_CONTEXT_MENU_OPTION = getContextMenuOptionIndex(ContextMenuOptionType.File)
 
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 interface ChatTextAreaProps {
 	inputValue: string
 	activeQuote: string | null
@@ -368,7 +353,6 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 		const handleMessage = useCallback((event: MessageEvent) => {
 			const message: ExtensionMessage = event.data
 			switch (message.type) {
-<<<<<<< HEAD
 				case "enhancedPromptResult": {
 					if (message.text) {
 						// Remove <think> and <thinking> tags (case insensitive) and their contents
@@ -378,13 +362,6 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 						// console.log("处理后文本:", cleanedText);
 						setInputValue(cleanedText)
 						setIsEnhancing(false)
-=======
-				case "fileSearchResults": {
-					// Only update results if they match the current query or if there's no mentionsRequestId - better UX
-					if (!message.mentionsRequestId || message.mentionsRequestId === currentSearchQueryRef.current) {
-						setFileSearchResults(message.results || [])
-						setSearchLoading(false)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					}
 					break
 				}
@@ -1043,15 +1020,9 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 				submitApiConfig()
 				changeModeDelay = 250 // necessary to let the api config update (we send message and wait for it to be saved) FIXME: this is a hack and we ideally should check for api config changes, then wait for it to be saved, before switching modes
 			}
-<<<<<<< HEAD
 			setTimeout(async () => {
 				const newMode = chatSettings.mode === "plan" ? PlanActMode.ACT : PlanActMode.PLAN
 				const response = await StateServiceClient.togglePlanActMode(
-=======
-			setTimeout(() => {
-				const newMode = chatSettings.mode === "plan" ? PlanActMode.ACT : PlanActMode.PLAN
-				StateServiceClient.togglePlanActMode(
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					TogglePlanActModeRequest.create({
 						chatSettings: {
 							mode: newMode,
@@ -1641,11 +1612,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					/>
 					{!inputValue && selectedImages.length === 0 && selectedFiles.length === 0 && (
 						<div className="absolute bottom-4 left-[25px] right-[60px] text-[10px] text-[var(--vscode-input-placeholderForeground)] opacity-70 whitespace-nowrap overflow-hidden text-ellipsis pointer-events-none z-[1]">
-<<<<<<< HEAD
 							Type @ for context, / for slash commands & workflows, hold shift to drag in files/images
-=======
-							Type @ for context, / for slash commands & workflows
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 						</div>
 					)}
 					{(selectedImages.length > 0 || selectedFiles.length > 0) && (

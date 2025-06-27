@@ -89,10 +89,7 @@ function convertClineSayToProtoEnum(say: AppClineSay | undefined): ClineSay | un
 		browser_action_result: ClineSay.BROWSER_ACTION_RESULT,
 		mcp_server_request_started: ClineSay.MCP_SERVER_REQUEST_STARTED,
 		mcp_server_response: ClineSay.MCP_SERVER_RESPONSE,
-<<<<<<< HEAD
 		mcp_notification: ClineSay.MCP_NOTIFICATION,
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		use_mcp_server: ClineSay.USE_MCP_SERVER_SAY,
 		diff_error: ClineSay.DIFF_ERROR,
 		deleted_api_reqs: ClineSay.DELETED_API_REQS,
@@ -136,10 +133,7 @@ function convertProtoEnumToClineSay(say: ClineSay): AppClineSay | undefined {
 		[ClineSay.BROWSER_ACTION_RESULT]: "browser_action_result",
 		[ClineSay.MCP_SERVER_REQUEST_STARTED]: "mcp_server_request_started",
 		[ClineSay.MCP_SERVER_RESPONSE]: "mcp_server_response",
-<<<<<<< HEAD
 		[ClineSay.MCP_NOTIFICATION]: "mcp_notification",
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		[ClineSay.USE_MCP_SERVER_SAY]: "use_mcp_server",
 		[ClineSay.DIFF_ERROR]: "diff_error",
 		[ClineSay.DELETED_API_REQS]: "deleted_api_reqs",

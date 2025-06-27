@@ -9,7 +9,6 @@ import { CodeeConfig } from "@continuedev/core/util/codaiConfigUtil"
 
 export interface WebviewMessage {
 	type:
-<<<<<<< HEAD
 		| "requestVsCodeLmModels"
 		| "fetchMcpMarketplace"
 		| "searchCommits"
@@ -17,27 +16,6 @@ export interface WebviewMessage {
 		| "grpc_request"
 		| "grpc_request_cancel"
 		| "updateAutocompleteConfig"
-=======
-		| "apiConfiguration"
-		| "webviewDidLaunch"
-		| "newTask"
-		| "condense"
-		| "reportBug"
-		| "requestVsCodeLmModels"
-		| "authStateChanged"
-		| "fetchMcpMarketplace"
-		| "searchCommits"
-		| "fetchLatestMcpServersFromHub"
-		| "telemetrySetting"
-		| "updateSettings"
-		| "clearAllTaskHistory"
-		| "fetchUserCreditsData"
-		| "searchFiles"
-		| "grpc_request"
-		| "grpc_request_cancel"
-		| "toggleWorkflow"
-		| "executeQuickWin"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		| "getAutocompleteConfig"
 		| "autocompleteConfig"
 		| "getLanguageConfig"
@@ -69,14 +47,9 @@ export interface WebviewMessage {
 	planActSeparateModelsSetting?: boolean
 	enableCheckpointsSetting?: boolean
 	mcpMarketplaceEnabled?: boolean
-<<<<<<< HEAD
 	mcpResponsesCollapsed?: boolean
 	telemetrySetting?: TelemetrySetting
 	mcpRichDisplayEnabled?: boolean
-=======
-	telemetrySetting?: TelemetrySetting
-	customInstructionsSetting?: string
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	mentionsRequestId?: string
 	query?: string
 	// For toggleFavoriteModel
@@ -98,15 +71,10 @@ export interface WebviewMessage {
 	enabled?: boolean
 	filename?: string
 
-	payload?: { command: string; title: string }
-
 	offset?: number
 	shellIntegrationTimeout?: number
 	terminalReuseEnabled?: boolean
-<<<<<<< HEAD
 	defaultTerminalProfile?: string
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	// For autocomplete config
 	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string

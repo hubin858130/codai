@@ -29,12 +29,6 @@ service FileService {
   // Search git commits in the workspace
   rpc searchCommits(StringRequest) returns (GitCommits);
 
-<<<<<<< HEAD
-=======
-  // Select images from the file system and return as data URLs
-  rpc selectImages(EmptyRequest) returns (StringArray);
-
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   // Select images and other files from the file system and returns as data URLs & paths respectively
   rpc selectFiles(BooleanRequest) returns (StringArrays);
   
@@ -58,15 +52,12 @@ service FileService {
 
   // Opens a task's conversation history file on disk
   rpc openTaskHistory(StringRequest) returns (Empty);
-<<<<<<< HEAD
   
   // Toggles a workflow on or off
   rpc toggleWorkflow(ToggleWorkflowRequest) returns (ClineRulesToggles);
 
   // Subscribe to workspace file updates
   rpc subscribeToWorkspaceUpdates(EmptyRequest) returns (stream StringArray);
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // Response for refreshRules operation
@@ -172,7 +163,6 @@ message ToggleCursorRuleRequest {
   Metadata metadata = 1;
   string rule_path = 2;   // Path to the rule file
   bool enabled = 3;       // Whether to enable or disable the rule
-<<<<<<< HEAD
 }
 
 // Request to toggle a workflow on or off
@@ -181,6 +171,4 @@ message ToggleWorkflowRequest {
   string workflow_path = 2;
   bool enabled = 3;
   bool is_global = 4;
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

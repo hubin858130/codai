@@ -10,12 +10,8 @@ import { useRemark } from "react-remark"
 import { useMount } from "react-use"
 import styled from "styled-components"
 import { highlight } from "../history/HistoryView"
-<<<<<<< HEAD
 import { ModelInfoView } from "./ApiOptions"
 import { normalizeApiConfiguration } from "./utils/providerUtils"
-=======
-import { ModelInfoView, normalizeApiConfiguration } from "./ApiOptions"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import FeaturedModelCard from "./FeaturedModelCard"
 import ThinkingBudgetSlider from "./ThinkingBudgetSlider"
 
@@ -47,20 +43,12 @@ export interface OpenRouterModelPickerProps {
 // Featured models for codai provider
 const featuredModels = [
 	{
-<<<<<<< HEAD
 		id: "anthropic/claude-sonnet-4",
-=======
-		id: "anthropic/claude-3.7-sonnet",
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		description: "Recommended for agentic coding in Cline",
 		label: "Best",
 	},
 	{
-<<<<<<< HEAD
 		id: "google/gemini-2.5-pro",
-=======
-		id: "google/gemini-2.5-pro-preview",
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		description: "Large 1M context window, great value",
 		label: "Trending",
 	},

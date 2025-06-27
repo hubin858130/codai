@@ -156,7 +156,6 @@ export interface ToggleCursorRuleRequest {
   enabled: boolean;
 }
 
-<<<<<<< HEAD
 /** Request to toggle a workflow on or off */
 export interface ToggleWorkflowRequest {
   metadata?: Metadata | undefined;
@@ -165,8 +164,6 @@ export interface ToggleWorkflowRequest {
   isGlobal: boolean;
 }
 
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 function createBaseRefreshedRules(): RefreshedRules {
   return {
     globalClineRulesToggles: undefined,
@@ -1699,7 +1696,6 @@ export const ToggleCursorRuleRequest: MessageFns<ToggleCursorRuleRequest> = {
     return message;
   },
 };
-<<<<<<< HEAD
 
 function createBaseToggleWorkflowRequest(): ToggleWorkflowRequest {
   return { metadata: undefined, workflowPath: "", enabled: false, isGlobal: false };
@@ -1810,8 +1806,6 @@ export const ToggleWorkflowRequest: MessageFns<ToggleWorkflowRequest> = {
     return message;
   },
 };
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 /** Service for file-related operations */
 export type FileServiceDefinition = typeof FileServiceDefinition;
@@ -1882,18 +1876,6 @@ export const FileServiceDefinition = {
       responseStream: false,
       options: {},
     },
-<<<<<<< HEAD
-=======
-    /** Select images from the file system and return as data URLs */
-    selectImages: {
-      name: "selectImages",
-      requestType: EmptyRequest,
-      requestStream: false,
-      responseType: StringArray,
-      responseStream: false,
-      options: {},
-    },
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     /** Select images and other files from the file system and returns as data URLs & paths respectively */
     selectFiles: {
       name: "selectFiles",
@@ -1966,7 +1948,6 @@ export const FileServiceDefinition = {
       responseStream: false,
       options: {},
     },
-<<<<<<< HEAD
     /** Toggles a workflow on or off */
     toggleWorkflow: {
       name: "toggleWorkflow",
@@ -1985,8 +1966,6 @@ export const FileServiceDefinition = {
       responseStream: true,
       options: {},
     },
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   },
 } as const;
 

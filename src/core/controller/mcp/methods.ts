@@ -6,30 +6,20 @@ import { registerMethod } from "./index"
 import { addRemoteMcpServer } from "./addRemoteMcpServer"
 import { deleteMcpServer } from "./deleteMcpServer"
 import { downloadMcp } from "./downloadMcp"
-<<<<<<< HEAD
 import { getLatestMcpServers } from "./getLatestMcpServers"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { openMcpSettings } from "./openMcpSettings"
 import { refreshMcpMarketplace } from "./refreshMcpMarketplace"
 import { restartMcpServer } from "./restartMcpServer"
 import { subscribeToMcpMarketplaceCatalog } from "./subscribeToMcpMarketplaceCatalog"
-<<<<<<< HEAD
 import { subscribeToMcpServers } from "./subscribeToMcpServers"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { toggleMcpServer } from "./toggleMcpServer"
 import { toggleToolAutoApprove } from "./toggleToolAutoApprove"
 import { updateMcpTimeout } from "./updateMcpTimeout"
 
 // Streaming methods for this service
 export const streamingMethods = [
-<<<<<<< HEAD
   "subscribeToMcpMarketplaceCatalog",
   "subscribeToMcpServers"
-=======
-  "subscribeToMcpMarketplaceCatalog"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 ]
 
 // Register all mcp service methods
@@ -38,18 +28,12 @@ export function registerAllMethods(): void {
 	registerMethod("addRemoteMcpServer", addRemoteMcpServer)
 	registerMethod("deleteMcpServer", deleteMcpServer)
 	registerMethod("downloadMcp", downloadMcp)
-<<<<<<< HEAD
 	registerMethod("getLatestMcpServers", getLatestMcpServers)
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	registerMethod("openMcpSettings", openMcpSettings)
 	registerMethod("refreshMcpMarketplace", refreshMcpMarketplace)
 	registerMethod("restartMcpServer", restartMcpServer)
 	registerMethod("subscribeToMcpMarketplaceCatalog", subscribeToMcpMarketplaceCatalog, { isStreaming: true })
-<<<<<<< HEAD
 	registerMethod("subscribeToMcpServers", subscribeToMcpServers, { isStreaming: true })
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	registerMethod("toggleMcpServer", toggleMcpServer)
 	registerMethod("toggleToolAutoApprove", toggleToolAutoApprove)
 	registerMethod("updateMcpTimeout", updateMcpTimeout)

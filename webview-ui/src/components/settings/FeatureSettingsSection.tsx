@@ -9,13 +9,10 @@ const FeatureSettingsSection = () => {
 		setEnableCheckpointsSetting,
 		mcpMarketplaceEnabled,
 		setMcpMarketplaceEnabled,
-<<<<<<< HEAD
 		mcpRichDisplayEnabled,
 		setMcpRichDisplayEnabled,
 		mcpResponsesCollapsed,
 		setMcpResponsesCollapsed,
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		chatSettings,
 		setChatSettings,
 	} = useExtensionState()
@@ -50,7 +47,6 @@ const FeatureSettingsSection = () => {
 				</p>
 			</div>
 			<div style={{ marginTop: 10 }}>
-<<<<<<< HEAD
 				<VSCodeCheckbox
 					checked={mcpRichDisplayEnabled}
 					onChange={(e: any) => {
@@ -77,8 +73,6 @@ const FeatureSettingsSection = () => {
 				</p>
 			</div>
 			<div style={{ marginTop: 10 }}>
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				<label
 					htmlFor="openai-reasoning-effort-dropdown"
 					className="block text-sm font-medium text-[var(--vscode-foreground)] mb-1">

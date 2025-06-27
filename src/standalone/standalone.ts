@@ -1,7 +1,6 @@
 import * as grpc from "@grpc/grpc-js"
 import { ReflectionService } from "@grpc/reflection"
 import * as health from "grpc-health-check"
-<<<<<<< HEAD
 import * as hostProviders from "@hosts/host-providers"
 import { activate } from "../extension"
 import { Controller } from "../core/controller"
@@ -25,22 +24,6 @@ async function main() {
 }
 
 function startProtobusService(controller: Controller) {
-=======
-
-import { activate } from "../extension"
-import { Controller } from "../core/controller"
-import { extensionContext, outputChannel, postMessage } from "./vscode-context"
-import { packageDefinition, proto, log, camelToSnakeCase, snakeToCamelCase } from "./utils"
-import { GrpcHandler, GrpcStreamingResponseHandler } from "./grpc-types"
-import { addServices } from "./server-setup"
-import { StreamingResponseHandler } from "@/core/controller/grpc-handler"
-
-function main() {
-	log("Starting service...")
-
-	activate(extensionContext)
-	const controller = new Controller(extensionContext, outputChannel, postMessage)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const server = new grpc.Server()
 
 	// Set up health check.
@@ -48,7 +31,6 @@ function main() {
 	healthImpl.addToServer(server)
 
 	// Add all the handlers for the ProtoBus services to the server.
-<<<<<<< HEAD
 	addProtobusServices(server, controller, wrapHandler, wrapStreamingResponseHandler)
 
 	// Create reflection service with protobus service names
@@ -82,27 +64,6 @@ const createWebview = () => {
 	return new ExternalWebviewProvider(extensionContext, outputChannel, WebviewProviderType.SIDEBAR)
 }
 
-=======
-	addServices(server, proto, controller, wrapHandler, wrapStreamingResponseHandler)
-
-	// Set up reflection.
-	const reflection = new ReflectionService(packageDefinition)
-	reflection.addToServer(server)
-
-	// Start the server.
-	const host = "127.0.0.1:50051"
-	server.bindAsync(host, grpc.ServerCredentials.createInsecure(), (err) => {
-		if (err) {
-			log(`Error: Failed to bind to ${host}, port may be unavailable ${err.message}`)
-			process.exit(1)
-		} else {
-			server.start()
-			log(`gRPC server listening on ${host}`)
-		}
-	})
-}
-
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 /**
  * Wraps a Promise-based handler function to make it compatible with gRPC's callback-based API.
  * This function converts an async handler that returns a Promise into a function that uses
@@ -121,15 +82,8 @@ function wrapHandler<TRequest, TResponse>(
 	return async (call: grpc.ServerUnaryCall<TRequest, TResponse>, callback: grpc.sendUnaryData<TResponse>) => {
 		try {
 			log(`gRPC request: ${call.getPath()}`)
-<<<<<<< HEAD
 			const result = await handler(controller, call.request)
 			callback(null, result)
-=======
-			const result = await handler(controller, snakeToCamelCase(call.request))
-			// The grpc-js serializer expects the proto message to be in the same
-			// case as the proto file. This is a work around until we find a solution.
-			callback(null, camelToSnakeCase(result))
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		} catch (err: any) {
 			log(`gRPC handler error: ${call.getPath()}\n${err.stack}`)
 			callback({
@@ -151,13 +105,7 @@ function wrapStreamingResponseHandler<TRequest, TResponse>(
 
 			const responseHandler: StreamingResponseHandler = (response, isLast, sequenceNumber) => {
 				try {
-<<<<<<< HEAD
 					call.write(response) // Use a bound version of call.write to maintain proper 'this' context
-=======
-					// The grpc-js serializer expects the proto message to be in the same
-					// case as the proto file. This is a work around until we find a solution.
-					call.write(camelToSnakeCase(response)) // Use a bound version of call.write to maintain proper 'this' context
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 					if (isLast === true) {
 						log(`Closing stream for ${requestId}`)
@@ -168,11 +116,7 @@ function wrapStreamingResponseHandler<TRequest, TResponse>(
 					return Promise.reject(error)
 				}
 			}
-<<<<<<< HEAD
 			await handler(controller, call.request, responseHandler, requestId)
-=======
-			await handler(controller, snakeToCamelCase(call.request), responseHandler, requestId)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		} catch (err: any) {
 			log(`gRPC handler error: ${call.getPath()}\n${err.stack}`)
 			call.destroy({

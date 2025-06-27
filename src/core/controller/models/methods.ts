@@ -9,7 +9,6 @@ import { getVsCodeLmModels } from "./getVsCodeLmModels"
 import { refreshOpenAiModels } from "./refreshOpenAiModels"
 import { refreshOpenRouterModels } from "./refreshOpenRouterModels"
 import { refreshRequestyModels } from "./refreshRequestyModels"
-<<<<<<< HEAD
 import { subscribeToOpenRouterModels } from "./subscribeToOpenRouterModels"
 import { updateApiConfigurationProto } from "./updateApiConfigurationProto"
 
@@ -17,8 +16,6 @@ import { updateApiConfigurationProto } from "./updateApiConfigurationProto"
 export const streamingMethods = [
   "subscribeToOpenRouterModels"
 ]
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 // Register all models service methods
 export function registerAllMethods(): void {
@@ -29,9 +26,6 @@ export function registerAllMethods(): void {
 	registerMethod("refreshOpenAiModels", refreshOpenAiModels)
 	registerMethod("refreshOpenRouterModels", refreshOpenRouterModels)
 	registerMethod("refreshRequestyModels", refreshRequestyModels)
-<<<<<<< HEAD
 	registerMethod("subscribeToOpenRouterModels", subscribeToOpenRouterModels, { isStreaming: true })
 	registerMethod("updateApiConfigurationProto", updateApiConfigurationProto)
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

@@ -15,49 +15,15 @@ import { CodeeConfig } from "@continuedev/core/util/codaiConfigUtil"
 
 // webview will hold state
 export interface ExtensionMessage {
-<<<<<<< HEAD
 	type: "action" | "state" | "selectedImages" | "mcpDownloadDetails" | "grpc_response" | "autocompleteConfig" | "languageConfig" | "enhancedPromptResult"// New type for gRPC responses
 	text?: string
 	action?: "accountLogoutClicked"
-=======
-	type:
-		| "action"
-		| "state"
-		| "selectedImages"
-		| "ollamaModels"
-		| "lmStudioModels"
-		| "theme"
-		| "workspaceUpdated"
-		| "openRouterModels"
-		| "openAiModels"
-		| "requestyModels"
-		| "mcpServers"
-		| "relinquishControl"
-		| "mcpDownloadDetails"
-		| "commitSearchResults"
-		| "openGraphData"
-		| "didUpdateSettings"
-		| "userCreditsBalance"
-		| "userCreditsUsage"
-		| "userCreditsPayments"
-		| "fileSearchResults"
-		| "grpc_response" // New type for gRPC responses
-		| "autocompleteConfig"
-		| "languageConfig"
-	text?: string
-	action?: "didBecomeVisible" | "accountLogoutClicked" | "focusChatInput"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	state?: ExtensionState
 	images?: string[]
 	files?: string[]
 	ollamaModels?: string[]
 	lmStudioModels?: string[]
 	vsCodeLmModels?: { vendor?: string; family?: string; version?: string; id?: string }[]
-<<<<<<< HEAD
-=======
-	filePaths?: string[]
-	openRouterModels?: Record<string, ModelInfo>
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	openAiModels?: string[]
 	mcpServers?: McpServer[]
 	customToken?: string
@@ -67,12 +33,6 @@ export interface ExtensionMessage {
 	commits?: GitCommit[]
 	url?: string
 	isImage?: boolean
-<<<<<<< HEAD
-=======
-	userCreditsBalance?: BalanceResponse
-	userCreditsUsage?: UsageTransaction[]
-	userCreditsPayments?: PaymentTransaction[]
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	success?: boolean
 	endpoint?: string
 	isBundled?: boolean
@@ -121,11 +81,8 @@ export interface ExtensionState {
 	telemetrySetting: TelemetrySetting
 	shellIntegrationTimeout: number
 	terminalReuseEnabled?: boolean
-<<<<<<< HEAD
 	terminalOutputLineLimit: number
 	defaultTerminalProfile?: string
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	uriScheme?: string
 	userInfo?: UserInfo
 	version: string
@@ -136,11 +93,7 @@ export interface ExtensionState {
 	globalWorkflowToggles: ClineRulesToggles
 	localCursorRulesToggles: ClineRulesToggles
 	localWindsurfRulesToggles: ClineRulesToggles
-<<<<<<< HEAD
 	mcpResponsesCollapsed?: boolean
-=======
-	currentLanguage1?: string
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 export interface ClineMessage {

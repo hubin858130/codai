@@ -138,7 +138,6 @@ class TelemetryService {
 		if (globalTelemetryEnabled) {
 			this.telemetryEnabled = didUserOptIn
 		} else {
-<<<<<<< HEAD
 			// Only show warning if user has opted in to Cline telemetry but VS Code telemetry is disabled
 			if (didUserOptIn) {
 				void vscode.window
@@ -153,19 +152,6 @@ class TelemetryService {
 					})
 			}
 			this.telemetryEnabled = false
-=======
-			// Show warning to user that global telemetry is disabled
-			void vscode.window
-				.showWarningMessage(
-					"VSCode telemetry is disabled. To enable telemetry for this extension, first enable VSCode telemetry in settings.",
-					"Open Settings",
-				)
-				.then((selection) => {
-					if (selection === "Open Settings") {
-						void vscode.commands.executeCommand("workbench.action.openSettings", "telemetry.telemetryLevel")
-					}
-				})
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		}
 
 		// Update PostHog client state based on telemetry preference

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react"
 import { VSCodeTextField, VSCodeCheckbox, VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
 import { useExtensionState } from "@/context/ExtensionStateContext"
@@ -18,17 +17,6 @@ export const TerminalSettingsSection: React.FC = () => {
 		platform,
 	} = useExtensionState()
 
-=======
-import React, { useState } from "react"
-import { VSCodeTextField, VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react"
-import { useExtensionState } from "@/context/ExtensionStateContext"
-import { StateServiceClient } from "@/services/grpc-client"
-import { Int64, Int64Request } from "@shared/proto/common"
-
-export const TerminalSettingsSection: React.FC = () => {
-	const { shellIntegrationTimeout, setShellIntegrationTimeout, terminalReuseEnabled, setTerminalReuseEnabled } =
-		useExtensionState()
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const [inputValue, setInputValue] = useState((shellIntegrationTimeout / 1000).toString())
 	const [inputError, setInputError] = useState<string | null>(null)
 
@@ -45,19 +33,10 @@ export const TerminalSettingsSection: React.FC = () => {
 		}
 
 		setInputError(null)
-<<<<<<< HEAD
 		const timeout = Math.round(seconds * 1000)
 
 		setShellIntegrationTimeout(timeout)
 
-=======
-		const timeout = Math.round(seconds * 1000) // Convert to milliseconds
-
-		// Update local state
-		setShellIntegrationTimeout(timeout)
-
-		// Send to extension using gRPC
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		StateServiceClient.updateTerminalConnectionTimeout({
 			value: timeout,
 		} as Int64Request)
@@ -71,10 +50,6 @@ export const TerminalSettingsSection: React.FC = () => {
 	}
 
 	const handleInputBlur = () => {
-<<<<<<< HEAD
-=======
-		// If there was an error, reset the input to the current valid value
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		if (inputError) {
 			setInputValue((shellIntegrationTimeout / 1000).toString())
 			setInputError(null)
@@ -84,7 +59,6 @@ export const TerminalSettingsSection: React.FC = () => {
 	const handleTerminalReuseChange = (event: Event) => {
 		const target = event.target as HTMLInputElement
 		const checked = target.checked
-<<<<<<< HEAD
 		setTerminalReuseEnabled(checked)
 		StateServiceClient.updateTerminalReuseEnabled({ value: checked } as any).catch((error) => {
 			console.error("Failed to update terminal reuse enabled:", error)
@@ -124,19 +98,6 @@ export const TerminalSettingsSection: React.FC = () => {
 			</div>
 
 			<div style={{ marginBottom: 15 }}>
-=======
-
-		// Update local state
-		setTerminalReuseEnabled(checked)
-
-		// TODO: Send to extension using gRPC when the backend is ready
-		// For now, we'll just update the local state
-	}
-
-	return (
-		<div id="terminal-settings-section" style={{ marginBottom: 20 }}>
-			<div style={{ marginBottom: 15 }}>
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				<div style={{ marginBottom: 8 }}>
 					<label style={{ fontWeight: "500", display: "block", marginBottom: 5 }}>
 						Shell integration timeout (seconds)
@@ -155,11 +116,7 @@ export const TerminalSettingsSection: React.FC = () => {
 					)}
 				</div>
 				<p style={{ fontSize: "12px", color: "var(--vscode-descriptionForeground)", margin: 0 }}>
-<<<<<<< HEAD
 					Set how long codai waits for shell integration to activate before executing commands. Increase this value if
-=======
-					Set how long Cline waits for shell integration to activate before executing commands. Increase this value if
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					you experience terminal connection timeouts.
 				</p>
 			</div>
@@ -173,18 +130,11 @@ export const TerminalSettingsSection: React.FC = () => {
 					</VSCodeCheckbox>
 				</div>
 				<p style={{ fontSize: "12px", color: "var(--vscode-descriptionForeground)", margin: 0 }}>
-<<<<<<< HEAD
 					When enabled, codai will reuse existing terminal windows that aren't in the current working directory. Disable
 					this if you experience issues with task lockout after a terminal command.
 				</p>
 			</div>
 			<TerminalOutputLineLimitSlider />
-=======
-					When enabled, Cline will reuse existing terminal windows that aren't in the current working directory. Disable
-					this if you experience issues with task lockout after a terminal command.
-				</p>
-			</div>
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		</div>
 	)
 }

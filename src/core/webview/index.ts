@@ -7,18 +7,9 @@ import { Controller } from "@core/controller/index"
 import { findLast } from "@shared/array"
 import { readFile } from "fs/promises"
 import path from "node:path"
-<<<<<<< HEAD
 import { v4 as uuidv4 } from "uuid"
 import { Uri } from "vscode"
 import { ExtensionMessage } from "@/shared/ExtensionMessage"
-=======
-import { WebviewProviderType } from "@/shared/webview/types"
-
-/*
-https://github.com/microsoft/vscode-webview-ui-toolkit-samples/blob/main/default/weather-webview/src/providers/WeatherViewProvider.ts
-https://github.com/KumarVariable/vscode-extension-sidebar-html/blob/master/src/customSidebarViewProvider.ts
-*/
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 export abstract class WebviewProvider {
 	public static readonly sideBarId = "codai-top.SidebarProvider" // used in package.json as the view's id. This value cannot be changed due to how vscode caches views based on their id, and updating the id would break existing instances of the extension.
@@ -31,13 +22,8 @@ export abstract class WebviewProvider {
 
 	constructor(
 		readonly context: vscode.ExtensionContext,
-<<<<<<< HEAD
 		protected readonly outputChannel: vscode.OutputChannel,
 		private readonly providerType: WebviewProviderType,
-=======
-		private readonly outputChannel: vscode.OutputChannel,
-		private readonly providerType: WebviewProviderType = WebviewProviderType.TAB, // Default to tab provider
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	) {
 		WebviewProvider.activeInstances.add(this)
 		this.clientId = uuidv4()
@@ -96,121 +82,15 @@ export abstract class WebviewProvider {
 	}
 
 	public static getTabInstances(): WebviewProvider[] {
-<<<<<<< HEAD
 		return Array.from(this.activeInstances).filter(
 			(instance) => instance.getWebview() && "onDidChangeViewState" in instance.getWebview(),
-=======
-		return Array.from(this.activeInstances).filter((instance) => instance.view && "onDidChangeViewState" in instance.view)
-	}
-
-	public static async disposeAllInstances() {
-		const instances = Array.from(this.activeInstances)
-		for (const instance of instances) {
-			await instance.dispose()
-		}
-	}
-
-	async resolveWebviewView(webviewView: vscode.WebviewView | vscode.WebviewPanel) {
-		this.view = webviewView
-
-		webviewView.webview.options = {
-			// Allow scripts in the webview
-			enableScripts: true,
-			localResourceRoots: [this.context.extensionUri],
-		}
-
-		webviewView.webview.html =
-			this.context.extensionMode === vscode.ExtensionMode.Development
-				? await this.getHMRHtmlContent(webviewView.webview)
-				: this.getHtmlContent(webviewView.webview)
-
-		// Sets up an event listener to listen for messages passed from the webview view context
-		// and executes code based on the message that is received
-		this.setWebviewMessageListener(webviewView.webview)
-
-		// Logs show up in bottom panel > Debug Console
-		//console.log("registering listener")
-
-		// Listen for when the panel becomes visible
-		// https://github.com/microsoft/vscode-discussions/discussions/840
-		if ("onDidChangeViewState" in webviewView) {
-			// WebviewView and WebviewPanel have all the same properties except for this visibility listener
-			// panel
-			webviewView.onDidChangeViewState(
-				() => {
-					if (this.view?.visible) {
-						this.controller.postMessageToWebview({
-							type: "action",
-							action: "didBecomeVisible",
-						})
-					}
-				},
-				null,
-				this.disposables,
-			)
-		} else if ("onDidChangeVisibility" in webviewView) {
-			// sidebar
-			webviewView.onDidChangeVisibility(
-				() => {
-					if (this.view?.visible) {
-						this.controller.postMessageToWebview({
-							type: "action",
-							action: "didBecomeVisible",
-						})
-					}
-				},
-				null,
-				this.disposables,
-			)
-		}
-
-		// Listen for when the view is disposed
-		// This happens when the user closes the view or when the view is closed programmatically
-		webviewView.onDidDispose(
-			async () => {
-				await this.dispose()
-			},
-			null,
-			this.disposables,
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		)
 	}
 
-<<<<<<< HEAD
 	public static async disposeAllInstances() {
 		const instances = Array.from(this.activeInstances)
 		for (const instance of instances) {
 			await instance.dispose()
-=======
-		// // if the extension is starting a new session, clear previous task state
-		// this.clearTask()
-		{
-			// Listen for configuration changes
-			vscode.workspace.onDidChangeConfiguration(
-				async (e) => {
-					if (e && e.affectsConfiguration("workbench.colorTheme")) {
-						// Sends latest theme name to webview
-						await this.controller.postMessageToWebview({
-							type: "theme",
-							text: JSON.stringify(await getTheme()),
-						})
-					}
-					if (e && e.affectsConfiguration("odai.mcpMarketplace.enabled")) {
-						// Update state when marketplace tab setting changes
-						await this.controller.postStateToWebview()
-					}
-				},
-				null,
-				this.disposables,
-			)
-
-			// if the extension is starting a new session, clear previous task state
-			this.controller.clearTask()
-
-			this.outputChannel.appendLine("Webview view resolved")
-
-			// Title setting logic removed to allow VSCode to use the container title primarily.
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		}
 	}
 
@@ -287,14 +167,6 @@ export abstract class WebviewProvider {
 
 		const katexCssUri = this.getExtensionUri("webview-ui", "node_modules", "katex", "dist", "katex.min.css")
 
-		const katexCssUri = getUri(webview, this.context.extensionUri, [
-			"webview-ui",
-			"node_modules",
-			"katex",
-			"dist",
-			"katex.min.css",
-		])
-
 		// const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "assets", "main.js"))
 
 		// const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "assets", "reset.css"))
@@ -327,16 +199,12 @@ export abstract class WebviewProvider {
 				<link rel="stylesheet" type="text/css" href="${stylesUri}">
 				<link href="${codiconsUri}" rel="stylesheet" />
 				<link href="${katexCssUri}" rel="stylesheet" />
-<<<<<<< HEAD
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none';
 					connect-src https://*.posthog.com https://*.cline.bot https://*.firebaseauth.com https://*.firebaseio.com https://*.googleapis.com https://*.firebase.com; 
 					font-src ${this.getCspSource()} data:; 
 					style-src ${this.getCspSource()} 'unsafe-inline'; 
 					img-src ${this.getCspSource()} https: data:; 
 					script-src 'nonce-${nonce}' 'unsafe-eval';">
-=======
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://*.posthog.com https://*.firebaseauth.com https://*.firebaseio.com https://*.googleapis.com https://*.firebase.com; font-src ${webview.cspSource} data:; style-src ${webview.cspSource} 'unsafe-inline'; img-src ${webview.cspSource} https: data:; script-src 'nonce-${nonce}' 'unsafe-eval';">
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				<title>Cline</title>
 			</head>
 			<body>
@@ -345,12 +213,9 @@ export abstract class WebviewProvider {
 				 <script type="text/javascript" nonce="${nonce}">
                     // Inject the provider type
                     window.WEBVIEW_PROVIDER_TYPE = ${JSON.stringify(this.providerType)};
-<<<<<<< HEAD
                     
                     // Inject the client ID
                     window.clineClientId = "${this.clientId}";
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
                 </script>
 				<script type="module" nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
@@ -390,11 +255,7 @@ export abstract class WebviewProvider {
 	 * @returns A template string literal containing the HTML that should be
 	 * rendered within the webview panel
 	 */
-<<<<<<< HEAD
 	protected async getHMRHtmlContent(): Promise<string> {
-=======
-	private async getHMRHtmlContent(webview: vscode.Webview): Promise<string> {
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		const localPort = await this.getDevServerPort()
 		const localServerUrl = `localhost:${localPort}`
 
@@ -416,15 +277,6 @@ export abstract class WebviewProvider {
 		// Get KaTeX resources
 		const katexCssUri = this.getExtensionUri("webview-ui", "node_modules", "katex", "dist", "katex.min.css")
 
-		// Get KaTeX resources
-		const katexCssUri = getUri(webview, this.context.extensionUri, [
-			"webview-ui",
-			"node_modules",
-			"katex",
-			"dist",
-			"katex.min.css",
-		])
-
 		const scriptEntrypoint = "src/main.tsx"
 		const scriptUri = `http://${localServerUrl}/${scriptEntrypoint}`
 
@@ -440,15 +292,9 @@ export abstract class WebviewProvider {
 
 		const csp = [
 			"default-src 'none'",
-<<<<<<< HEAD
 			`font-src ${this.getCspSource()} data:`,
 			`style-src ${this.getCspSource()} 'unsafe-inline' https://* http://${localServerUrl} http://0.0.0.0:${localPort}`,
 			`img-src ${this.getCspSource()} https: data:`,
-=======
-			`font-src ${webview.cspSource} data:`,
-			`style-src ${webview.cspSource} 'unsafe-inline' https://* http://${localServerUrl} http://0.0.0.0:${localPort}`,
-			`img-src ${webview.cspSource} https: data:`,
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			`script-src 'unsafe-eval' https://* http://${localServerUrl} http://0.0.0.0:${localPort} 'nonce-${nonce}'`,
 			`connect-src https://* ws://${localServerUrl} ws://0.0.0.0:${localPort} http://${localServerUrl} http://0.0.0.0:${localPort}`,
 		]
@@ -471,12 +317,9 @@ export abstract class WebviewProvider {
 					<script type="text/javascript" nonce="${nonce}">
 						// Inject the provider type
 						window.WEBVIEW_PROVIDER_TYPE = ${JSON.stringify(this.providerType)};
-<<<<<<< HEAD
 						
 						// Inject the client ID
 						window.clineClientId = "${this.clientId}";
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					</script>
 					${reactRefresh}
 					<script type="module" src="${scriptUri}"></script>

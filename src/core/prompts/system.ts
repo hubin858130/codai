@@ -12,7 +12,6 @@ export const SYSTEM_PROMPT = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-<<<<<<< HEAD
 	isNextGenModel: boolean = false,
 ) => {
 
@@ -21,16 +20,6 @@ export const SYSTEM_PROMPT = async (
 	}
 
   if (isNextGenModel) {
-=======
-	isClaude4ModelFamily: boolean = false,
-) => {
-
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
-		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
-	}
-
-  if (isClaude4ModelFamily) {
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 
@@ -668,7 +657,6 @@ export const SYSTEM_PROMPT_WITHOUT_MCP = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-<<<<<<< HEAD
 	isNextGenModel: boolean = false,
 ) => {
 
@@ -677,16 +665,6 @@ export const SYSTEM_PROMPT_WITHOUT_MCP = async (
 	}
 
   if (isNextGenModel) {
-=======
-	isClaude4ModelFamily: boolean = false,
-) => {
-
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
-		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
-	}
-
-  if (isClaude4ModelFamily) {
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 
@@ -1204,7 +1182,6 @@ export const SYSTEM_PROMPT_TALK = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-<<<<<<< HEAD
 	isNextGenModel: boolean = false,
 ) => {
 
@@ -1213,16 +1190,6 @@ export const SYSTEM_PROMPT_TALK = async (
 	}
 
   if (isNextGenModel) {
-=======
-	isClaude4ModelFamily: boolean = false,
-) => {
-
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
-		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
-	}
-
-  if (isClaude4ModelFamily) {
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 
@@ -1588,7 +1555,6 @@ export const SYSTEM_PROMPT_TALK_WITHOUT_MCP = async (
 	supportsBrowserUse: boolean,
 	mcpHub: McpHub,
 	browserSettings: BrowserSettings,
-<<<<<<< HEAD
 	isNextGenModel: boolean = false,
 ) => {
 
@@ -1597,16 +1563,6 @@ export const SYSTEM_PROMPT_TALK_WITHOUT_MCP = async (
 	}
 
   if (isNextGenModel) {
-=======
-	isClaude4ModelFamily: boolean = false,
-) => {
-
-	if (isClaude4ModelFamily && USE_EXPERIMENTAL_CLAUDE4_FEATURES) {
-		return SYSTEM_PROMPT_CLAUDE4_EXPERIMENTAL(cwd, supportsBrowserUse, mcpHub, browserSettings)
-	}
-
-  if (isClaude4ModelFamily) {
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
     return SYSTEM_PROMPT_CLAUDE4(cwd, supportsBrowserUse, mcpHub, browserSettings)
   }
 

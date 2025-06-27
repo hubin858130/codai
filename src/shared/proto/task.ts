@@ -6,7 +6,6 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-<<<<<<< HEAD
 import {
   BooleanRequest,
   Empty,
@@ -17,9 +16,6 @@ import {
   StringArrayRequest,
   StringRequest,
 } from "./common";
-=======
-import { Empty, EmptyRequest, Int64, Int64Request, Metadata, StringArrayRequest, StringRequest } from "./common";
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 /** Request message for creating a new task */
 export interface NewTaskRequest {
@@ -92,7 +88,6 @@ export interface AskResponseRequest {
   text: string;
   images: string[];
   files: string[];
-<<<<<<< HEAD
 }
 
 /** Request for executing a quick win task */
@@ -105,8 +100,6 @@ export interface ExecuteQuickWinRequest {
 /** Results returned when deleting all task history */
 export interface DeleteAllTaskHistoryCount {
   tasksDeleted: number;
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 function createBaseNewTaskRequest(): NewTaskRequest {
@@ -1151,7 +1144,6 @@ export const AskResponseRequest: MessageFns<AskResponseRequest> = {
   },
 };
 
-<<<<<<< HEAD
 function createBaseExecuteQuickWinRequest(): ExecuteQuickWinRequest {
   return { metadata: undefined, command: "", title: "" };
 }
@@ -1304,8 +1296,6 @@ export const DeleteAllTaskHistoryCount: MessageFns<DeleteAllTaskHistoryCount> = 
   },
 };
 
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 export type TaskServiceDefinition = typeof TaskServiceDefinition;
 export const TaskServiceDefinition = {
   name: "TaskService",
@@ -1428,7 +1418,6 @@ export const TaskServiceDefinition = {
       responseStream: false,
       options: {},
     },
-<<<<<<< HEAD
     /** Executes a quick win task with command and title */
     executeQuickWin: {
       name: "executeQuickWin",
@@ -1447,8 +1436,6 @@ export const TaskServiceDefinition = {
       responseStream: false,
       options: {},
     },
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
   },
 } as const;
 

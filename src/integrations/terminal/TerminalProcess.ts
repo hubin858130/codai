@@ -73,7 +73,6 @@ export class TerminalProcess extends EventEmitter<TerminalProcessEvents> {
 			let isFirstChunk = true
 			let didOutputNonCommand = false
 			let didEmitEmptyLine = false
-<<<<<<< HEAD
 			let receivedFirstChunk = false
 
 			// Set up a timeout to emit empty line if no output is received within 3 seconds
@@ -88,8 +87,6 @@ export class TerminalProcess extends EventEmitter<TerminalProcessEvents> {
 					this.emit("line", "[Command is running but producing no output]")
 				}
 			}, 3000) // 3 second timeout
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 			for await (let data of stream) {
 				// Clear the timeout since we received output

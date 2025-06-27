@@ -2,10 +2,7 @@ import { LINKS } from "@/constants"
 import { useExtensionState } from "@/context/ExtensionStateContext"
 import { McpServiceClient } from "@/services/grpc-client"
 import { convertProtoMcpServersToMcpServers } from "@shared/proto-conversions/mcp/mcp-server-conversion"
-<<<<<<< HEAD
 import { McpServers } from "@shared/proto/mcp"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 import { EmptyRequest } from "@shared/proto/common"
 import { AddRemoteMcpServerRequest } from "@shared/proto/mcp"
 import { VSCodeButton, VSCodeLink, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
@@ -46,11 +43,7 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 		setShowConnectingMessage(true)
 
 		try {
-<<<<<<< HEAD
 			const servers: McpServers = await McpServiceClient.addRemoteMcpServer(
-=======
-			const servers = await McpServiceClient.addRemoteMcpServer(
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				AddRemoteMcpServerRequest.create({
 					serverName: serverName.trim(),
 					serverUrl: serverUrl.trim(),
@@ -59,11 +52,7 @@ const AddRemoteServerForm = ({ onServerAdded }: { onServerAdded: () => void }) =
 
 			setIsSubmitting(false)
 
-<<<<<<< HEAD
 			const mcpServers = convertProtoMcpServersToMcpServers(servers.mcpServers)
-=======
-			const mcpServers = convertProtoMcpServersToMcpServers(servers)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			setMcpServers(mcpServers)
 
 			setServerName("")

@@ -96,11 +96,8 @@ export class TerminalManager {
 	private disposables: vscode.Disposable[] = []
 	private shellIntegrationTimeout: number = 4000
 	private terminalReuseEnabled: boolean = true
-<<<<<<< HEAD
 	private terminalOutputLineLimit: number = 500
 	private defaultTerminalProfile: string = "default"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	constructor() {
 		let disposable: vscode.Disposable | undefined
@@ -261,11 +258,7 @@ export class TerminalManager {
 
 		// If no non-busy terminal in the current working dir exists and terminal reuse is enabled, try to find any non-busy terminal regardless of CWD
 		if (this.terminalReuseEnabled) {
-<<<<<<< HEAD
 			const availableTerminal = terminals.find((t) => !t.busy && t.shellPath === expectedShellPath)
-=======
-			const availableTerminal = terminals.find((t) => !t.busy)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			if (availableTerminal) {
 				// Set up promise and tracking for CWD change
 				const cwdPromise = new Promise<void>((resolve, reject) => {
@@ -274,7 +267,6 @@ export class TerminalManager {
 				})
 
 				// Navigate back to the desired directory
-<<<<<<< HEAD
 				const cdProcess = this.runCommand(availableTerminal, `cd "${cwd}"`)
 
 				// Wait for the cd command to complete before proceeding
@@ -282,9 +274,6 @@ export class TerminalManager {
 
 				// Add a small delay to ensure terminal is ready after cd
 				await new Promise((resolve) => setTimeout(resolve, 100))
-=======
-				await this.runCommand(availableTerminal, `cd "${cwd}"`)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 				// Either resolve immediately if CWD already updated or wait for event/timeout
 				if (this.isCwdMatchingExpected(availableTerminal)) {
@@ -356,7 +345,6 @@ export class TerminalManager {
 	setTerminalReuseEnabled(enabled: boolean): void {
 		this.terminalReuseEnabled = enabled
 	}
-<<<<<<< HEAD
 
 	setTerminalOutputLineLimit(limit: number): void {
 		this.terminalOutputLineLimit = limit
@@ -470,6 +458,4 @@ export class TerminalManager {
 	closeAllTerminals(): number {
 		return this.closeTerminals(() => true, true)
 	}
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

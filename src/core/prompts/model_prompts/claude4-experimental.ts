@@ -128,14 +128,10 @@ ${
 					const config = JSON.parse(server.config)
 
 					return (
-<<<<<<< HEAD
 						`## ${server.name}` +
 						(config.command
 							? ` (\`${config.command}${config.args && Array.isArray(config.args) ? ` ${config.args.join(" ")}` : ""}\`)`
 							: "") +
-=======
-						`## ${server.name} (\`${config.command}${config.args && Array.isArray(config.args) ? ` ${config.args.join(" ")}` : ""}\`)` +
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 						(tools ? `\n\n### Available Tools\n${tools}` : "") +
 						(templates ? `\n\n### Resource Templates\n${templates}` : "") +
 						(resources ? `\n\n### Direct Resources\n${resources}` : "")

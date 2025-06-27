@@ -12,11 +12,7 @@ import { convertProtoMcpServersToMcpServers } from "@shared/proto-conversions/mc
 import { EmptyRequest } from "@shared/proto/common"
 
 const ServersToggleModal: React.FC = () => {
-<<<<<<< HEAD
 	const { mcpServers, navigateToMcp, setMcpServers } = useExtensionState()
-=======
-	const { mcpServers, navigateToMcp } = useExtensionState()
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const [isVisible, setIsVisible] = useState(false)
 	const buttonRef = useRef<HTMLDivElement>(null)
 	const modalRef = useRef<HTMLDivElement>(null)

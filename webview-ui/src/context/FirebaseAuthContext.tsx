@@ -4,11 +4,8 @@ import { EmptyRequest } from "@shared/proto/common"
 import { initializeApp } from "firebase/app"
 import { User, getAuth, signInWithCustomToken, signOut } from "firebase/auth"
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react"
-<<<<<<< HEAD
 import { useExtensionState } from "./ExtensionStateContext"
 import { AuthStateChanged, AuthStateChangedRequest } from "@shared/proto/account"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 // Firebase configuration from extension
 const firebaseConfig = {

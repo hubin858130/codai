@@ -1,22 +1,14 @@
 import { SVGProps } from "react"
 
 /**
-<<<<<<< HEAD
  * ClineLogoVariable component renders the codai logo with automatic theme adaptation.
-=======
- * ClineLogoVariable component renders the Cline logo with automatic theme adaptation.
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
  *
  * This component uses the VS Code theme variable `--vscode-icon-foreground` for the fill color,
  * which automatically adjusts based on the active VS Code theme (light, dark, high contrast)
  * to ensure optimal contrast with the background.
  *
  * @param {SVGProps<SVGSVGElement>} props - Standard SVG props including className, style, etc.
-<<<<<<< HEAD
  * @returns {JSX.Element} SVG codai logo that adapts to VS Code themes
-=======
- * @returns {JSX.Element} SVG Cline logo that adapts to VS Code themes
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
  */
 const ClineLogoVariable = (props: SVGProps<SVGSVGElement>) => (
 	<svg xmlns="http://www.w3.org/2000/svg" width="47" height="50" viewBox="0 0 47 50" fill="none" {...props}>

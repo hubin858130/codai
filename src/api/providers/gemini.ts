@@ -97,11 +97,7 @@ export class GeminiHandler implements ApiHandler {
 		}
 
 		// Add thinking config if the model supports it
-<<<<<<< HEAD
 		if (thinkingBudget > 0) {
-=======
-		if (info.thinkingConfig?.outputPrice !== undefined && maxBudget > 0) {
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			requestConfig.thinkingConfig = {
 				thinkingBudget: thinkingBudget,
 				includeThoughts: true,
@@ -117,10 +113,7 @@ export class GeminiHandler implements ApiHandler {
 		let promptTokens = 0
 		let outputTokens = 0
 		let cacheReadTokens = 0
-<<<<<<< HEAD
 		let thoughtsTokenCount = 0 // Initialize thought token counts
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		let lastUsageMetadata: GenerateContentResponseUsageMetadata | undefined
 
 		try {
@@ -140,7 +133,6 @@ export class GeminiHandler implements ApiHandler {
 					isFirstSdkChunk = false
 				}
 
-<<<<<<< HEAD
 				// Handle thinking content from Gemini's response
 				const candidateForThoughts = chunk?.candidates?.[0]
 				const partsForThoughts = candidateForThoughts?.content?.parts
@@ -166,8 +158,6 @@ export class GeminiHandler implements ApiHandler {
 					thoughts = "" // Reset thoughts after yielding
 				}
 
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				if (chunk.text) {
 					yield {
 						type: "text",
@@ -179,10 +169,7 @@ export class GeminiHandler implements ApiHandler {
 					lastUsageMetadata = chunk.usageMetadata
 					promptTokens = lastUsageMetadata.promptTokenCount ?? promptTokens
 					outputTokens = lastUsageMetadata.candidatesTokenCount ?? outputTokens
-<<<<<<< HEAD
 					thoughtsTokenCount = lastUsageMetadata.thoughtsTokenCount ?? thoughtsTokenCount
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					cacheReadTokens = lastUsageMetadata.cachedContentTokenCount ?? cacheReadTokens
 				}
 			}
@@ -193,22 +180,14 @@ export class GeminiHandler implements ApiHandler {
 					info,
 					inputTokens: promptTokens,
 					outputTokens,
-<<<<<<< HEAD
 					thoughtsTokenCount,
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					cacheReadTokens,
 				})
 				yield {
 					type: "usage",
-<<<<<<< HEAD
 					inputTokens: promptTokens - cacheReadTokens,
 					outputTokens,
 					thoughtsTokenCount,
-=======
-					inputTokens: promptTokens,
-					outputTokens,
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 					cacheReadTokens,
 					cacheWriteTokens: 0,
 					totalCost,
@@ -291,19 +270,13 @@ export class GeminiHandler implements ApiHandler {
 		info,
 		inputTokens,
 		outputTokens,
-<<<<<<< HEAD
 		thoughtsTokenCount = 0,
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		cacheReadTokens = 0,
 	}: {
 		info: ModelInfo
 		inputTokens: number
 		outputTokens: number
-<<<<<<< HEAD
 		thoughtsTokenCount: number
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		cacheReadTokens?: number
 	}) {
 		// Exit early if any required pricing information is missing
@@ -335,30 +308,18 @@ export class GeminiHandler implements ApiHandler {
 		const inputTokensCost = inputPrice * (uncachedInputTokens / 1_000_000)
 
 		// 2. Output token costs
-<<<<<<< HEAD
 		const responseTokensCost = outputPrice * ((outputTokens + thoughtsTokenCount) / 1_000_000)
-=======
-		const outputTokensCost = outputPrice * (outputTokens / 1_000_000)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 		// 3. Cache read costs (immediate)
 		const cacheReadCost = (cacheReadTokens ?? 0) > 0 ? cacheReadsPrice * ((cacheReadTokens ?? 0) / 1_000_000) : 0
 
 		// Calculate total immediate cost (excluding cache write/storage costs)
-<<<<<<< HEAD
 		const totalCost = inputTokensCost + responseTokensCost + cacheReadCost
-=======
-		const totalCost = inputTokensCost + outputTokensCost + cacheReadCost
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 		// Create the trace object for debugging
 		const trace: Record<string, { price: number; tokens: number; cost: number }> = {
 			input: { price: inputPrice, tokens: uncachedInputTokens, cost: inputTokensCost },
-<<<<<<< HEAD
 			output: { price: outputPrice, tokens: outputTokens, cost: responseTokensCost },
-=======
-			output: { price: outputPrice, tokens: outputTokens, cost: outputTokensCost },
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 		}
 
 		// Only include cache read costs in the trace (cache write costs are tracked separately)

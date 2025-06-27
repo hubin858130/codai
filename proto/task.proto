@@ -33,13 +33,10 @@ service TaskService {
   rpc taskFeedback(StringRequest) returns (Empty);
   // Shows task completion changes diff in a view
   rpc taskCompletionViewChanges(Int64Request) returns (Empty);
-<<<<<<< HEAD
   // Executes a quick win task with command and title
   rpc executeQuickWin(ExecuteQuickWinRequest) returns (Empty);
   // Deletes all task history
   rpc deleteAllTaskHistory(BooleanRequest) returns (DeleteAllTaskHistoryCount);
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // Request message for creating a new task
@@ -113,7 +110,6 @@ message AskResponseRequest {
   string text = 3;
   repeated string images = 4;
   repeated string files = 5;
-<<<<<<< HEAD
 }
 
 // Request for executing a quick win task
@@ -126,6 +122,4 @@ message ExecuteQuickWinRequest {
 // Results returned when deleting all task history
 message DeleteAllTaskHistoryCount {
   int32 tasks_deleted = 1;
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }

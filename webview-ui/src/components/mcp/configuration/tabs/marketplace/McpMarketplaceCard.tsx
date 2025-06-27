@@ -1,16 +1,10 @@
 import { McpServiceClient } from "@/services/grpc-client"
 import { McpMarketplaceItem, McpServer } from "@shared/mcp"
 import { StringRequest } from "@shared/proto/common"
-<<<<<<< HEAD
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useEvent } from "react-use"
 import styled from "styled-components"
 import { useExtensionState } from "@/context/ExtensionStateContext"
-=======
-import { useCallback, useMemo, useRef, useState } from "react"
-import { useEvent } from "react-use"
-import styled from "styled-components"
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 interface McpMarketplaceCardProps {
 	item: McpMarketplaceItem

@@ -22,7 +22,6 @@ import { WebviewProviderType as WebviewProviderTypeEnum } from "@shared/proto/ui
 import { WebviewProviderType } from "./shared/webview/types"
 import { sendHistoryButtonClickedEvent } from "./core/controller/ui/subscribeToHistoryButtonClicked"
 import { sendAccountButtonClickedEvent } from "./core/controller/ui/subscribeToAccountButtonClicked"
-<<<<<<< HEAD
 import {
 	migratePlanActGlobalToWorkspaceStorage,
 	migrateCustomInstructionsToGlobalRules,
@@ -35,8 +34,6 @@ import * as hostProviders from "@hosts/host-providers"
 import { vscodeHostBridgeClient } from "@/hosts/vscode/client/host-grpc-client"
 import { VscodeWebviewProvider } from "./core/webview/VscodeWebviewProvider"
 import { ExtensionContext } from "vscode"
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 // 使用try-catch包裹导入语句，防止模块加载失败导致整个扩展崩溃//huqb
 let ContinueCompletionProvider: any = null
 let useOriginal = false
@@ -108,7 +105,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	Logger.initialize(outputChannel)
 	Logger.log("Codai extension activated")
 
-<<<<<<< HEAD
 	maybeSetupHostProviders(context)
 
 	// Migrate global storage values to workspace storage (one-time cleanup)
@@ -127,12 +123,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	const currentVersion = context.extension.packageJSON.version
 	const previousVersion = context.globalState.get<string>("codaiVersion")
 	const sidebarWebview = hostProviders.createWebviewProvider(WebviewProviderType.SIDEBAR)
-=======
-	// Version checking for autoupdate notification
-	const currentVersion = context.extension.packageJSON.version
-	const previousVersion = context.globalState.get<string>("codaiVersion")
-	const sidebarWebview = new WebviewProvider(context, outputChannel, WebviewProviderType.SIDEBAR)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	// Initialize test mode and add disposables to context
 	context.subscriptions.push(...initializeTestMode(context, sidebarWebview))
@@ -159,7 +149,6 @@ export async function activate(context: vscode.ExtensionContext) {
 				vscode.window.showInformationMessage(message)
 				// Record that we've shown the popup for this version.
 				await context.globalState.update("codaiLastPopupNotificationVersion", currentVersion)
-<<<<<<< HEAD
 			}
 			// Always update the main version tracker for the next launch.
 			await context.globalState.update("codaiVersion", currentVersion)
@@ -305,188 +294,6 @@ export async function activate(context: vscode.ExtensionContext) {
 				const tabInstances = WebviewProvider.getTabInstances()
 				for (const instance of tabInstances) {
 					sendAccountButtonClickedEvent(instance.controller.id)
-=======
-			}
-			// Always update the main version tracker for the next launch.
-			await context.globalState.update("codaiVersion", currentVersion)
-		}
-	} catch (error) {
-		const errorMessage = error instanceof Error ? error.message : String(error)
-		console.error(`Error during post-update actions: ${errorMessage}, Stack trace: ${error.stack}`)
-	}
-
-	// backup id in case vscMachineID doesn't work
-	let installId = context.globalState.get<string>("installId")
-
-	if (!installId) {
-		installId = uuidv4()
-		await context.globalState.update("installId", installId)
-	}
-
-	telemetryService.captureExtensionActivated(installId)
-
-	context.subscriptions.push(
-		vscode.commands.registerCommand("codai.plusButtonClicked", async (webview: any) => {
-			console.log("[DEBUG] plusButtonClicked", webview)
-			// Pass the webview type to the event sender
-			const isSidebar = !webview
-
-			const openChat = async (instance: WebviewProvider) => {
-				await instance?.controller.clearTask()
-				await instance?.controller.postStateToWebview()
-				await sendChatButtonClickedEvent(instance.controller.id)
-			}
-
-			if (isSidebar) {
-				const sidebarInstance = WebviewProvider.getSidebarInstance()
-				if (sidebarInstance) {
-					openChat(sidebarInstance)
-					// Send event to the sidebar instance
-				}
-			} else {
-				const tabInstances = WebviewProvider.getTabInstances()
-				for (const instance of tabInstances) {
-					openChat(instance)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
-				}
-			}
-		}),
-	)
-
-<<<<<<< HEAD
-	/*
-	We use the text document content provider API to show the left side for diff view by creating a virtual document for the original content. This makes it readonly so users know to edit the right side if they want to keep their changes.
-
-	- This API allows you to create readonly documents in VSCode from arbitrary sources, and works by claiming an uri-scheme for which your provider then returns text contents. The scheme must be provided when registering a provider and cannot change afterwards.
-	- Note how the provider doesn't create uris for virtual documents - its role is to provide contents given such an uri. In return, content providers are wired into the open document logic so that providers are always considered.
-	https://code.visualstudio.com/api/extension-guides/virtual-documents
-	*/
-	const diffContentProvider = new (class implements vscode.TextDocumentContentProvider {
-		provideTextDocumentContent(uri: vscode.Uri): string {
-			return Buffer.from(uri.query, "base64").toString("utf-8")
-		}
-	})()
-	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider(DIFF_VIEW_URI_SCHEME, diffContentProvider))
-
-	// URI Handler
-	const handleUri = async (uri: vscode.Uri) => {
-		console.log("URI Handler called with:", {
-			path: uri.path,
-			query: uri.query,
-			scheme: uri.scheme,
-		})
-
-		const path = uri.path
-		const query = new URLSearchParams(uri.query.replace(/\+/g, "%2B"))
-		const visibleWebview = WebviewProvider.getVisibleInstance()
-		if (!visibleWebview) {
-			return
-		}
-		switch (path) {
-			case "/openrouter": {
-				const code = query.get("code")
-				if (code) {
-					await visibleWebview?.controller.handleOpenRouterCallback(code)
-				}
-				break
-			}
-			case "/auth": {
-				const token = query.get("token")
-				const state = query.get("state")
-				const apiKey = query.get("apiKey")
-
-				console.log("Auth callback received:", {
-					token: token,
-					state: state,
-					apiKey: apiKey,
-				})
-
-=======
-	context.subscriptions.push(
-		vscode.commands.registerCommand("codai.mcpButtonClicked", (webview: any) => {
-			console.log("[DEBUG] mcpButtonClicked", webview)
-			// Pass the webview type to the event sender
-			const isSidebar = !webview
-			const webviewType = isSidebar ? WebviewProviderTypeEnum.SIDEBAR : WebviewProviderTypeEnum.TAB
-
-			// Will send to appropriate subscribers based on the source webview type
-			sendMcpButtonClickedEvent(webviewType)
-		}),
-	)
-
-	const openClineInNewTab = async () => {
-		Logger.log("Opening Cline in new tab")
-		// (this example uses webviewProvider activation event which is necessary to deserialize cached webview, but since we use retainContextWhenHidden, we don't need to use that event)
-		// https://github.com/microsoft/vscode-extension-samples/blob/main/webview-sample/src/extension.ts
-		const tabWebview = new WebviewProvider(context, outputChannel, WebviewProviderType.TAB)
-		//const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined
-		const lastCol = Math.max(...vscode.window.visibleTextEditors.map((editor) => editor.viewColumn || 0))
-
-		// Check if there are any visible text editors, otherwise open a new group to the right
-		const hasVisibleEditors = vscode.window.visibleTextEditors.length > 0
-		if (!hasVisibleEditors) {
-			await vscode.commands.executeCommand("workbench.action.newGroupRight")
-		}
-		const targetCol = hasVisibleEditors ? Math.max(lastCol + 1, 1) : vscode.ViewColumn.Two
-
-		const panel = vscode.window.createWebviewPanel(WebviewProvider.tabPanelId, "Codai", targetCol, {
-			enableScripts: true,
-			retainContextWhenHidden: true,
-			localResourceRoots: [context.extensionUri],
-		})
-		// TODO: use better svg icon with light and dark variants (see https://stackoverflow.com/questions/58365687/vscode-extension-iconpath)
-
-		panel.iconPath = {
-			light: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "robot_panel_light.png"),
-			dark: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "robot_panel_dark.png"),
-		}
-		tabWebview.resolveWebviewView(panel)
-
-		// Lock the editor group so clicking on files doesn't open them over the panel
-		await setTimeoutPromise(100)
-		await vscode.commands.executeCommand("workbench.action.lockEditorGroup")
-	}
-
-	context.subscriptions.push(vscode.commands.registerCommand("codai.popoutButtonClicked", openClineInNewTab))
-	context.subscriptions.push(vscode.commands.registerCommand("codai.openInNewTab", openClineInNewTab))
-
-	context.subscriptions.push(
-		vscode.commands.registerCommand("codai.settingsButtonClicked", (webview: any) => {
-			const isSidebar = !webview
-			const webviewType = isSidebar ? WebviewProviderTypeEnum.SIDEBAR : WebviewProviderTypeEnum.TAB
-
-			sendSettingsButtonClickedEvent(webviewType)
-		}),
-	)
-
-	context.subscriptions.push(
-		vscode.commands.registerCommand("codai.historyButtonClicked", async (webview: any) => {
-			console.log("[DEBUG] historyButtonClicked", webview)
-			// Pass the webview type to the event sender
-			const isSidebar = !webview
-			const webviewType = isSidebar ? WebviewProviderTypeEnum.SIDEBAR : WebviewProviderTypeEnum.TAB
-
-			// Send event to all subscribers using the gRPC streaming method
-			await sendHistoryButtonClickedEvent(webviewType)
-		}),
-	)
-
-	context.subscriptions.push(
-		vscode.commands.registerCommand("codai.accountButtonClicked", (webview: any) => {
-			console.log("[DEBUG] accountButtonClicked", webview)
-
-			const isSidebar = !webview
-			if (isSidebar) {
-				const sidebarInstance = WebviewProvider.getSidebarInstance()
-				if (sidebarInstance) {
-					// Send event to sidebar controller
-					sendAccountButtonClickedEvent(sidebarInstance.controller.id)
-				}
-			} else {
-				// Send to all tab instances
-				const tabInstances = WebviewProvider.getTabInstances()
-				for (const instance of tabInstances) {
-					sendAccountButtonClickedEvent(instance.controller.id)
 				}
 			}
 		}),
@@ -539,7 +346,6 @@ export async function activate(context: vscode.ExtensionContext) {
 					apiKey: apiKey,
 				})
 
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				// Validate state parameter
 				if (!(await visibleWebview?.controller.validateAuthState(state))) {
 					vscode.window.showErrorMessage("Invalid auth state")
@@ -826,13 +632,8 @@ export async function activate(context: vscode.ExtensionContext) {
 			let activeWebviewProvider: WebviewProvider | undefined = WebviewProvider.getVisibleInstance()
 
 			// If a tab is visible and active, ensure it's fully revealed (might be redundant but safe)
-<<<<<<< HEAD
 			if (activeWebviewProvider?.getWebview() && activeWebviewProvider.getWebview().hasOwnProperty("reveal")) {
 				const panelView = activeWebviewProvider.getWebview() as vscode.WebviewPanel
-=======
-			if (activeWebviewProvider?.view && activeWebviewProvider.view.hasOwnProperty("reveal")) {
-				const panelView = activeWebviewProvider.view as vscode.WebviewPanel
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				panelView.reveal(panelView.viewColumn)
 			} else if (!activeWebviewProvider) {
 				// No webview is currently visible, try to activate the sidebar
@@ -846,13 +647,8 @@ export async function activate(context: vscode.ExtensionContext) {
 					const tabInstances = WebviewProvider.getTabInstances()
 					if (tabInstances.length > 0) {
 						const potentialTabInstance = tabInstances[tabInstances.length - 1] // Get the most recent one
-<<<<<<< HEAD
 						if (potentialTabInstance.getWebview() && potentialTabInstance.getWebview().hasOwnProperty("reveal")) {
 							const panelView = potentialTabInstance.getWebview() as vscode.WebviewPanel
-=======
-						if (potentialTabInstance.view && potentialTabInstance.view.hasOwnProperty("reveal")) {
-							const panelView = potentialTabInstance.view as vscode.WebviewPanel
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							panelView.reveal(panelView.viewColumn)
 							activeWebviewProvider = potentialTabInstance
 						}
@@ -868,17 +664,12 @@ export async function activate(context: vscode.ExtensionContext) {
 						() => {
 							const visibleInstance = WebviewProvider.getVisibleInstance()
 							// Ensure a boolean is returned
-<<<<<<< HEAD
 							return !!(visibleInstance?.getWebview() && visibleInstance.getWebview().hasOwnProperty("reveal"))
-=======
-							return !!(visibleInstance?.view && visibleInstance.view.hasOwnProperty("reveal"))
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 						},
 						{ timeout: 2000 },
 					)
 					activeWebviewProvider = WebviewProvider.getVisibleInstance()
 				}
-<<<<<<< HEAD
 			}
 			// At this point, activeWebviewProvider should be the one we want to send the message to.
 			// It could still be undefined if opening a new tab failed or timed out.
@@ -892,22 +683,6 @@ export async function activate(context: vscode.ExtensionContext) {
 					"Could not activate Cline view. Please try opening it manually from the Activity Bar.",
 				)
 			}
-=======
-			}
-			// At this point, activeWebviewProvider should be the one we want to send the message to.
-			// It could still be undefined if opening a new tab failed or timed out.
-			if (activeWebviewProvider) {
-				activeWebviewProvider.controller.postMessageToWebview({
-					type: "action",
-					action: "focusChatInput",
-				})
-			} else {
-				console.error("FocusChatInput: Could not find or activate a Cline webview to focus.")
-				vscode.window.showErrorMessage(
-					"Could not activate Cline view. Please try opening it manually from the Activity Bar.",
-				)
-			}
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			telemetryService.captureButtonClick("command_focusChatInput", activeWebviewProvider?.controller.task?.taskId, true)
 		}),
 	)
@@ -924,22 +699,14 @@ export async function activate(context: vscode.ExtensionContext) {
 			} else {
 				// Create a temporary controller just for this operation
 				const outputChannel = vscode.window.createOutputChannel("Codai Commit Generator")
-<<<<<<< HEAD
 				const tempController = new Controller(context, outputChannel, () => Promise.resolve(true), uuidv4())
-=======
-				const tempController = new Controller(context, outputChannel, () => Promise.resolve(true))
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 				await tempController.generateGitCommitMessage()
 				outputChannel.dispose()
 			}
 		}),
 	)
-<<<<<<< HEAD
 	
-=======
-
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	// 如果成功加载了ContinueCompletionProvider，则注册它
 	if (ContinueCompletionProvider) {
 		try {
@@ -956,7 +723,6 @@ export async function activate(context: vscode.ExtensionContext) {
 	}
 
 	return createClineAPI(outputChannel, sidebarWebview.controller)
-<<<<<<< HEAD
 }
 
 function maybeSetupHostProviders(context: ExtensionContext) {
@@ -967,8 +733,6 @@ function maybeSetupHostProviders(context: ExtensionContext) {
 		}
 		hostProviders.initializeHostProviders(createWebview, vscodeHostBridgeClient)
 	}
-=======
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 }
 
 // TODO: Find a solution for automatically removing DEV related content from production builds.

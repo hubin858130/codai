@@ -98,7 +98,6 @@ export const MAX_IMAGES_AND_FILES_PER_MESSAGE = 20
 const QUICK_WINS_HISTORY_THRESHOLD = 300
 
 const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryView }: ChatViewProps) => {
-<<<<<<< HEAD
 	const {
 		version,
 		clineMessages: messages,
@@ -107,9 +106,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 		telemetrySetting,
 		navigateToChat,
 	} = useExtensionState()
-=======
-	const { version, clineMessages: messages, taskHistory, apiConfiguration, telemetrySetting } = useExtensionState()
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 	const shouldShowQuickWins = false // !taskHistory || taskHistory.length < QUICK_WINS_HISTORY_THRESHOLD
 	//const task = messages.length > 0 ? (messages[0].say === "task" ? messages[0] : undefined) : undefined) : undefined
 	const task = useMemo(() => messages.at(0), [messages]) // leaving this less safe version here since if the first message is not a task, then the extension is in a bad state and needs to be debugged (see Cline.abort)
@@ -150,96 +146,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 	const [showScrollToBottom, setShowScrollToBottom] = useState(false)
 	const [isAtBottom, setIsAtBottom] = useState(false)
 	const [pendingScrollToMessage, setPendingScrollToMessage] = useState<number | null>(null)
-<<<<<<< HEAD
-=======
-
-	useEffect(() => {
-		const handleCopy = async (e: ClipboardEvent) => {
-			const targetElement = e.target as HTMLElement | null
-			// If the copy event originated from an input or textarea,
-			// let the default browser behavior handle it.
-			if (
-				targetElement &&
-				(targetElement.tagName === "INPUT" || targetElement.tagName === "TEXTAREA" || targetElement.isContentEditable)
-			) {
-				return
-			}
-
-			if (window.getSelection) {
-				const selection = window.getSelection()
-				if (selection && selection.rangeCount > 0) {
-					const range = selection.getRangeAt(0)
-					const commonAncestor = range.commonAncestorContainer
-					let textToCopy: string | null = null
-
-					// Check if the selection is inside an element where plain text copy is preferred
-					let currentElement =
-						commonAncestor.nodeType === Node.ELEMENT_NODE
-							? (commonAncestor as HTMLElement)
-							: commonAncestor.parentElement
-					let preferPlainTextCopy = false
-					while (currentElement) {
-						if (currentElement.tagName === "PRE" && currentElement.querySelector("code")) {
-							preferPlainTextCopy = true
-							break
-						}
-						// Check computed white-space style
-						const computedStyle = window.getComputedStyle(currentElement)
-						if (
-							computedStyle.whiteSpace === "pre" ||
-							computedStyle.whiteSpace === "pre-wrap" ||
-							computedStyle.whiteSpace === "pre-line"
-						) {
-							// If the element itself or an ancestor has pre-like white-space,
-							// and the selection is likely contained within it, prefer plain text.
-							// This helps with elements like the TaskHeader's text display.
-							preferPlainTextCopy = true
-							break
-						}
-
-						// Stop searching if we reach a known chat message boundary or body
-						if (
-							currentElement.classList.contains("chat-row-assistant-message-container") ||
-							currentElement.classList.contains("chat-row-user-message-container") ||
-							currentElement.tagName === "BODY"
-						) {
-							break
-						}
-						currentElement = currentElement.parentElement
-					}
-
-					if (preferPlainTextCopy) {
-						// For code blocks or elements with pre-formatted white-space, get plain text.
-						textToCopy = selection.toString()
-					} else {
-						// For other content, use the existing HTML-to-Markdown conversion
-						const clonedSelection = range.cloneContents()
-						const div = document.createElement("div")
-						div.appendChild(clonedSelection)
-						const selectedHtml = div.innerHTML
-						textToCopy = await convertHtmlToMarkdown(selectedHtml)
-					}
-
-					if (textToCopy !== null) {
-						try {
-							FileServiceClient.copyToClipboard(StringRequest.create({ value: textToCopy })).catch((err) => {
-								console.error("Error copying to clipboard:", err)
-							})
-							e.preventDefault()
-						} catch (error) {
-							console.error("Error copying to clipboard:", error)
-						}
-					}
-				}
-			}
-		}
-		document.addEventListener("copy", handleCopy)
-
-		return () => {
-			document.removeEventListener("copy", handleCopy)
-		}
-	}, [])
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	// UI layout depends on the last 2 messages
 	// (since it relies on the content of these messages, we are deep comparing. i.e. the button state after hitting button sets enableButtons to false, and this effect otherwise would have to true again even if messages didn't change
@@ -346,60 +252,36 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					switch (lastMessage.ask) {
 						case "api_req_failed":
 							setSendingDisabled(true)
-<<<<<<< HEAD
-=======
-							setClineAsk("api_req_failed")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(true)
 							setPrimaryButtonText("Retry")
 							setSecondaryButtonText("Start New Task")
 							break
 						case "mistake_limit_reached":
 							setSendingDisabled(false)
-<<<<<<< HEAD
-=======
-							setClineAsk("mistake_limit_reached")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(true)
 							setPrimaryButtonText("Proceed Anyways")
 							setSecondaryButtonText("Start New Task")
 							break
 						case "auto_approval_max_req_reached":
 							setSendingDisabled(true)
-<<<<<<< HEAD
-=======
-							setClineAsk("auto_approval_max_req_reached")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(true)
 							setPrimaryButtonText("Proceed")
 							setSecondaryButtonText("Start New Task")
 							break
 						case "followup":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("followup")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(false)
 							// setPrimaryButtonText(undefined)
 							// setSecondaryButtonText(undefined)
 							break
 						case "plan_mode_respond":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("plan_mode_respond")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(false)
 							// setPrimaryButtonText(undefined)
 							// setSecondaryButtonText(undefined)
 							break
 						case "tool":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("tool")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							const tool = JSON.parse(lastMessage.text || "{}") as ClineSayTool
 							switch (tool.tool) {
@@ -416,40 +298,24 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							break
 						case "browser_action_launch":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("browser_action_launch")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							setPrimaryButtonText("Approve")
 							setSecondaryButtonText("Reject")
 							break
 						case "command":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("command")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							setPrimaryButtonText("Run Command")
 							setSecondaryButtonText("Reject")
 							break
 						case "command_output":
 							setSendingDisabled(false)
-<<<<<<< HEAD
-=======
-							setClineAsk("command_output")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(true)
 							setPrimaryButtonText("Proceed While Running")
 							setSecondaryButtonText(undefined)
 							break
 						case "use_mcp_server":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("use_mcp_server")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							setPrimaryButtonText("Approve")
 							setSecondaryButtonText("Reject")
@@ -457,20 +323,12 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 						case "completion_result":
 							// extension waiting for feedback. but we can just present a new task button
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("completion_result")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							setPrimaryButtonText("Start New Task")
 							setSecondaryButtonText(undefined)
 							break
 						case "resume_task":
 							setSendingDisabled(false)
-<<<<<<< HEAD
-=======
-							setClineAsk("resume_task")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(true)
 							setPrimaryButtonText("Resume Task")
 							setSecondaryButtonText(undefined)
@@ -478,10 +336,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							break
 						case "resume_completed_task":
 							setSendingDisabled(false)
-<<<<<<< HEAD
-=======
-							setClineAsk("resume_completed_task")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(true)
 							setPrimaryButtonText("Start New Task")
 							setSecondaryButtonText(undefined)
@@ -489,30 +343,18 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 							break
 						case "new_task":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("new_task")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							setPrimaryButtonText("Start New Task with Context")
 							setSecondaryButtonText(undefined)
 							break
 						case "condense":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("condense")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							setPrimaryButtonText("Condense Conversation")
 							setSecondaryButtonText(undefined)
 							break
 						case "report_bug":
 							setSendingDisabled(isPartial)
-<<<<<<< HEAD
-=======
-							setClineAsk("report_bug")
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 							setEnableButtons(!isPartial)
 							setPrimaryButtonText("Report GitHub issue")
 							setSecondaryButtonText(undefined)
@@ -529,10 +371,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 								setSendingDisabled(true)
 								setSelectedImages([])
 								setSelectedFiles([])
-<<<<<<< HEAD
-=======
-								setClineAsk(undefined)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 								setEnableButtons(false)
 							}
 							break
@@ -568,10 +406,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 	useEffect(() => {
 		if (messages.length === 0) {
 			setSendingDisabled(false)
-<<<<<<< HEAD
-=======
-			setClineAsk(undefined)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			setEnableButtons(false)
 			setPrimaryButtonText("Approve")
 			setSecondaryButtonText("Reject")
@@ -656,10 +490,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 				setSendingDisabled(true)
 				setSelectedImages([])
 				setSelectedFiles([])
-<<<<<<< HEAD
-=======
-				setClineAsk(undefined)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 				setEnableButtons(false)
 				// setPrimaryButtonText(undefined)
 				// setSecondaryButtonText(undefined)
@@ -739,10 +569,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					break
 			}
 			setSendingDisabled(true)
-<<<<<<< HEAD
-=======
-			setClineAsk(undefined)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			setEnableButtons(false)
 			// setPrimaryButtonText(undefined)
 			// setSecondaryButtonText(undefined)
@@ -795,10 +621,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					break
 			}
 			setSendingDisabled(true)
-<<<<<<< HEAD
-=======
-			setClineAsk(undefined)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 			setEnableButtons(false)
 			// setPrimaryButtonText(undefined)
 			// setSecondaryButtonText(undefined)
@@ -841,7 +663,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 					if (imagesToAdd > 0) {
 						setSelectedImages((prevImages) => [...prevImages, ...response.values1.slice(0, imagesToAdd)])
 					}
-<<<<<<< HEAD
 
 					// Use remaining slots for files
 					const remainingSlots = availableSlots - imagesToAdd
@@ -872,49 +693,6 @@ const ChatView = ({ isHidden, showAnnouncement, hideAnnouncement, showHistoryVie
 			window.removeEventListener("focusChatInput", handleFocusChatInput)
 		}
 	}, [isHidden])
-=======
-
-					// Use remaining slots for files
-					const remainingSlots = availableSlots - imagesToAdd
-					if (remainingSlots > 0) {
-						setSelectedFiles((prevFiles) => [...prevFiles, ...response.values2.slice(0, remainingSlots)])
-					}
-				}
-			}
-		} catch (error) {
-			console.error("Error selecting images & files:", error)
-		}
-	}, [selectedModelInfo.supportsImages])
-
-	const shouldDisableFilesAndImages = selectedImages.length + selectedFiles.length >= MAX_IMAGES_AND_FILES_PER_MESSAGE
-
-	const handleMessage = useCallback(
-		(e: MessageEvent) => {
-			const message: ExtensionMessage = e.data
-			switch (message.type) {
-				case "action":
-					switch (message.action!) {
-						case "didBecomeVisible":
-							if (!isHidden && !sendingDisabled && !enableButtons) {
-								textAreaRef.current?.focus()
-							}
-							break
-						case "focusChatInput":
-							textAreaRef.current?.focus()
-							if (isHidden) {
-								window.dispatchEvent(new CustomEvent("chatButtonClicked"))
-							}
-							break
-					}
-					break
-			}
-			// textAreaRef.current is not explicitly required here since react guarantees that ref will be stable across re-renders, and we're not using its value but its reference.
-		},
-		[isHidden, sendingDisabled, enableButtons, handleSendMessage, handlePrimaryButtonClick, handleSecondaryButtonClick],
-	)
-
-	useEvent("message", handleMessage)
->>>>>>> 16bc1c863785d2e3350bd9c2baa4bc31be43087d
 
 	// Set up addToInput subscription
 	useEffect(() => {
