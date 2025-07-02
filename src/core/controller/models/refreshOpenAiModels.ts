@@ -3,6 +3,7 @@ import { OpenAiModelsRequest } from "../../../shared/proto/models"
 import { StringArray } from "../../../shared/proto/common"
 import axios from "axios"
 import type { AxiosRequestConfig } from "axios"
+import { EncryptUtil, getPluginVersion } from "@/utils/encrypt"
 
 /**
  * Fetches available models from the OpenAI API
@@ -22,7 +23,11 @@ export async function refreshOpenAiModels(controller: Controller, request: OpenA
 
 		const config: AxiosRequestConfig = {}
 		if (request.apiKey) {
-			config["headers"] = { Authorization: `Bearer ${request.apiKey}` }
+			config["headers"] = {
+				Authorization: `Bearer ${request.apiKey}`,
+				"X-Codee-Token": EncryptUtil.encrypt(request.apiKey ?? ""),
+				"X-Codee-Ver": "CodeeVsCodeExtension/" + getPluginVersion(),
+			}
 		}
 
 		const response = await axios.get(`${request.baseUrl}/models`, config)

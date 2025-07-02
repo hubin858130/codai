@@ -2,12 +2,14 @@ import { ApiConfiguration, azureOpenAiDefaultApiVersion, openAiModelInfoSaneDefa
 import { OpenAiModelsRequest } from "@shared/proto/models"
 import { ModelsServiceClient } from "@/services/grpc-client"
 import { getAsVar, VSC_DESCRIPTION_FOREGROUND } from "@/utils/vscStyles"
-import { VSCodeTextField, VSCodeButton, VSCodeCheckbox } from "@vscode/webview-ui-toolkit/react"
+import { VSCodeTextField, VSCodeButton, VSCodeCheckbox, VSCodeRadioGroup, VSCodeRadio } from "@vscode/webview-ui-toolkit/react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ModelInfoView } from "../common/ModelInfoView"
 import { ApiKeyField } from "../common/ApiKeyField"
 import { BaseUrlField } from "../common/BaseUrlField"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
+import { StringArray } from "@shared/proto/common"
+import { useExtensionState } from "@/context/ExtensionStateContext"
 
 /**
  * Props for the OpenAICompatibleProvider component
@@ -28,6 +30,7 @@ export const OpenAICompatibleProvider = ({
 	showModelOptions,
 	isPopup,
 }: OpenAICompatibleProviderProps) => {
+	const extensionState = useExtensionState()
 	const [modelConfigurationSelected, setModelConfigurationSelected] = useState(false)
 
 	// Get the normalized configuration
@@ -44,22 +47,37 @@ export const OpenAICompatibleProvider = ({
 		}
 	}, [])
 
-	const debouncedRefreshOpenAiModels = useCallback((baseUrl?: string, apiKey?: string) => {
-		if (debounceTimerRef.current) {
-			clearTimeout(debounceTimerRef.current)
-		}
+	const debouncedRefreshOpenAiModels = useCallback(
+		(baseUrl?: string, apiKey?: string) => {
+			if (debounceTimerRef.current) {
+				clearTimeout(debounceTimerRef.current)
+			}
+			console.log("@@@@ debouncedRefreshOpenAiModels:", baseUrl)
+			if (baseUrl && apiKey) {
+				debounceTimerRef.current = setTimeout(() => {
+					ModelsServiceClient.refreshOpenAiModels(
+						OpenAiModelsRequest.create({
+							baseUrl,
+							apiKey,
+						}),
+					)
+						.then((response: StringArray) => {
+							const models = response.values || []
+							extensionState.setOpenAiModels(models)
+							console.log("@@@@ models", models)
+						})
+						.catch((error) => {
+							console.error("Failed to refresh OpenAI models:", error)
+						})
+				}, 500)
+			}
+		},
+		[extensionState],
+	)
 
-		if (baseUrl && apiKey) {
-			debounceTimerRef.current = setTimeout(() => {
-				ModelsServiceClient.refreshOpenAiModels(
-					OpenAiModelsRequest.create({
-						baseUrl,
-						apiKey,
-					}),
-				).catch((error) => {
-					console.error("Failed to refresh OpenAI models:", error)
-				})
-			}, 500)
+	useEffect(() => {
+		if (apiConfiguration?.apiProvider == "openai" && apiConfiguration.openAiBaseUrl) {
+			debouncedRefreshOpenAiModels(apiConfiguration?.openAiBaseUrl, apiConfiguration?.openAiApiKey)
 		}
 	}, [])
 
@@ -97,6 +115,29 @@ export const OpenAICompatibleProvider = ({
 				placeholder={"Enter Model ID..."}>
 				<span style={{ fontWeight: 500 }}>Model ID</span>
 			</VSCodeTextField>
+			{extensionState.openAiModels.length > 0 && (
+				<VSCodeRadioGroup
+					value={
+						extensionState.openAiModels.includes(apiConfiguration?.openAiModelId || "")
+							? apiConfiguration?.openAiModelId
+							: ""
+					}
+					onChange={(e) => {
+						const value = (e.target as HTMLInputElement)?.value
+						// need to check value first since radio group returns empty string sometimes
+						if (value) {
+							handleInputChange("openAiModelId")({
+								target: { value },
+							})
+						}
+					}}>
+					{extensionState.openAiModels.map((model) => (
+						<VSCodeRadio key={model} value={model} checked={apiConfiguration?.openAiModelId === model}>
+							{model}
+						</VSCodeRadio>
+					))}
+				</VSCodeRadioGroup>
+			)}
 
 			{/* OpenAI Compatible Custom Headers */}
 			{(() => {
