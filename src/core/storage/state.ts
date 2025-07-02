@@ -54,6 +54,10 @@ export async function getWorkspaceState(context: vscode.ExtensionContext, key: s
 	return await context.globalState.get(key) //huqb
 }
 
+export async function getWorkspaceStateReal(context: vscode.ExtensionContext, key: string) {
+	return await context.workspaceState.get(key)
+}
+
 export async function getAllExtensionState(context: vscode.ExtensionContext) {
 	const [
 		isNewUser,
@@ -203,7 +207,7 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getGlobalState(context, "claudeCodePath") as Promise<string | undefined>,
 	])
 
-	const localClineRulesToggles = (await getWorkspaceState(context, "localClineRulesToggles")) as ClineRulesToggles
+	const localClineRulesToggles = (await getWorkspaceStateReal(context, "localClineRulesToggles")) as ClineRulesToggles
 
 	const [
 		chatSettings,
@@ -278,7 +282,6 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 	])
 
 	console.log("@@@@ storedApiProvider: ", storedApiProvider)
-	console.log("@@@@ openAiModelId: ", openAiModelId)
 	let apiProvider: ApiProvider
 	if (storedApiProvider) {
 		apiProvider = storedApiProvider
@@ -507,8 +510,10 @@ export async function updateApiConfiguration(context: vscode.ExtensionContext, a
 		claudeCodePath,
 	} = apiConfiguration
 	// Workspace state updates
-	console.log("@@@@ apiProvider:", apiProvider)
+	console.log("@@@@ update apiProvider:", apiProvider)
 	await updateWorkspaceState(context, "apiProvider", apiProvider)
+	let apiProv = await getWorkspaceState(context, "apiProvider")
+	console.log("@@@@ get apiProvider:", apiProv)
 	await updateWorkspaceState(context, "apiModelId", apiModelId)
 	await updateWorkspaceState(context, "thinkingBudgetTokens", thinkingBudgetTokens)
 	await updateWorkspaceState(context, "reasoningEffort", reasoningEffort)
