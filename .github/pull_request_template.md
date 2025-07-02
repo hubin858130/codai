@@ -1,9 +1,9 @@
 <!--
-Thank you for contributing to Cline!
+Thank you for contributing to Codai!
 
 ⚠️ Important: Before submitting this PR, please ensure you have:
 - Opened an issue and discussed your proposed changes with the community / contributors
-- Received approval from a core Cline contributor prior to proceeding with the implementation
+- Received approval from a core Codai contributor prior to proceeding with the implementation
 - Link the associated issue in the "Related Issue" section
 
 Limited exceptions:
@@ -62,7 +62,6 @@ We're not looking for exhaustive documentation - just evidence that you've thoug
 -   [ ] Changes are limited to a single feature, bugfix or chore (split larger changes into separate PRs)
 -   [ ] Tests are passing (`npm test`) and code is formatted and linted (`npm run format && npm run lint`)
 -   [ ] I have created a changeset using `npm run changeset` (required for user-facing changes)
--   [ ] I have reviewed [contributor guidelines](https://github.com/cline/cline/blob/main/CONTRIBUTING.md)
 
 ### Screenshots
 

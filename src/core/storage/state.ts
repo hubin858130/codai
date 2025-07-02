@@ -45,11 +45,13 @@ export async function getSecret(context: vscode.ExtensionContext, key: SecretKey
 // workspace
 
 export async function updateWorkspaceState(context: vscode.ExtensionContext, key: string, value: any) {
-	await context.workspaceState.update(key, value)
+	// await context.workspaceState.update(key, value)
+	await context.globalState.update(key, value) //huqb
 }
 
 export async function getWorkspaceState(context: vscode.ExtensionContext, key: string) {
-	return await context.workspaceState.get(key)
+	// return await context.workspaceState.get(key)
+	return await context.globalState.get(key) //huqb
 }
 
 export async function getAllExtensionState(context: vscode.ExtensionContext) {
@@ -275,6 +277,8 @@ export async function getAllExtensionState(context: vscode.ExtensionContext) {
 		getWorkspaceState(context, "previousModeSapAiCoreModelId") as Promise<string | undefined>,
 	])
 
+	console.log("@@@@ storedApiProvider: ", storedApiProvider)
+	console.log("@@@@ openAiModelId: ", openAiModelId)
 	let apiProvider: ApiProvider
 	if (storedApiProvider) {
 		apiProvider = storedApiProvider
@@ -503,6 +507,7 @@ export async function updateApiConfiguration(context: vscode.ExtensionContext, a
 		claudeCodePath,
 	} = apiConfiguration
 	// Workspace state updates
+	console.log("@@@@ apiProvider:", apiProvider)
 	await updateWorkspaceState(context, "apiProvider", apiProvider)
 	await updateWorkspaceState(context, "apiModelId", apiModelId)
 	await updateWorkspaceState(context, "thinkingBudgetTokens", thinkingBudgetTokens)
