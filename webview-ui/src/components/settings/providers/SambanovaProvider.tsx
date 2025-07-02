@@ -3,6 +3,7 @@ import { ApiKeyField } from "../common/ApiKeyField"
 import { ModelSelector } from "../common/ModelSelector"
 import { ModelInfoView } from "../common/ModelInfoView"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
+import { useTranslation } from "react-i18next"
 
 /**
  * Props for the SambanovaProvider component
@@ -18,6 +19,7 @@ interface SambanovaProviderProps {
  * The SambaNova provider configuration component
  */
 export const SambanovaProvider = ({ apiConfiguration, handleInputChange, showModelOptions, isPopup }: SambanovaProviderProps) => {
+	const { t } = useTranslation()
 	// Get the normalized configuration
 	const { selectedModelId, selectedModelInfo } = normalizeApiConfiguration(apiConfiguration)
 
@@ -27,7 +29,7 @@ export const SambanovaProvider = ({ apiConfiguration, handleInputChange, showMod
 				value={apiConfiguration?.sambanovaApiKey || ""}
 				onChange={handleInputChange("sambanovaApiKey")}
 				providerName="SambaNova"
-				signupUrl="https://docs.sambanova.ai/cloud/docs/get-started/overview"
+				signupUrl="https://cloud.sambanova.ai/apis"
 			/>
 
 			{showModelOptions && (
@@ -36,7 +38,7 @@ export const SambanovaProvider = ({ apiConfiguration, handleInputChange, showMod
 						models={sambanovaModels}
 						selectedModelId={selectedModelId}
 						onChange={handleInputChange("apiModelId")}
-						label="Model"
+						label={t("settings.api.model")}
 					/>
 
 					<ModelInfoView selectedModelId={selectedModelId} modelInfo={selectedModelInfo} isPopup={isPopup} />

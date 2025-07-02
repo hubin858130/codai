@@ -7,15 +7,17 @@ import { useOpenRouterKeyInfo } from "../../ui/hooks/useOpenRouterKeyInfo"
 import VSCodeButtonLink from "../../common/VSCodeButtonLink"
 import OpenRouterModelPicker, { OPENROUTER_MODEL_PICKER_Z_INDEX } from "../OpenRouterModelPicker"
 import { formatPrice } from "../utils/pricingUtils"
+import { useTranslation } from "react-i18next"
 
 /**
  * Component to display OpenRouter balance information
  */
 const OpenRouterBalanceDisplay = ({ apiKey }: { apiKey: string }) => {
+	const { t } = useTranslation()
 	const { data: keyInfo, isLoading, error } = useOpenRouterKeyInfo(apiKey)
 
 	if (isLoading) {
-		return <span style={{ fontSize: "12px", color: "var(--vscode-descriptionForeground)" }}>Loading...</span>
+		return <span style={{ fontSize: "12px", color: "var(--vscode-descriptionForeground)" }}>{t("settings.api.loading")}</span>
 	}
 
 	if (error || !keyInfo || keyInfo.limit === null) {
@@ -39,7 +41,7 @@ const OpenRouterBalanceDisplay = ({ apiKey }: { apiKey: string }) => {
 				paddingLeft: 4,
 				cursor: "pointer",
 			}}>
-			Balance: {formattedBalance}
+			{t("settings.api.balance")}: {formattedBalance}
 		</VSCodeLink>
 	)
 }
@@ -65,6 +67,7 @@ export const OpenRouterProvider = ({
 	isPopup,
 	uriScheme,
 }: OpenRouterProviderProps) => {
+	const { t } = useTranslation()
 	const [providerSortingSelected, setProviderSortingSelected] = useState(!!apiConfiguration?.openRouterProviderSorting)
 
 	// Create a wrapper for handling field changes more directly
@@ -80,9 +83,9 @@ export const OpenRouterProvider = ({
 					style={{ width: "100%" }}
 					type="password"
 					onInput={handleInputChange("openRouterApiKey")}
-					placeholder="Enter API Key...">
+					placeholder={t("settings.api.enterApiKey")}>
 					<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-						<span style={{ fontWeight: 500 }}>OpenRouter API Key</span>
+						<span style={{ fontWeight: 500 }}>OpenRouter {t("settings.api.apiKey")}</span>
 						{apiConfiguration?.openRouterApiKey && (
 							<OpenRouterBalanceDisplay apiKey={apiConfiguration.openRouterApiKey} />
 						)}
@@ -93,7 +96,7 @@ export const OpenRouterProvider = ({
 						href={getOpenRouterAuthUrl(uriScheme)}
 						style={{ margin: "5px 0 0 0" }}
 						appearance="secondary">
-						Get OpenRouter API Key
+						{t("settings.api.getApiKey", { provider: "OpenRouter" })}
 					</VSCodeButtonLink>
 				)}
 				<p
@@ -102,7 +105,7 @@ export const OpenRouterProvider = ({
 						marginTop: "5px",
 						color: "var(--vscode-descriptionForeground)",
 					}}>
-					This key is stored locally and only used to make API requests from this extension.
+					{t("settings.api.keyStoredLocally")}
 				</p>
 			</div>
 
@@ -118,7 +121,7 @@ export const OpenRouterProvider = ({
 								handleFieldChange("openRouterProviderSorting")("")
 							}
 						}}>
-						Sort underlying provider routing
+						{t("settings.api.sortProviderRouting")}
 					</VSCodeCheckbox>
 
 					{providerSortingSelected && (
@@ -130,21 +133,19 @@ export const OpenRouterProvider = ({
 									onChange={(e: any) => {
 										handleFieldChange("openRouterProviderSorting")(e.target.value)
 									}}>
-									<VSCodeOption value="">Default</VSCodeOption>
-									<VSCodeOption value="price">Price</VSCodeOption>
-									<VSCodeOption value="throughput">Throughput</VSCodeOption>
-									<VSCodeOption value="latency">Latency</VSCodeOption>
+									<VSCodeOption value="">{t("settings.api.default")}</VSCodeOption>
+									<VSCodeOption value="price">{t("settings.api.price")}</VSCodeOption>
+									<VSCodeOption value="throughput">{t("settings.api.throughput")}</VSCodeOption>
+									<VSCodeOption value="latency">{t("settings.api.latency")}</VSCodeOption>
 								</VSCodeDropdown>
 							</DropdownContainer>
 							<p style={{ fontSize: "12px", marginTop: 3, color: "var(--vscode-descriptionForeground)" }}>
-								{!apiConfiguration?.openRouterProviderSorting &&
-									"Default behavior is to load balance requests across providers (like AWS, Google Vertex, Anthropic), prioritizing price while considering provider uptime"}
-								{apiConfiguration?.openRouterProviderSorting === "price" &&
-									"Sort providers by price, prioritizing the lowest cost provider"}
+								{!apiConfiguration?.openRouterProviderSorting && t("settings.api.defaultBehaviorDesc")}
+								{apiConfiguration?.openRouterProviderSorting === "price" && t("settings.api.priceProviderDesc")}
 								{apiConfiguration?.openRouterProviderSorting === "throughput" &&
-									"Sort providers by throughput, prioritizing the provider with the highest throughput (may increase cost)"}
+									t("settings.api.throughputProviderDesc")}
 								{apiConfiguration?.openRouterProviderSorting === "latency" &&
-									"Sort providers by response time, prioritizing the provider with the lowest latency"}
+									t("settings.api.latencyProviderDesc")}
 							</p>
 						</div>
 					)}

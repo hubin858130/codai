@@ -1,6 +1,7 @@
 import { ApiConfiguration } from "@shared/api"
 import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
 import { ApiKeyField } from "../common/ApiKeyField"
+import { useTranslation } from "react-i18next"
 
 /**
  * Props for the TogetherProvider component
@@ -16,6 +17,8 @@ interface TogetherProviderProps {
  * The Together provider configuration component
  */
 export const TogetherProvider = ({ apiConfiguration, handleInputChange, showModelOptions, isPopup }: TogetherProviderProps) => {
+	const { t } = useTranslation()
+
 	return (
 		<div>
 			<ApiKeyField
@@ -27,8 +30,8 @@ export const TogetherProvider = ({ apiConfiguration, handleInputChange, showMode
 				value={apiConfiguration?.togetherModelId || ""}
 				style={{ width: "100%" }}
 				onInput={handleInputChange("togetherModelId")}
-				placeholder={"Enter Model ID..."}>
-				<span style={{ fontWeight: 500 }}>Model ID</span>
+				placeholder={t("settings.api.enterModelId")}>
+				<span style={{ fontWeight: 500 }}>{t("settings.api.modelId")}</span>
 			</VSCodeTextField>
 			<p
 				style={{
@@ -36,10 +39,7 @@ export const TogetherProvider = ({ apiConfiguration, handleInputChange, showMode
 					marginTop: 3,
 					color: "var(--vscode-descriptionForeground)",
 				}}>
-				<span style={{ color: "var(--vscode-errorForeground)" }}>
-					(<span style={{ fontWeight: 500 }}>Note:</span> codai uses complex prompts and works best with Claude models.
-					Less capable models may not work as expected.)
-				</span>
+				<span style={{ color: "var(--vscode-errorForeground)" }}>({t("settings.api.complexPromptsNote")})</span>
 			</p>
 		</div>
 	)

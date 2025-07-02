@@ -17,6 +17,7 @@ import { memo } from "react"
 import { ModelSelector } from "../common/ModelSelector"
 import { ModelInfoView } from "../common/ModelInfoView"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
+import { useTranslation } from "react-i18next"
 
 interface GeminiCliProviderProps {
 	apiConfiguration: ApiConfiguration
@@ -26,6 +27,7 @@ interface GeminiCliProviderProps {
 }
 
 const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptions, isPopup }: GeminiCliProviderProps) => {
+	const { t } = useTranslation()
 	// Get the normalized configuration
 	const { selectedModelId, selectedModelInfo } = normalizeApiConfiguration(apiConfiguration)
 	return (
@@ -35,8 +37,8 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 				style={{ width: "100%", marginTop: 3 }}
 				type="text"
 				onInput={handleInputChange("geminiCliOAuthPath")}
-				placeholder="Default: ~/.gemini/oauth_creds.json">
-				<span style={{ fontWeight: 500 }}>OAuth Credentials Path (optional)</span>
+				placeholder={t("settings.api.oauthPathPlaceholder")}>
+				<span style={{ fontWeight: 500 }}>{t("settings.api.oauthCredentialsPath")}</span>
 			</VSCodeTextField>
 			<p
 				style={{
@@ -44,7 +46,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 					marginTop: 3,
 					color: "var(--vscode-descriptionForeground)",
 				}}>
-				Path to the OAuth credentials file. Leave empty to use the default location (~/.gemini/oauth_creds.json).
+				{t("settings.api.oauthPathDesc")}
 			</p>
 
 			{apiConfiguration?.geminiCliProjectId && (
@@ -54,7 +56,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 						style={{ width: "100%", marginTop: 3 }}
 						type="text"
 						disabled>
-						<span style={{ fontWeight: 500 }}>Discovered Project ID</span>
+						<span style={{ fontWeight: 500 }}>{t("settings.api.discoveredProjectId")}</span>
 					</VSCodeTextField>
 					<p
 						style={{
@@ -62,7 +64,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 							marginTop: 3,
 							color: "var(--vscode-descriptionForeground)",
 						}}>
-						This project ID was automatically discovered from your OAuth credentials.
+						{t("settings.api.projectIdAutoDesc")}
 					</p>
 				</>
 			)}
@@ -73,8 +75,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 					marginTop: 5,
 					color: "var(--vscode-descriptionForeground)",
 				}}>
-				This provider uses OAuth authentication from the Gemini CLI tool and does not require API keys. If you haven't
-				authenticated yet, please run{" "}
+				{t("settings.api.geminiCliDesc")}{" "}
 				<code
 					style={{
 						backgroundColor: "var(--vscode-textCodeBlock-background)",
@@ -88,7 +89,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 				<VSCodeLink
 					href="https://github.com/google-gemini/gemini-cli?tab=readme-ov-file#quickstart"
 					style={{ display: "inline", fontSize: "inherit" }}>
-					Gemini CLI Setup Instructions
+					{t("settings.api.geminiCliSetup")}
 				</VSCodeLink>
 			</p>
 
@@ -98,7 +99,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 						models={geminiCliModels}
 						selectedModelId={selectedModelId}
 						onChange={handleInputChange("apiModelId")}
-						label="Model"
+						label={t("settings.api.model")}
 					/>
 
 					<ModelInfoView selectedModelId={selectedModelId} modelInfo={selectedModelInfo} isPopup={isPopup} />
@@ -133,7 +134,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 							color: "#FFA500",
 							fontSize: "12px",
 						}}>
-						Important Requirements
+						{t("settings.api.importantRequirements")}
 					</span>
 				</div>
 				<p
@@ -143,13 +144,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 						lineHeight: "1.4",
 						color: "var(--vscode-foreground)",
 					}}>
-					• First, you need to install the <strong>Gemini CLI tool</strong>
-					<br />• Then, run <strong>gemini</strong> in your terminal and make sure you{" "}
-					<strong>Log in with Google</strong>
-					<br />• Only works with <strong>personal Google accounts</strong> (not Google Workspace accounts)
-					<br />
-					• Does not use API keys - authentication is handled via OAuth
-					<br />• Requires the Gemini CLI tool to be installed and authenticated first
+					{t("settings.api.geminiCliRequirements")}
 				</p>
 			</div>
 
@@ -160,7 +155,7 @@ const GeminiCliProvider = ({ apiConfiguration, handleInputChange, showModelOptio
 					color: "var(--vscode-charts-green)",
 					fontWeight: 500,
 				}}>
-				✓ Free tier access via OAuth authentication
+				{t("settings.api.freeTierAccess")}
 			</p>
 		</div>
 	)

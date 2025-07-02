@@ -4,6 +4,7 @@ import { ApiKeyField } from "../common/ApiKeyField"
 import { ModelSelector } from "../common/ModelSelector"
 import { ModelInfoView } from "../common/ModelInfoView"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
+import { useTranslation } from "react-i18next"
 
 /**
  * Props for the AskSageProvider component
@@ -19,6 +20,7 @@ interface AskSageProviderProps {
  * The AskSage provider configuration component
  */
 export const AskSageProvider = ({ apiConfiguration, handleInputChange, showModelOptions, isPopup }: AskSageProviderProps) => {
+	const { t } = useTranslation()
 	// Get the normalized configuration
 	const { selectedModelId, selectedModelInfo } = normalizeApiConfiguration(apiConfiguration)
 
@@ -28,7 +30,7 @@ export const AskSageProvider = ({ apiConfiguration, handleInputChange, showModel
 				value={apiConfiguration?.asksageApiKey || ""}
 				onChange={handleInputChange("asksageApiKey")}
 				providerName="AskSage"
-				helpText="This key is stored locally and only used to make API requests from this extension."
+				helpText={t("settings.api.keyStoredLocally")}
 			/>
 
 			<VSCodeTextField
@@ -46,7 +48,7 @@ export const AskSageProvider = ({ apiConfiguration, handleInputChange, showModel
 						models={askSageModels}
 						selectedModelId={selectedModelId}
 						onChange={handleInputChange("apiModelId")}
-						label="Model"
+						label={t("settings.api.model")}
 					/>
 
 					<ModelInfoView selectedModelId={selectedModelId} modelInfo={selectedModelInfo} isPopup={isPopup} />

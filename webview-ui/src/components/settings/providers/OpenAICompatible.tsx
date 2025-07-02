@@ -10,6 +10,7 @@ import { BaseUrlField } from "../common/BaseUrlField"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
 import { StringArray } from "@shared/proto/common"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { useTranslation } from "react-i18next"
 
 /**
  * Props for the OpenAICompatibleProvider component
@@ -30,6 +31,7 @@ export const OpenAICompatibleProvider = ({
 	showModelOptions,
 	isPopup,
 }: OpenAICompatibleProviderProps) => {
+	const { t } = useTranslation()
 	const extensionState = useExtensionState()
 	const [modelConfigurationSelected, setModelConfigurationSelected] = useState(false)
 
@@ -93,8 +95,8 @@ export const OpenAICompatibleProvider = ({
 
 					debouncedRefreshOpenAiModels(baseUrl, apiConfiguration?.openAiApiKey)
 				}}
-				placeholder={"Enter base URL..."}>
-				<span style={{ fontWeight: 500 }}>Base URL</span>
+				placeholder={t("settings.api.enterBaseUrl")}>
+				<span style={{ fontWeight: 500 }}>{t("settings.api.baseUrl")}</span>
 			</VSCodeTextField>
 
 			<ApiKeyField
@@ -112,8 +114,8 @@ export const OpenAICompatibleProvider = ({
 				value={apiConfiguration?.openAiModelId || ""}
 				style={{ width: "100%", marginBottom: 10 }}
 				onInput={handleInputChange("openAiModelId")}
-				placeholder={"Enter Model ID..."}>
-				<span style={{ fontWeight: 500 }}>Model ID</span>
+				placeholder={t("settings.api.enterModelId")}>
+				<span style={{ fontWeight: 500 }}>{t("settings.api.modelId")}</span>
 			</VSCodeTextField>
 			{extensionState.openAiModels.length > 0 && (
 				<VSCodeRadioGroup
@@ -145,7 +147,7 @@ export const OpenAICompatibleProvider = ({
 				return (
 					<div style={{ marginBottom: 10 }}>
 						<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-							<span style={{ fontWeight: 500 }}>Custom Headers</span>
+							<span style={{ fontWeight: 500 }}>{t("settings.api.customHeaders")}</span>
 							<VSCodeButton
 								onClick={() => {
 									const currentHeaders = { ...(apiConfiguration?.openAiHeaders || {}) }
@@ -158,7 +160,7 @@ export const OpenAICompatibleProvider = ({
 										},
 									})
 								}}>
-								Add Header
+								{t("settings.api.addHeader")}
 							</VSCodeButton>
 						</div>
 						<div>
@@ -167,7 +169,7 @@ export const OpenAICompatibleProvider = ({
 									<VSCodeTextField
 										value={key}
 										style={{ width: "40%" }}
-										placeholder="Header name"
+										placeholder={t("settings.api.headerName")}
 										onInput={(e: any) => {
 											const currentHeaders = apiConfiguration?.openAiHeaders ?? {}
 											const newValue = e.target.value
@@ -187,7 +189,7 @@ export const OpenAICompatibleProvider = ({
 									<VSCodeTextField
 										value={value}
 										style={{ width: "40%" }}
-										placeholder="Header value"
+										placeholder={t("settings.api.headerValue")}
 										onInput={(e: any) => {
 											handleInputChange("openAiHeaders")({
 												target: {
@@ -209,7 +211,7 @@ export const OpenAICompatibleProvider = ({
 												},
 											})
 										}}>
-										Remove
+										{t("settings.api.remove")}
 									</VSCodeButton>
 								</div>
 							))}
@@ -222,7 +224,7 @@ export const OpenAICompatibleProvider = ({
 				value={apiConfiguration?.azureApiVersion}
 				onChange={(value) => handleInputChange("azureApiVersion")({ target: { value } })}
 				label="Set Azure API version"
-				placeholder={`Default: ${azureOpenAiDefaultApiVersion}`}
+				placeholder={`${t("settings.api.default")}: ${azureOpenAiDefaultApiVersion}`}
 			/>
 
 			<div
@@ -244,7 +246,7 @@ export const OpenAICompatibleProvider = ({
 						fontWeight: 700,
 						textTransform: "uppercase",
 					}}>
-					Model Configuration
+					{t("settings.api.modelConfiguration")}
 				</span>
 			</div>
 
@@ -262,7 +264,7 @@ export const OpenAICompatibleProvider = ({
 								target: { value: modelInfo },
 							})
 						}}>
-						Supports Images
+						{t("settings.api.supportsImages")}
 					</VSCodeCheckbox>
 
 					<VSCodeCheckbox
@@ -277,7 +279,7 @@ export const OpenAICompatibleProvider = ({
 								target: { value: modelInfo },
 							})
 						}}>
-						Supports browser use
+						{t("settings.api.supportsBrowserUse")}
 					</VSCodeCheckbox>
 
 					<VSCodeCheckbox
@@ -293,7 +295,7 @@ export const OpenAICompatibleProvider = ({
 								target: { value: modelInfo },
 							})
 						}}>
-						Enable R1 messages format
+						{t("settings.api.enableR1Format")}
 					</VSCodeCheckbox>
 
 					<div style={{ display: "flex", gap: 10, marginTop: "5px" }}>
@@ -313,7 +315,7 @@ export const OpenAICompatibleProvider = ({
 									target: { value: modelInfo },
 								})
 							}}>
-							<span style={{ fontWeight: 500 }}>Context Window Size</span>
+							<span style={{ fontWeight: 500 }}>{t("settings.api.contextWindowSize")}</span>
 						</VSCodeTextField>
 
 						<VSCodeTextField
@@ -332,7 +334,7 @@ export const OpenAICompatibleProvider = ({
 									target: { value: modelInfo },
 								})
 							}}>
-							<span style={{ fontWeight: 500 }}>Max Output Tokens</span>
+							<span style={{ fontWeight: 500 }}>{t("settings.api.maxOutputTokens")}</span>
 						</VSCodeTextField>
 					</div>
 
@@ -353,7 +355,7 @@ export const OpenAICompatibleProvider = ({
 									target: { value: modelInfo },
 								})
 							}}>
-							<span style={{ fontWeight: 500 }}>Input Price / 1M tokens</span>
+							<span style={{ fontWeight: 500 }}>{t("settings.api.inputPricePerMillion")}</span>
 						</VSCodeTextField>
 
 						<VSCodeTextField
@@ -372,7 +374,7 @@ export const OpenAICompatibleProvider = ({
 									target: { value: modelInfo },
 								})
 							}}>
-							<span style={{ fontWeight: 500 }}>Output Price / 1M tokens</span>
+							<span style={{ fontWeight: 500 }}>{t("settings.api.outputPricePerMillion")}</span>
 						</VSCodeTextField>
 					</div>
 
@@ -403,7 +405,7 @@ export const OpenAICompatibleProvider = ({
 									target: { value: modelInfo },
 								})
 							}}>
-							<span style={{ fontWeight: 500 }}>Temperature</span>
+							<span style={{ fontWeight: 500 }}>{t("settings.api.temperature")}</span>
 						</VSCodeTextField>
 					</div>
 				</>
@@ -415,10 +417,7 @@ export const OpenAICompatibleProvider = ({
 					marginTop: 3,
 					color: "var(--vscode-descriptionForeground)",
 				}}>
-				<span style={{ color: "var(--vscode-errorForeground)" }}>
-					(<span style={{ fontWeight: 500 }}>Note:</span> codai uses complex prompts and works best with Claude models.
-					Less capable models may not work as expected.)
-				</span>
+				<span style={{ color: "var(--vscode-errorForeground)" }}>({t("settings.api.complexPromptsNote")})</span>
 			</p>
 
 			{showModelOptions && (
