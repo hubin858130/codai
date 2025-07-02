@@ -108,7 +108,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	maybeSetupHostProviders(context)
 
 	// Migrate global storage values to workspace storage (one-time cleanup)
-	await migratePlanActGlobalToWorkspaceStorage(context)
+	// await migratePlanActGlobalToWorkspaceStorage(context)//huqb
 
 	// Migrate custom instructions to global Cline rules (one-time cleanup)
 	await migrateCustomInstructionsToGlobalRules(context)
@@ -706,7 +706,7 @@ export async function activate(context: vscode.ExtensionContext) {
 			}
 		}),
 	)
-	
+
 	// 如果成功加载了ContinueCompletionProvider，则注册它
 	if (ContinueCompletionProvider) {
 		try {
