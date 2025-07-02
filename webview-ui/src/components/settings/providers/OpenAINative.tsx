@@ -3,6 +3,7 @@ import { ApiKeyField } from "../common/ApiKeyField"
 import { ModelSelector } from "../common/ModelSelector"
 import { ModelInfoView } from "../common/ModelInfoView"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
+import { useTranslation } from "react-i18next"
 
 /**
  * Props for the OpenAINativeProvider component
@@ -23,6 +24,7 @@ export const OpenAINativeProvider = ({
 	showModelOptions,
 	isPopup,
 }: OpenAINativeProviderProps) => {
+	const { t } = useTranslation()
 	// Get the normalized configuration
 	const { selectedModelId, selectedModelInfo } = normalizeApiConfiguration(apiConfiguration)
 
@@ -41,7 +43,7 @@ export const OpenAINativeProvider = ({
 						models={openAiNativeModels}
 						selectedModelId={selectedModelId}
 						onChange={handleInputChange("apiModelId")}
-						label="Model"
+						label={t("settings.api.model")}
 					/>
 
 					<ModelInfoView selectedModelId={selectedModelId} modelInfo={selectedModelInfo} isPopup={isPopup} />

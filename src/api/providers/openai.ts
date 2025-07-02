@@ -7,6 +7,7 @@ import { convertToOpenAiMessages } from "../transform/openai-format"
 import { ApiStream } from "../transform/stream"
 import { convertToR1Format } from "../transform/r1-format"
 import type { ChatCompletionReasoningEffort } from "openai/resources/chat/completions"
+import { EncryptUtil, getPluginVersion } from "@/utils/encrypt"
 
 export class OpenAiHandler implements ApiHandler {
 	private options: ApiHandlerOptions
@@ -74,15 +75,24 @@ export class OpenAiHandler implements ApiHandler {
 			reasoningEffort = (this.options.reasoningEffort as ChatCompletionReasoningEffort) || "medium"
 		}
 
-		const stream = await this.client.chat.completions.create({
-			model: modelId,
-			messages: openAiMessages,
-			temperature,
-			max_tokens: maxTokens,
-			reasoning_effort: reasoningEffort,
-			stream: true,
-			stream_options: { include_usage: true },
-		})
+		const stream = await this.client.chat.completions.create(
+			{
+				model: modelId,
+				messages: openAiMessages,
+				temperature,
+				max_tokens: maxTokens,
+				reasoning_effort: reasoningEffort,
+				stream: true,
+				stream_options: { include_usage: true },
+			},
+			// 通过 axios 的请求配置合并 headers //huqb
+			{
+				headers: {
+					"X-Codee-Token": EncryptUtil.encrypt(this.options.openAiApiKey ?? ""), //huqb
+					"X-Codee-Ver": "CodeeVsCodeExtension/" + getPluginVersion(),
+				},
+			},
+		)
 		for await (const chunk of stream) {
 			const delta = chunk.choices[0]?.delta
 			if (delta?.content) {

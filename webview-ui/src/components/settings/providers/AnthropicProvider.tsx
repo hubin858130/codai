@@ -5,6 +5,7 @@ import { ModelSelector } from "../common/ModelSelector"
 import { ModelInfoView } from "../common/ModelInfoView"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
 import ThinkingBudgetSlider from "../ThinkingBudgetSlider"
+import { useTranslation } from "react-i18next"
 
 // Anthropic models that support thinking/reasoning mode
 const SUPPORTED_THINKING_MODELS = ["claude-3-7-sonnet-20250219", "claude-sonnet-4-20250514", "claude-opus-4-20250514"]
@@ -30,6 +31,7 @@ export const AnthropicProvider = ({
 	isPopup,
 	setApiConfiguration,
 }: AnthropicProviderProps) => {
+	const { t } = useTranslation()
 	// Get the normalized configuration
 	const { selectedModelId, selectedModelInfo } = normalizeApiConfiguration(apiConfiguration)
 
@@ -51,7 +53,7 @@ export const AnthropicProvider = ({
 				value={apiConfiguration?.anthropicBaseUrl}
 				onChange={handleFieldChange("anthropicBaseUrl")}
 				placeholder="Default: https://api.anthropic.com"
-				label="Use custom base URL"
+				label={t("settings.api.customBaseUrl")}
 			/>
 
 			{showModelOptions && (
@@ -60,7 +62,7 @@ export const AnthropicProvider = ({
 						models={anthropicModels}
 						selectedModelId={selectedModelId}
 						onChange={handleInputChange("apiModelId")}
-						label="Model"
+						label={t("settings.api.model")}
 					/>
 
 					{SUPPORTED_THINKING_MODELS.includes(selectedModelId) && setApiConfiguration && (

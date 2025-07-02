@@ -38,6 +38,7 @@ interface ExtensionStateContextType extends ExtensionState {
 	theme: Record<string, string> | undefined
 	openRouterModels: Record<string, ModelInfo>
 	openAiModels: string[]
+	setOpenAiModels: (models: string[]) => void // huqb
 	requestyModels: Record<string, ModelInfo>
 	mcpServers: McpServer[]
 	mcpMarketplaceCatalog: McpMarketplaceCatalog
@@ -672,6 +673,7 @@ export const ExtensionStateContextProvider: React.FC<{
 		theme,
 		openRouterModels,
 		openAiModels,
+		setOpenAiModels, // huqb
 		requestyModels,
 		mcpServers,
 		mcpMarketplaceCatalog,
