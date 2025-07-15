@@ -130,3 +130,14 @@ Codai utilizes three types of models:
   - Enter API key
   - Select Gemini-2.5-flash or Gemini-2.5-pro from dropdown
   - Click "Finish"
+
+#### 10. Kimi (moonshot)  
+
+- Go to the developer console at https://platform.moonshot.cn/console/account (login required).  
+- Click on the left navigation: **API Key Management**.  
+- Select **"Create API Key"** and save it locally.  
+- Configure the coding model in Codai:  
+  - In the **Service Provider** dropdown, choose **"OpenAI Compatible"**.  
+  - In **Base URL**, enter: `https://api.moonshot.cn/v1`.  
+  - Paste the newly generated **API Key** into the API key input field.  
+  - Recommended model: `kimi-k2-0711-preview` (tested to be very strong for coding!).  
