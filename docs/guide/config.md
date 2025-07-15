@@ -128,4 +128,15 @@
   - 在服务提供商下拉框中选择“Google Gemini”
   - 填入刚申请的API key到apikey输入框中
   - 模型ID中下拉选择Gemini-2.5-flash或者Gemini-2.5-pro
-  - 点击“完成”
+  - 点击“完成
+
+#### 10.Kimi(月之暗面)
+
+- 点击进入开发者控制台https://platform.moonshot.cn/console/account，需要先登录
+- 点击左边的导航：API Key 管理
+- 点击“新建 API key”，并记录到本地
+- Codai中配置聊天编码模型：
+  - 在服务提供商下拉框中选择“Openai Compatible”
+  - BaseURL中填：https://api.moonshot.cn/v1
+  - 填入刚申请的API key到apikey输入框中
+  - 模型建议使用：`kimi-k2-0711-preview`（实测编码很强！）
