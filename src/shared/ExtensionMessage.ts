@@ -1,51 +1,19 @@
 // type that represents json data that is sent from extension to webview, called ExtensionMessage and has 'type' enum which can be 'plusButtonClicked' or 'settingsButtonClicked' or 'hello'
-
-import { GitCommit } from "../utils/git"
-import { ApiConfiguration, ModelInfo } from "./api"
+import { ApiConfiguration } from "./api"
 import { AutoApprovalSettings } from "./AutoApprovalSettings"
 import { BrowserSettings } from "./BrowserSettings"
 import { ChatSettings } from "./ChatSettings"
 import { HistoryItem } from "./HistoryItem"
-import { McpServer, McpMarketplaceCatalog, McpDownloadResponse, McpViewTab } from "./mcp"
 import { TelemetrySetting } from "./TelemetrySetting"
-import type { BalanceResponse, UsageTransaction, PaymentTransaction } from "../shared/ClineAccount"
 import { ClineRulesToggles } from "./cline-rules"
 import { UserInfo } from "./UserInfo"
+import { McpDisplayMode } from "./McpDisplayMode"
 import { CodeeConfig } from "@continuedev/core/util/codaiConfigUtil"
 
 // webview will hold state
 export interface ExtensionMessage {
-	type: "action" | "state" | "selectedImages" | "mcpDownloadDetails" | "grpc_response" | "autocompleteConfig" | "languageConfig" | "enhancedPromptResult"// New type for gRPC responses
-	text?: string
-	action?: "accountLogoutClicked"
-	state?: ExtensionState
-	images?: string[]
-	files?: string[]
-	ollamaModels?: string[]
-	lmStudioModels?: string[]
-	vsCodeLmModels?: { vendor?: string; family?: string; version?: string; id?: string }[]
-	openAiModels?: string[]
-	mcpServers?: McpServer[]
-	customToken?: string
-	mcpMarketplaceCatalog?: McpMarketplaceCatalog
-	error?: string
-	mcpDownloadDetails?: McpDownloadResponse
-	commits?: GitCommit[]
-	url?: string
-	isImage?: boolean
-	success?: boolean
-	endpoint?: string
-	isBundled?: boolean
-	isConnected?: boolean
-	isRemote?: boolean
-	host?: string
-	mentionsRequestId?: string
-	results?: Array<{
-		path: string
-		type: "file" | "folder"
-		label?: string
-	}>
-	tab?: McpViewTab
+	type: "grpc_response" | "autocompleteConfig" | "languageConfig" | "enhancedPromptResult" // New type for gRPC responses
+
 	grpc_response?: {
 		message?: any // JSON serialized protobuf message
 		request_id: string // Same ID as the request
@@ -55,6 +23,7 @@ export interface ExtensionMessage {
 	}
 	autocompleteConfig?: Partial<CodeeConfig>
 	language?: string
+	text?: string
 }
 
 export type Platform = "aix" | "darwin" | "freebsd" | "linux" | "openbsd" | "sunos" | "win32" | "unknown"
@@ -63,6 +32,7 @@ export const DEFAULT_PLATFORM = "unknown"
 
 export interface ExtensionState {
 	isNewUser: boolean
+	welcomeViewCompleted: boolean
 	apiConfiguration?: ApiConfiguration
 	autoApprovalSettings: AutoApprovalSettings
 	browserSettings: BrowserSettings
@@ -72,7 +42,7 @@ export interface ExtensionState {
 	clineMessages: ClineMessage[]
 	currentTaskItem?: HistoryItem
 	mcpMarketplaceEnabled?: boolean
-	mcpRichDisplayEnabled: boolean
+	mcpDisplayMode: McpDisplayMode
 	planActSeparateModelsSetting: boolean
 	enableCheckpointsSetting?: boolean
 	platform: Platform

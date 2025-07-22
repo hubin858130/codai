@@ -2,10 +2,10 @@ import path from "path"
 import fs from "fs/promises"
 import { Controller } from ".."
 import { DeleteAllTaskHistoryCount } from "../../../shared/proto/task"
-import { BooleanRequest } from "../../../shared/proto/common"
 import { getGlobalState, updateGlobalState } from "../../storage/state"
 import { fileExistsAtPath } from "../../../utils/fs"
-import vscode from "vscode"
+import { ShowMessageRequest, ShowMessageType } from "@/shared/proto/host/window"
+import { getHostBridgeProvider } from "@/hosts/host-providers"
 
 /**
  * Deletes all task history, with an option to preserve favorites
@@ -13,7 +13,7 @@ import vscode from "vscode"
  * @param request Request with option to preserve favorites
  * @returns Results with count of deleted tasks
  */
-export async function deleteAllTaskHistory(controller: Controller, request: BooleanRequest): Promise<DeleteAllTaskHistoryCount> {
+export async function deleteAllTaskHistory(controller: Controller): Promise<DeleteAllTaskHistoryCount> {
 	try {
 		// Clear current task first
 		await controller.clearTask()
@@ -22,8 +22,28 @@ export async function deleteAllTaskHistory(controller: Controller, request: Bool
 		const taskHistory = ((await getGlobalState(controller.context, "taskHistory")) as any[]) || []
 		const totalTasks = taskHistory.length
 
+		const userChoice = (
+			await getHostBridgeProvider().windowClient.showMessage(
+				ShowMessageRequest.create({
+					type: ShowMessageType.WARNING,
+					message: "What would you like to delete?",
+					options: {
+						modal: true,
+						items: ["Delete All Except Favorites", "Delete Everything"],
+					},
+				}),
+			)
+		)?.selectedOption
+
+		// Default VS Code Cancel button returns `undefined` - don't delete anything
+		if (userChoice === undefined) {
+			return DeleteAllTaskHistoryCount.create({
+				tasksDeleted: 0,
+			})
+		}
+
 		// If preserving favorites, filter out non-favorites
-		if (request.value) {
+		if (userChoice === "Delete All Except Favorites") {
 			const favoritedTasks = taskHistory.filter((task) => task.isFavorited === true)
 
 			// If there are favorited tasks, update state
@@ -45,9 +65,27 @@ export async function deleteAllTaskHistory(controller: Controller, request: Bool
 					tasksDeleted: totalTasks - favoritedTasks.length,
 				})
 			} else {
-				return DeleteAllTaskHistoryCount.create({
-					tasksDeleted: 0,
-				})
+				// No favorited tasks found - show warning and ask user what to do
+				const answer = (
+					await getHostBridgeProvider().windowClient.showMessage(
+						ShowMessageRequest.create({
+							type: ShowMessageType.WARNING,
+							message: "No favorited tasks found. Would you like to delete all tasks anyway?",
+							options: {
+								modal: true,
+								items: ["Delete All Tasks"],
+							},
+						}),
+					)
+				)?.selectedOption
+
+				// User cancelled - don't delete anything
+				if (answer === undefined) {
+					return DeleteAllTaskHistoryCount.create({
+						tasksDeleted: 0,
+					})
+				}
+				// If user chose "Delete All Tasks", fall through to the `delete everything` section below
 			}
 		}
 
@@ -67,8 +105,11 @@ export async function deleteAllTaskHistory(controller: Controller, request: Bool
 				await fs.rm(checkpointsDirPath, { recursive: true, force: true })
 			}
 		} catch (error) {
-			vscode.window.showErrorMessage(
-				`Encountered error while deleting task history, there may be some files left behind. Error: ${error instanceof Error ? error.message : String(error)}`,
+			getHostBridgeProvider().windowClient.showMessage(
+				ShowMessageRequest.create({
+					type: ShowMessageType.ERROR,
+					message: `Encountered error while deleting task history, there may be some files left behind. Error: ${error instanceof Error ? error.message : String(error)}`,
+				}),
 			)
 		}
 

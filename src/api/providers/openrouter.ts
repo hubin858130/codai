@@ -3,27 +3,50 @@ import axios from "axios"
 import { setTimeout as setTimeoutPromise } from "node:timers/promises"
 import OpenAI from "openai"
 import { ApiHandler } from "../"
-import { ApiHandlerOptions, ModelInfo, openRouterDefaultModelId, openRouterDefaultModelInfo } from "@shared/api"
+import { ModelInfo, openRouterDefaultModelId, openRouterDefaultModelInfo } from "@shared/api"
 import { withRetry } from "../retry"
 import { createOpenRouterStream } from "../transform/openrouter-stream"
 import { ApiStream, ApiStreamUsageChunk } from "../transform/stream"
 import { OpenRouterErrorResponse } from "./types"
+import { shouldSkipReasoningForModel } from "@utils/model-utils"
+
+interface OpenRouterHandlerOptions {
+	openRouterApiKey?: string
+	openRouterModelId?: string
+	openRouterModelInfo?: ModelInfo
+	openRouterProviderSorting?: string
+	reasoningEffort?: string
+	thinkingBudgetTokens?: number
+}
 
 export class OpenRouterHandler implements ApiHandler {
-	private options: ApiHandlerOptions
-	private client: OpenAI
+	private options: OpenRouterHandlerOptions
+	private client: OpenAI | undefined
 	lastGenerationId?: string
 
-	constructor(options: ApiHandlerOptions) {
+	constructor(options: OpenRouterHandlerOptions) {
 		this.options = options
-		this.client = new OpenAI({
-			baseURL: "https://openrouter.ai/api/v1",
-			apiKey: this.options.openRouterApiKey,
-			defaultHeaders: {
+	}
+
+	private ensureClient(): OpenAI {
+		if (!this.client) {
+			if (!this.options.openRouterApiKey) {
+				throw new Error("OpenRouter API key is required")
+			}
+			try {
+				this.client = new OpenAI({
+					baseURL: "https://openrouter.ai/api/v1",
+					apiKey: this.options.openRouterApiKey,
+					defaultHeaders: {
 				"HTTP-Referer": "https://codai.top", // Optional, for including your app on openrouter.ai rankings.
 				"X-Title": "Codai", // Optional. Shows in rankings on openrouter.ai.
-			},
-		})
+					},
+				})
+			} catch (error: any) {
+				throw new Error(`Error creating OpenRouter client: ${error.message}`)
+			}
+		}
+		return this.client
 	}
 
 	// 移除装饰器，直接实现方法
@@ -34,10 +57,12 @@ export class OpenRouterHandler implements ApiHandler {
 	}
 	// @withRetry()
 	async *_createMessageImpl(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream {
+
+		const client = this.ensureClient()
 		this.lastGenerationId = undefined
 
 		const stream = await createOpenRouterStream(
-			this.client,
+			client,
 			systemPrompt,
 			messages,
 			this.getModel(),
@@ -95,7 +120,8 @@ export class OpenRouterHandler implements ApiHandler {
 			}
 
 			// Reasoning tokens are returned separately from the content
-			if ("reasoning" in delta && delta.reasoning) {
+			// Skip reasoning content for Grok 4 models since it only displays "thinking" without providing useful information
+			if ("reasoning" in delta && delta.reasoning && !shouldSkipReasoningForModel(this.options.openRouterModelId)) {
 				yield {
 					type: "reasoning",
 					// @ts-ignore-next-line
@@ -216,9 +242,6 @@ export class OpenRouterHandler implements ApiHandler {
 
 	getModel(): { id: string; info: ModelInfo } {
 		let modelId = this.options.openRouterModelId
-		if (modelId === "x-ai/grok-3") {
-			modelId = "x-ai/grok-3-beta"
-		}
 		const modelInfo = this.options.openRouterModelInfo
 		if (modelId && modelInfo) {
 			return { id: modelId, info: modelInfo }

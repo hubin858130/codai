@@ -1,10 +1,15 @@
-import { VSCodeButton, VSCodeDivider, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
-import { memo, useEffect, useState } from "react"
-import { useFirebaseAuth } from "@/context/FirebaseAuthContext"
-import { vscode } from "@/utils/vscode"
+import {
+	VSCodeButton,
+	VSCodeDivider,
+	VSCodeLink,
+	VSCodeDropdown,
+	VSCodeOption,
+	VSCodeTag,
+} from "@vscode/webview-ui-toolkit/react"
+import { memo, useCallback, useEffect, useState, useRef } from "react"
+import { useClineAuth } from "@/context/ClineAuthContext"
 import VSCodeButtonLink from "../common/VSCodeButtonLink"
 import ClineLogoWhite from "../../assets/ClineLogoWhite"
-import CountUp from "react-countup"
 import CreditsHistoryTable from "./CreditsHistoryTable"
 import { UsageTransaction, PaymentTransaction } from "@shared/ClineAccount"
 import { useExtensionState } from "@/context/ExtensionStateContext"

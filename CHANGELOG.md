@@ -1,4 +1,8 @@
 # Changelog
+## [1.2.4]
+
+-   Fix enhanced prompt feature
+-   Synchronize Cline v3.19.7
 
 ## [1.2.3]
 

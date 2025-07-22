@@ -44,7 +44,7 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 			</h3>
 			<ul style={ulStyle}>
 				<li>
-					<b>Optimized for Claude 4:</b> codai is now optimized to work with the Claude 4 family of models, resulting in
+					<b>Optimized for Claude 4:</b> Cline is now optimized to work with the Claude 4 family of models, resulting in
 					improved performance, reliability, and new capabilities.
 				</li>
 				<li>
@@ -52,11 +52,11 @@ const Announcement = ({ version, hideAnnouncement }: AnnouncementProps) => {
 					authentication to access Gemini models for free.
 				</li>
 				<li>
-					<b>WebFetch Tool:</b> Gemini 2.5 Pro and Claude 4 models now support the WebFetch tool, allowing codai to
+					<b>WebFetch Tool:</b> Gemini 2.5 Pro and Claude 4 models now support the WebFetch tool, allowing Cline to
 					retrieve and summarize web content directly in conversations.
 				</li>
 				<li>
-					<b>Self Knowledge:</b> When using frontier models, codai is self-aware about his capabilities and featureset.
+					<b>Self Knowledge:</b> When using frontier models, Cline is self-aware about his capabilities and featureset.
 				</li>
 				<li>
 					<b>Improved Diff Editing:</b> Improved diff editing to achieve record lows in diff edit failures for frontier

@@ -23,6 +23,19 @@ import { PromiseAdapter, promiseFromEvent } from "./promiseUtils"
 import { SecretStorage } from "./SecretStorage"
 import { UriEventHandler } from "./uriHandler"
 
+// 重写authentication.getSession方法来避免认证提供者超时
+// 这是一个临时解决方案，用于避免Continue认证系统导致的问题
+const originalGetSession = authentication.getSession
+authentication.getSession = async function(providerId: string, scopes: readonly string[], options?: any) {
+	// 如果是Continue相关的认证请求，直接返回null
+	if (providerId === 'continue' || providerId === 'continue-staging') {
+		console.log(`跳过认证请求: ${providerId} - 对普通用户不需要`)
+		return null as any
+	}
+	// 对于其他认证请求（如GitHub），使用原始方法
+	return originalGetSession.call(authentication, providerId, scopes, options)
+} as any
+
 const AUTH_NAME = "Continue"
 
 const enableControlServerBeta = workspace.getConfiguration(EXTENSION_NAME).get<boolean>("enableContinueForTeams", false)
