@@ -18,25 +18,27 @@ export enum ApiProvider {
   OLLAMA = 5,
   LMSTUDIO = 6,
   GEMINI = 7,
-  GEMINI_CLI = 8,
-  OPENAI_NATIVE = 9,
-  REQUESTY = 10,
-  TOGETHER = 11,
-  DEEPSEEK = 12,
-  QWEN = 13,
-  DOUBAO = 14,
-  MISTRAL = 15,
-  VSCODE_LM = 16,
-  CLINE = 17,
-  LITELLM = 18,
-  NEBIUS = 19,
-  FIREWORKS = 20,
-  ASKSAGE = 21,
-  XAI = 22,
-  SAMBANOVA = 23,
-  CEREBRAS = 24,
+  OPENAI_NATIVE = 8,
+  REQUESTY = 9,
+  TOGETHER = 10,
+  DEEPSEEK = 11,
+  QWEN = 12,
+  DOUBAO = 13,
+  MISTRAL = 14,
+  VSCODE_LM = 15,
+  CLINE = 16,
+  LITELLM = 17,
+  NEBIUS = 18,
+  FIREWORKS = 19,
+  ASKSAGE = 20,
+  XAI = 21,
+  SAMBANOVA = 22,
+  CEREBRAS = 23,
+  GROQ = 24,
   SAPAICORE = 25,
   CLAUDE_CODE = 26,
+  MOONSHOT = 27,
+  HUGGINGFACE = 28,
   UNRECOGNIZED = -1,
 }
 
@@ -67,62 +69,68 @@ export function apiProviderFromJSON(object: any): ApiProvider {
     case "GEMINI":
       return ApiProvider.GEMINI;
     case 8:
-    case "GEMINI_CLI":
-      return ApiProvider.GEMINI_CLI;
-    case 9:
     case "OPENAI_NATIVE":
       return ApiProvider.OPENAI_NATIVE;
-    case 10:
+    case 9:
     case "REQUESTY":
       return ApiProvider.REQUESTY;
-    case 11:
+    case 10:
     case "TOGETHER":
       return ApiProvider.TOGETHER;
-    case 12:
+    case 11:
     case "DEEPSEEK":
       return ApiProvider.DEEPSEEK;
-    case 13:
+    case 12:
     case "QWEN":
       return ApiProvider.QWEN;
-    case 14:
+    case 13:
     case "DOUBAO":
       return ApiProvider.DOUBAO;
-    case 15:
+    case 14:
     case "MISTRAL":
       return ApiProvider.MISTRAL;
-    case 16:
+    case 15:
     case "VSCODE_LM":
       return ApiProvider.VSCODE_LM;
-    case 17:
+    case 16:
     case "CLINE":
       return ApiProvider.CLINE;
-    case 18:
+    case 17:
     case "LITELLM":
       return ApiProvider.LITELLM;
-    case 19:
+    case 18:
     case "NEBIUS":
       return ApiProvider.NEBIUS;
-    case 20:
+    case 19:
     case "FIREWORKS":
       return ApiProvider.FIREWORKS;
-    case 21:
+    case 20:
     case "ASKSAGE":
       return ApiProvider.ASKSAGE;
-    case 22:
+    case 21:
     case "XAI":
       return ApiProvider.XAI;
-    case 23:
+    case 22:
     case "SAMBANOVA":
       return ApiProvider.SAMBANOVA;
-    case 24:
+    case 23:
     case "CEREBRAS":
       return ApiProvider.CEREBRAS;
+    case 24:
+    case "GROQ":
+      return ApiProvider.GROQ;
     case 25:
     case "SAPAICORE":
       return ApiProvider.SAPAICORE;
     case 26:
     case "CLAUDE_CODE":
       return ApiProvider.CLAUDE_CODE;
+    case 27:
+    case "MOONSHOT":
+      return ApiProvider.MOONSHOT;
+    case 28:
+    case "HUGGINGFACE":
+      return ApiProvider.HUGGINGFACE;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -148,8 +156,6 @@ export function apiProviderToJSON(object: ApiProvider): string {
       return "LMSTUDIO";
     case ApiProvider.GEMINI:
       return "GEMINI";
-    case ApiProvider.GEMINI_CLI:
-      return "GEMINI_CLI";
     case ApiProvider.OPENAI_NATIVE:
       return "OPENAI_NATIVE";
     case ApiProvider.REQUESTY:
@@ -182,10 +188,16 @@ export function apiProviderToJSON(object: ApiProvider): string {
       return "SAMBANOVA";
     case ApiProvider.CEREBRAS:
       return "CEREBRAS";
+    case ApiProvider.GROQ:
+      return "GROQ";
     case ApiProvider.SAPAICORE:
       return "SAPAICORE";
     case ApiProvider.CLAUDE_CODE:
       return "CLAUDE_CODE";
+    case ApiProvider.MOONSHOT:
+      return "MOONSHOT";
+    case ApiProvider.HUGGINGFACE:
+      return "HUGGINGFACE";
     case ApiProvider.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -315,7 +327,7 @@ export interface ModelsApiConfiguration {
   /** From ApiHandlerOptions (excluding onRetryAttempt function) */
   apiModelId?: string | undefined;
   apiKey?: string | undefined;
-  clineApiKey?: string | undefined;
+  clineAccountId?: string | undefined;
   taskId?: string | undefined;
   liteLlmBaseUrl?: string | undefined;
   liteLlmModelId?: string | undefined;
@@ -386,8 +398,16 @@ export interface ModelsApiConfiguration {
   sapAiCoreTokenUrl?: string | undefined;
   sapAiCoreBaseUrl?: string | undefined;
   claudeCodePath?: string | undefined;
-  geminiCliOauthPath?: string | undefined;
-  geminiCliProjectId?: string | undefined;
+  awsAuthentication?: string | undefined;
+  awsBedrockApiKey?: string | undefined;
+  moonshotApiKey?: string | undefined;
+  moonshotApiLine?: string | undefined;
+  groqApiKey?: string | undefined;
+  groqModelId?: string | undefined;
+  groqModelInfo?: OpenRouterModelInfo | undefined;
+  huggingFaceApiKey?: string | undefined;
+  huggingFaceModelId?: string | undefined;
+  huggingFaceModelInfo?: OpenRouterModelInfo | undefined;
 }
 
 export interface ModelsApiConfiguration_OpenAiHeadersEntry {
@@ -2023,7 +2043,7 @@ function createBaseModelsApiConfiguration(): ModelsApiConfiguration {
   return {
     apiModelId: undefined,
     apiKey: undefined,
-    clineApiKey: undefined,
+    clineAccountId: undefined,
     taskId: undefined,
     liteLlmBaseUrl: undefined,
     liteLlmModelId: undefined,
@@ -2094,8 +2114,16 @@ function createBaseModelsApiConfiguration(): ModelsApiConfiguration {
     sapAiCoreTokenUrl: undefined,
     sapAiCoreBaseUrl: undefined,
     claudeCodePath: undefined,
-    geminiCliOauthPath: undefined,
-    geminiCliProjectId: undefined,
+    awsAuthentication: undefined,
+    awsBedrockApiKey: undefined,
+    moonshotApiKey: undefined,
+    moonshotApiLine: undefined,
+    groqApiKey: undefined,
+    groqModelId: undefined,
+    groqModelInfo: undefined,
+    huggingFaceApiKey: undefined,
+    huggingFaceModelId: undefined,
+    huggingFaceModelInfo: undefined,
   };
 }
 
@@ -2107,8 +2135,8 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
     if (message.apiKey !== undefined) {
       writer.uint32(18).string(message.apiKey);
     }
-    if (message.clineApiKey !== undefined) {
-      writer.uint32(26).string(message.clineApiKey);
+    if (message.clineAccountId !== undefined) {
+      writer.uint32(26).string(message.clineAccountId);
     }
     if (message.taskId !== undefined) {
       writer.uint32(34).string(message.taskId);
@@ -2320,11 +2348,35 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
     if (message.claudeCodePath !== undefined) {
       writer.uint32(586).string(message.claudeCodePath);
     }
-    if (message.geminiCliOauthPath !== undefined) {
-      writer.uint32(594).string(message.geminiCliOauthPath);
+    if (message.awsAuthentication !== undefined) {
+      writer.uint32(594).string(message.awsAuthentication);
     }
-    if (message.geminiCliProjectId !== undefined) {
-      writer.uint32(602).string(message.geminiCliProjectId);
+    if (message.awsBedrockApiKey !== undefined) {
+      writer.uint32(602).string(message.awsBedrockApiKey);
+    }
+    if (message.moonshotApiKey !== undefined) {
+      writer.uint32(610).string(message.moonshotApiKey);
+    }
+    if (message.moonshotApiLine !== undefined) {
+      writer.uint32(618).string(message.moonshotApiLine);
+    }
+    if (message.groqApiKey !== undefined) {
+      writer.uint32(626).string(message.groqApiKey);
+    }
+    if (message.groqModelId !== undefined) {
+      writer.uint32(634).string(message.groqModelId);
+    }
+    if (message.groqModelInfo !== undefined) {
+      OpenRouterModelInfo.encode(message.groqModelInfo, writer.uint32(642).fork()).join();
+    }
+    if (message.huggingFaceApiKey !== undefined) {
+      writer.uint32(650).string(message.huggingFaceApiKey);
+    }
+    if (message.huggingFaceModelId !== undefined) {
+      writer.uint32(658).string(message.huggingFaceModelId);
+    }
+    if (message.huggingFaceModelInfo !== undefined) {
+      OpenRouterModelInfo.encode(message.huggingFaceModelInfo, writer.uint32(666).fork()).join();
     }
     return writer;
   },
@@ -2357,7 +2409,7 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
             break;
           }
 
-          message.clineApiKey = reader.string();
+          message.clineAccountId = reader.string();
           continue;
         }
         case 4: {
@@ -2928,7 +2980,7 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
             break;
           }
 
-          message.geminiCliOauthPath = reader.string();
+          message.awsAuthentication = reader.string();
           continue;
         }
         case 75: {
@@ -2936,7 +2988,71 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
             break;
           }
 
-          message.geminiCliProjectId = reader.string();
+          message.awsBedrockApiKey = reader.string();
+          continue;
+        }
+        case 76: {
+          if (tag !== 610) {
+            break;
+          }
+
+          message.moonshotApiKey = reader.string();
+          continue;
+        }
+        case 77: {
+          if (tag !== 618) {
+            break;
+          }
+
+          message.moonshotApiLine = reader.string();
+          continue;
+        }
+        case 78: {
+          if (tag !== 626) {
+            break;
+          }
+
+          message.groqApiKey = reader.string();
+          continue;
+        }
+        case 79: {
+          if (tag !== 634) {
+            break;
+          }
+
+          message.groqModelId = reader.string();
+          continue;
+        }
+        case 80: {
+          if (tag !== 642) {
+            break;
+          }
+
+          message.groqModelInfo = OpenRouterModelInfo.decode(reader, reader.uint32());
+          continue;
+        }
+        case 81: {
+          if (tag !== 650) {
+            break;
+          }
+
+          message.huggingFaceApiKey = reader.string();
+          continue;
+        }
+        case 82: {
+          if (tag !== 658) {
+            break;
+          }
+
+          message.huggingFaceModelId = reader.string();
+          continue;
+        }
+        case 83: {
+          if (tag !== 666) {
+            break;
+          }
+
+          message.huggingFaceModelInfo = OpenRouterModelInfo.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -2952,7 +3068,7 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
     return {
       apiModelId: isSet(object.apiModelId) ? globalThis.String(object.apiModelId) : undefined,
       apiKey: isSet(object.apiKey) ? globalThis.String(object.apiKey) : undefined,
-      clineApiKey: isSet(object.clineApiKey) ? globalThis.String(object.clineApiKey) : undefined,
+      clineAccountId: isSet(object.clineAccountId) ? globalThis.String(object.clineAccountId) : undefined,
       taskId: isSet(object.taskId) ? globalThis.String(object.taskId) : undefined,
       liteLlmBaseUrl: isSet(object.liteLlmBaseUrl) ? globalThis.String(object.liteLlmBaseUrl) : undefined,
       liteLlmModelId: isSet(object.liteLlmModelId) ? globalThis.String(object.liteLlmModelId) : undefined,
@@ -3060,8 +3176,18 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
       sapAiCoreTokenUrl: isSet(object.sapAiCoreTokenUrl) ? globalThis.String(object.sapAiCoreTokenUrl) : undefined,
       sapAiCoreBaseUrl: isSet(object.sapAiCoreBaseUrl) ? globalThis.String(object.sapAiCoreBaseUrl) : undefined,
       claudeCodePath: isSet(object.claudeCodePath) ? globalThis.String(object.claudeCodePath) : undefined,
-      geminiCliOauthPath: isSet(object.geminiCliOauthPath) ? globalThis.String(object.geminiCliOauthPath) : undefined,
-      geminiCliProjectId: isSet(object.geminiCliProjectId) ? globalThis.String(object.geminiCliProjectId) : undefined,
+      awsAuthentication: isSet(object.awsAuthentication) ? globalThis.String(object.awsAuthentication) : undefined,
+      awsBedrockApiKey: isSet(object.awsBedrockApiKey) ? globalThis.String(object.awsBedrockApiKey) : undefined,
+      moonshotApiKey: isSet(object.moonshotApiKey) ? globalThis.String(object.moonshotApiKey) : undefined,
+      moonshotApiLine: isSet(object.moonshotApiLine) ? globalThis.String(object.moonshotApiLine) : undefined,
+      groqApiKey: isSet(object.groqApiKey) ? globalThis.String(object.groqApiKey) : undefined,
+      groqModelId: isSet(object.groqModelId) ? globalThis.String(object.groqModelId) : undefined,
+      groqModelInfo: isSet(object.groqModelInfo) ? OpenRouterModelInfo.fromJSON(object.groqModelInfo) : undefined,
+      huggingFaceApiKey: isSet(object.huggingFaceApiKey) ? globalThis.String(object.huggingFaceApiKey) : undefined,
+      huggingFaceModelId: isSet(object.huggingFaceModelId) ? globalThis.String(object.huggingFaceModelId) : undefined,
+      huggingFaceModelInfo: isSet(object.huggingFaceModelInfo)
+        ? OpenRouterModelInfo.fromJSON(object.huggingFaceModelInfo)
+        : undefined,
     };
   },
 
@@ -3073,8 +3199,8 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
     if (message.apiKey !== undefined) {
       obj.apiKey = message.apiKey;
     }
-    if (message.clineApiKey !== undefined) {
-      obj.clineApiKey = message.clineApiKey;
+    if (message.clineAccountId !== undefined) {
+      obj.clineAccountId = message.clineAccountId;
     }
     if (message.taskId !== undefined) {
       obj.taskId = message.taskId;
@@ -3292,11 +3418,35 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
     if (message.claudeCodePath !== undefined) {
       obj.claudeCodePath = message.claudeCodePath;
     }
-    if (message.geminiCliOauthPath !== undefined) {
-      obj.geminiCliOauthPath = message.geminiCliOauthPath;
+    if (message.awsAuthentication !== undefined) {
+      obj.awsAuthentication = message.awsAuthentication;
     }
-    if (message.geminiCliProjectId !== undefined) {
-      obj.geminiCliProjectId = message.geminiCliProjectId;
+    if (message.awsBedrockApiKey !== undefined) {
+      obj.awsBedrockApiKey = message.awsBedrockApiKey;
+    }
+    if (message.moonshotApiKey !== undefined) {
+      obj.moonshotApiKey = message.moonshotApiKey;
+    }
+    if (message.moonshotApiLine !== undefined) {
+      obj.moonshotApiLine = message.moonshotApiLine;
+    }
+    if (message.groqApiKey !== undefined) {
+      obj.groqApiKey = message.groqApiKey;
+    }
+    if (message.groqModelId !== undefined) {
+      obj.groqModelId = message.groqModelId;
+    }
+    if (message.groqModelInfo !== undefined) {
+      obj.groqModelInfo = OpenRouterModelInfo.toJSON(message.groqModelInfo);
+    }
+    if (message.huggingFaceApiKey !== undefined) {
+      obj.huggingFaceApiKey = message.huggingFaceApiKey;
+    }
+    if (message.huggingFaceModelId !== undefined) {
+      obj.huggingFaceModelId = message.huggingFaceModelId;
+    }
+    if (message.huggingFaceModelInfo !== undefined) {
+      obj.huggingFaceModelInfo = OpenRouterModelInfo.toJSON(message.huggingFaceModelInfo);
     }
     return obj;
   },
@@ -3308,7 +3458,7 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
     const message = createBaseModelsApiConfiguration();
     message.apiModelId = object.apiModelId ?? undefined;
     message.apiKey = object.apiKey ?? undefined;
-    message.clineApiKey = object.clineApiKey ?? undefined;
+    message.clineAccountId = object.clineAccountId ?? undefined;
     message.taskId = object.taskId ?? undefined;
     message.liteLlmBaseUrl = object.liteLlmBaseUrl ?? undefined;
     message.liteLlmModelId = object.liteLlmModelId ?? undefined;
@@ -3398,8 +3548,20 @@ export const ModelsApiConfiguration: MessageFns<ModelsApiConfiguration> = {
     message.sapAiCoreTokenUrl = object.sapAiCoreTokenUrl ?? undefined;
     message.sapAiCoreBaseUrl = object.sapAiCoreBaseUrl ?? undefined;
     message.claudeCodePath = object.claudeCodePath ?? undefined;
-    message.geminiCliOauthPath = object.geminiCliOauthPath ?? undefined;
-    message.geminiCliProjectId = object.geminiCliProjectId ?? undefined;
+    message.awsAuthentication = object.awsAuthentication ?? undefined;
+    message.awsBedrockApiKey = object.awsBedrockApiKey ?? undefined;
+    message.moonshotApiKey = object.moonshotApiKey ?? undefined;
+    message.moonshotApiLine = object.moonshotApiLine ?? undefined;
+    message.groqApiKey = object.groqApiKey ?? undefined;
+    message.groqModelId = object.groqModelId ?? undefined;
+    message.groqModelInfo = (object.groqModelInfo !== undefined && object.groqModelInfo !== null)
+      ? OpenRouterModelInfo.fromPartial(object.groqModelInfo)
+      : undefined;
+    message.huggingFaceApiKey = object.huggingFaceApiKey ?? undefined;
+    message.huggingFaceModelId = object.huggingFaceModelId ?? undefined;
+    message.huggingFaceModelInfo = (object.huggingFaceModelInfo !== undefined && object.huggingFaceModelInfo !== null)
+      ? OpenRouterModelInfo.fromPartial(object.huggingFaceModelInfo)
+      : undefined;
     return message;
   },
 };
@@ -3526,6 +3688,15 @@ export const ModelsServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    /** Refreshes and returns Hugging Face models */
+    refreshHuggingFaceModels: {
+      name: "refreshHuggingFaceModels",
+      requestType: EmptyRequest,
+      requestStream: false,
+      responseType: OpenRouterCompatibleModelInfo,
+      responseStream: false,
+      options: {},
+    },
     /** Refreshes and returns OpenAI models */
     refreshOpenAiModels: {
       name: "refreshOpenAiModels",
@@ -3559,6 +3730,15 @@ export const ModelsServiceDefinition = {
       requestType: UpdateApiConfigurationRequest,
       requestStream: false,
       responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+    /** Refreshes and returns Groq models */
+    refreshGroqModels: {
+      name: "refreshGroqModels",
+      requestType: EmptyRequest,
+      requestStream: false,
+      responseType: OpenRouterCompatibleModelInfo,
       responseStream: false,
       options: {},
     },

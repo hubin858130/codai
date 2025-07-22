@@ -77,7 +77,7 @@ const TelemetryBanner = () => {
 					(and access experimental features)
 				</i>
 				<div style={{ marginTop: 4 }}>
-					codai collects anonymous error and usage data to help us fix bugs and improve the extension. No code, prompts,
+					Cline collects anonymous error and usage data to help us fix bugs and improve the extension. No code, prompts,
 					or personal information is ever sent.
 					<div style={{ marginTop: 4 }}>
 						You can turn this setting off in{" "}

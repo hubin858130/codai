@@ -1,4 +1,6 @@
-import { MAX_IMAGES_AND_FILES_PER_MESSAGE } from "@/components/chat/ChatView"
+import { CHAT_CONSTANTS } from "@/components/chat/chat-view/constants"
+
+const { MAX_IMAGES_AND_FILES_PER_MESSAGE } = CHAT_CONSTANTS
 import ContextMenu from "@/components/chat/ContextMenu"
 import SlashCommandMenu from "@/components/chat/SlashCommandMenu"
 import { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
@@ -1766,13 +1768,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 										style={{
 											bottom: `calc(100vh - ${menuPosition}px + 6px)`,
 										}}>
-										<ApiOptions
-											showModelOptions={true}
-											apiErrorMessage={undefined}
-											modelIdErrorMessage={undefined}
-											isPopup={true}
-											saveImmediately={true} // Ensure popup saves immediately
-										/>
+										<ApiOptions showModelOptions={true} modelIdErrorMessage={undefined} isPopup={true} />
 									</ModelSelectorTooltip>
 								)}
 							</ModelContainer>
@@ -1782,7 +1778,7 @@ const ChatTextArea = forwardRef<HTMLTextAreaElement, ChatTextAreaProps>(
 					<Tooltip
 						style={{ zIndex: 1000 }}
 						visible={shownTooltipMode !== null}
-						tipText={`In ${shownTooltipMode === "act" ? t("chat.actModeTooltip") : t("chat.planModeTooltip")}  mode, codai will ${shownTooltipMode === "act" ? "complete the task immediately" : "gather information to architect a plan"}`}
+						tipText={`${shownTooltipMode === "act" ? t("chat.actModeTooltip") : t("chat.planModeTooltip")}`}
 						hintText={t("chat.toggleModeHint", { metaKey: metaKeyChar })}>
 						<SwitchContainer data-testid="mode-switch" disabled={false} onClick={onModeToggle}>
 							<Slider isAct={chatSettings.mode === "act"} isPlan={chatSettings.mode === "plan"} />

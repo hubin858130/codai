@@ -1,57 +1,48 @@
-import { ApiConfiguration, geminiModels } from "@shared/api"
+import { geminiModels } from "@shared/api"
 import { ApiKeyField } from "../common/ApiKeyField"
 import { BaseUrlField } from "../common/BaseUrlField"
 import { ModelSelector } from "../common/ModelSelector"
 import { ModelInfoView } from "../common/ModelInfoView"
 import { normalizeApiConfiguration } from "../utils/providerUtils"
 import ThinkingBudgetSlider from "../ThinkingBudgetSlider"
+import { useApiConfigurationHandlers } from "../utils/useApiConfigurationHandlers"
+import { useExtensionState } from "@/context/ExtensionStateContext"
 import { useTranslation } from "react-i18next"
 
 // Gemini models that support thinking/reasoning mode
-const SUPPORTED_THINKING_MODELS = ["gemini-2.5-pro", "gemini-2.5-flash"]
+const SUPPORTED_THINKING_MODELS = ["gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite-preview-06-17"]
 
 /**
  * Props for the GeminiProvider component
  */
 interface GeminiProviderProps {
-	apiConfiguration: ApiConfiguration
-	handleInputChange: (field: keyof ApiConfiguration) => (event: any) => void
 	showModelOptions: boolean
 	isPopup?: boolean
-	setApiConfiguration?: (config: ApiConfiguration) => void
 }
 
 /**
  * The Gemini provider configuration component
  */
-export const GeminiProvider = ({
-	apiConfiguration,
-	handleInputChange,
-	showModelOptions,
-	isPopup,
-	setApiConfiguration,
-}: GeminiProviderProps) => {
+export const GeminiProvider = ({ showModelOptions, isPopup }: GeminiProviderProps) => {
 	const { t } = useTranslation()
+	const { apiConfiguration } = useExtensionState()
+	const { handleFieldChange } = useApiConfigurationHandlers()
+
 	// Get the normalized configuration
 	const { selectedModelId, selectedModelInfo } = normalizeApiConfiguration(apiConfiguration)
-
-	// Create a wrapper for handling field changes more directly
-	const handleFieldChange = (field: keyof ApiConfiguration) => (value: string) => {
-		handleInputChange(field)({ target: { value } })
-	}
 
 	return (
 		<div>
 			<ApiKeyField
-				value={apiConfiguration?.geminiApiKey || ""}
-				onChange={handleInputChange("geminiApiKey")}
+				initialValue={apiConfiguration?.geminiApiKey || ""}
+				onChange={(value) => handleFieldChange("geminiApiKey", value)}
 				providerName="Gemini"
 				signupUrl="https://aistudio.google.com/apikey"
 			/>
 
 			<BaseUrlField
-				value={apiConfiguration?.geminiBaseUrl}
-				onChange={handleFieldChange("geminiBaseUrl")}
+				initialValue={apiConfiguration?.geminiBaseUrl}
+				onChange={(value) => handleFieldChange("geminiBaseUrl", value)}
 				placeholder="Default: https://generativelanguage.googleapis.com"
 				label={t("settings.api.customBaseUrl")}
 			/>
@@ -61,16 +52,12 @@ export const GeminiProvider = ({
 					<ModelSelector
 						models={geminiModels}
 						selectedModelId={selectedModelId}
-						onChange={handleInputChange("apiModelId")}
+						onChange={(e: any) => handleFieldChange("apiModelId", e.target.value)}
 						label={t("settings.api.model")}
 					/>
 
-					{SUPPORTED_THINKING_MODELS.includes(selectedModelId) && setApiConfiguration && (
-						<ThinkingBudgetSlider
-							apiConfiguration={apiConfiguration}
-							setApiConfiguration={setApiConfiguration}
-							maxBudget={selectedModelInfo.thinkingConfig?.maxBudget}
-						/>
+					{SUPPORTED_THINKING_MODELS.includes(selectedModelId) && (
+						<ThinkingBudgetSlider maxBudget={selectedModelInfo.thinkingConfig?.maxBudget} />
 					)}
 
 					<ModelInfoView selectedModelId={selectedModelId} modelInfo={selectedModelInfo} isPopup={isPopup} />

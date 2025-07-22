@@ -1,9 +1,11 @@
 import path from "path"
 import fs from "fs/promises"
 import { Controller } from ".."
-import { Empty, StringArrayRequest, BooleanRequest } from "../../../shared/proto/common"
+import { Empty, StringArrayRequest } from "../../../shared/proto/common"
 import { TaskMethodHandler } from "./index"
 import { fileExistsAtPath } from "../../../utils/fs"
+import { getHostBridgeProvider } from "@/hosts/host-providers"
+import { ShowMessageRequest, ShowMessageType } from "@/shared/proto/host/window"
 
 /**
  * Deletes tasks with the specified IDs
@@ -18,6 +20,24 @@ export const deleteTasksWithIds: TaskMethodHandler = async (
 ): Promise<Empty> => {
 	if (!request.value || request.value.length === 0) {
 		throw new Error("Missing task IDs")
+	}
+
+	const taskCount = request.value.length
+	const message =
+		taskCount === 1
+			? "Are you sure you want to delete this task? This action cannot be undone."
+			: `Are you sure you want to delete these ${taskCount} tasks? This action cannot be undone.`
+
+	const userChoice = await getHostBridgeProvider().windowClient.showMessage(
+		ShowMessageRequest.create({
+			type: ShowMessageType.WARNING,
+			message,
+			options: { modal: true, items: ["Delete"] },
+		}),
+	)
+
+	if (userChoice === undefined) {
+		return Empty.create()
 	}
 
 	for (const id of request.value) {

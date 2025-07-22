@@ -36,5 +36,5 @@
 		}
 	},
 	"include": ["src/**/*", "scripts/**/*"],
-	"exclude": ["node_modules", ".vscode-test", "webview-ui", "continue_core"]
+	"exclude": ["node_modules", ".vscode-test", "webview-ui", "continue_core", "src/test/e2e/**/*"]
 }

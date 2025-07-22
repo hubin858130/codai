@@ -1,14 +1,13 @@
 import { ApiConfiguration } from "@shared/api"
-import { VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
+import { DebouncedTextField } from "../common/DebouncedTextField"
 import { ApiKeyField } from "../common/ApiKeyField"
+import { useExtensionState } from "@/context/ExtensionStateContext"
+import { useApiConfigurationHandlers } from "../utils/useApiConfigurationHandlers"
 import { useTranslation } from "react-i18next"
-
 /**
  * Props for the TogetherProvider component
  */
 interface TogetherProviderProps {
-	apiConfiguration: ApiConfiguration
-	handleInputChange: (field: keyof ApiConfiguration) => (event: any) => void
 	showModelOptions: boolean
 	isPopup?: boolean
 }
@@ -16,23 +15,24 @@ interface TogetherProviderProps {
 /**
  * The Together provider configuration component
  */
-export const TogetherProvider = ({ apiConfiguration, handleInputChange, showModelOptions, isPopup }: TogetherProviderProps) => {
+export const TogetherProvider = ({ showModelOptions, isPopup }: TogetherProviderProps) => {
+	const { apiConfiguration } = useExtensionState()
+	const { handleFieldChange } = useApiConfigurationHandlers()
 	const { t } = useTranslation()
-
 	return (
 		<div>
 			<ApiKeyField
-				value={apiConfiguration?.togetherApiKey || ""}
-				onChange={handleInputChange("togetherApiKey")}
+				initialValue={apiConfiguration?.togetherApiKey || ""}
+				onChange={(value) => handleFieldChange("togetherApiKey", value)}
 				providerName="Together"
 			/>
-			<VSCodeTextField
-				value={apiConfiguration?.togetherModelId || ""}
+			<DebouncedTextField
+				initialValue={apiConfiguration?.togetherModelId || ""}
+				onChange={(value) => handleFieldChange("togetherModelId", value)}
 				style={{ width: "100%" }}
-				onInput={handleInputChange("togetherModelId")}
 				placeholder={t("settings.api.enterModelId")}>
 				<span style={{ fontWeight: 500 }}>{t("settings.api.modelId")}</span>
-			</VSCodeTextField>
+			</DebouncedTextField>
 			<p
 				style={{
 					fontSize: "12px",

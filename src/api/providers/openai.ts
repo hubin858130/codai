@@ -1,41 +1,64 @@
 import { Anthropic } from "@anthropic-ai/sdk"
 import OpenAI, { AzureOpenAI } from "openai"
 import { withRetry } from "../retry"
-import { ApiHandlerOptions, azureOpenAiDefaultApiVersion, ModelInfo, openAiModelInfoSaneDefaults } from "@shared/api"
+import { azureOpenAiDefaultApiVersion, ModelInfo, openAiModelInfoSaneDefaults, OpenAiCompatibleModelInfo } from "@shared/api"
 import { ApiHandler } from "../index"
 import { convertToOpenAiMessages } from "../transform/openai-format"
 import { ApiStream } from "../transform/stream"
 import { convertToR1Format } from "../transform/r1-format"
 import type { ChatCompletionReasoningEffort } from "openai/resources/chat/completions"
+
+interface OpenAiHandlerOptions {
+	openAiApiKey?: string
+	openAiBaseUrl?: string
+	azureApiVersion?: string
+	openAiHeaders?: Record<string, string>
+	openAiModelId?: string
+	openAiModelInfo?: OpenAiCompatibleModelInfo
+	reasoningEffort?: string
+}
 import { EncryptUtil, getPluginVersion } from "@/utils/encrypt"
 
 export class OpenAiHandler implements ApiHandler {
-	private options: ApiHandlerOptions
-	private client: OpenAI
+	private options: OpenAiHandlerOptions
+	private client: OpenAI | undefined
 
-	constructor(options: ApiHandlerOptions) {
+	constructor(options: OpenAiHandlerOptions) {
 		this.options = options
-		// Azure API shape slightly differs from the core API shape: https://github.com/openai/openai-node?tab=readme-ov-file#microsoft-azure-openai
-		// Use azureApiVersion to determine if this is an Azure endpoint, since the URL may not always contain 'azure.com'
-		if (
-			this.options.azureApiVersion ||
-			((this.options.openAiBaseUrl?.toLowerCase().includes("azure.com") ||
-				this.options.openAiBaseUrl?.toLowerCase().includes("azure.us")) &&
-				!this.options.openAiModelId?.toLowerCase().includes("deepseek"))
-		) {
-			this.client = new AzureOpenAI({
-				baseURL: this.options.openAiBaseUrl,
-				apiKey: this.options.openAiApiKey,
-				apiVersion: this.options.azureApiVersion || azureOpenAiDefaultApiVersion,
-				defaultHeaders: this.options.openAiHeaders,
-			})
-		} else {
-			this.client = new OpenAI({
-				baseURL: this.options.openAiBaseUrl,
-				apiKey: this.options.openAiApiKey,
-				defaultHeaders: this.options.openAiHeaders,
-			})
+	}
+
+	private ensureClient(): OpenAI {
+		if (!this.client) {
+			if (!this.options.openAiApiKey) {
+				throw new Error("OpenAI API key is required")
+			}
+			try {
+				// Azure API shape slightly differs from the core API shape: https://github.com/openai/openai-node?tab=readme-ov-file#microsoft-azure-openai
+				// Use azureApiVersion to determine if this is an Azure endpoint, since the URL may not always contain 'azure.com'
+				if (
+					this.options.azureApiVersion ||
+					((this.options.openAiBaseUrl?.toLowerCase().includes("azure.com") ||
+						this.options.openAiBaseUrl?.toLowerCase().includes("azure.us")) &&
+						!this.options.openAiModelId?.toLowerCase().includes("deepseek"))
+				) {
+					this.client = new AzureOpenAI({
+						baseURL: this.options.openAiBaseUrl,
+						apiKey: this.options.openAiApiKey,
+						apiVersion: this.options.azureApiVersion || azureOpenAiDefaultApiVersion,
+						defaultHeaders: this.options.openAiHeaders,
+					})
+				} else {
+					this.client = new OpenAI({
+						baseURL: this.options.openAiBaseUrl,
+						apiKey: this.options.openAiApiKey,
+						defaultHeaders: this.options.openAiHeaders,
+					})
+				}
+			} catch (error: any) {
+				throw new Error(`Error creating OpenAI client: ${error.message}`)
+			}
 		}
+		return this.client
 	}
 
 	// 移除装饰器，直接实现方法
@@ -46,6 +69,8 @@ export class OpenAiHandler implements ApiHandler {
 	}
 	// @withRetry()
 	async *_createMessageImpl(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream {
+
+		this.client = this.ensureClient()
 		const modelId = this.options.openAiModelId ?? ""
 		const isDeepseekReasoner = modelId.includes("deepseek-reasoner")
 		const isR1FormatRequired = this.options.openAiModelInfo?.isR1FormatRequired ?? false

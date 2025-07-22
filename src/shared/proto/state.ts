@@ -162,7 +162,7 @@ export interface UpdateSettingsRequest {
   shellIntegrationTimeout?: number | undefined;
   terminalReuseEnabled?: boolean | undefined;
   mcpResponsesCollapsed?: boolean | undefined;
-  mcpRichDisplayEnabled?: boolean | undefined;
+  mcpDisplayMode?: string | undefined;
   terminalOutputLineLimit?: number | undefined;
 }
 
@@ -179,7 +179,7 @@ export interface ApiConfiguration {
     | string
     | undefined;
   /** Provider-specific API keys */
-  clineApiKey?: string | undefined;
+  clineAccountId?: string | undefined;
   openrouterApiKey?: string | undefined;
   anthropicBaseUrl?: string | undefined;
   openaiApiKey?: string | undefined;
@@ -300,7 +300,17 @@ export interface ApiConfiguration {
     | string
     | undefined;
   /** Claude Code specific */
-  claudeCodePath?: string | undefined;
+  claudeCodePath?:
+    | string
+    | undefined;
+  /** Extension fields for Bedrock Api Keys */
+  awsAuthentication?: string | undefined;
+  awsBedrockApiKey?:
+    | string
+    | undefined;
+  /** Moonshot */
+  moonshotApiKey?: string | undefined;
+  moonshotApiLine?: string | undefined;
 }
 
 function createBaseState(): State {
@@ -1432,7 +1442,7 @@ function createBaseUpdateSettingsRequest(): UpdateSettingsRequest {
     shellIntegrationTimeout: undefined,
     terminalReuseEnabled: undefined,
     mcpResponsesCollapsed: undefined,
-    mcpRichDisplayEnabled: undefined,
+    mcpDisplayMode: undefined,
     terminalOutputLineLimit: undefined,
   };
 }
@@ -1469,8 +1479,8 @@ export const UpdateSettingsRequest: MessageFns<UpdateSettingsRequest> = {
     if (message.mcpResponsesCollapsed !== undefined) {
       writer.uint32(80).bool(message.mcpResponsesCollapsed);
     }
-    if (message.mcpRichDisplayEnabled !== undefined) {
-      writer.uint32(88).bool(message.mcpRichDisplayEnabled);
+    if (message.mcpDisplayMode !== undefined) {
+      writer.uint32(90).string(message.mcpDisplayMode);
     }
     if (message.terminalOutputLineLimit !== undefined) {
       writer.uint32(96).int64(message.terminalOutputLineLimit);
@@ -1566,11 +1576,11 @@ export const UpdateSettingsRequest: MessageFns<UpdateSettingsRequest> = {
           continue;
         }
         case 11: {
-          if (tag !== 88) {
+          if (tag !== 90) {
             break;
           }
 
-          message.mcpRichDisplayEnabled = reader.bool();
+          message.mcpDisplayMode = reader.string();
           continue;
         }
         case 12: {
@@ -1614,9 +1624,7 @@ export const UpdateSettingsRequest: MessageFns<UpdateSettingsRequest> = {
       mcpResponsesCollapsed: isSet(object.mcpResponsesCollapsed)
         ? globalThis.Boolean(object.mcpResponsesCollapsed)
         : undefined,
-      mcpRichDisplayEnabled: isSet(object.mcpRichDisplayEnabled)
-        ? globalThis.Boolean(object.mcpRichDisplayEnabled)
-        : undefined,
+      mcpDisplayMode: isSet(object.mcpDisplayMode) ? globalThis.String(object.mcpDisplayMode) : undefined,
       terminalOutputLineLimit: isSet(object.terminalOutputLineLimit)
         ? globalThis.Number(object.terminalOutputLineLimit)
         : undefined,
@@ -1655,8 +1663,8 @@ export const UpdateSettingsRequest: MessageFns<UpdateSettingsRequest> = {
     if (message.mcpResponsesCollapsed !== undefined) {
       obj.mcpResponsesCollapsed = message.mcpResponsesCollapsed;
     }
-    if (message.mcpRichDisplayEnabled !== undefined) {
-      obj.mcpRichDisplayEnabled = message.mcpRichDisplayEnabled;
+    if (message.mcpDisplayMode !== undefined) {
+      obj.mcpDisplayMode = message.mcpDisplayMode;
     }
     if (message.terminalOutputLineLimit !== undefined) {
       obj.terminalOutputLineLimit = Math.round(message.terminalOutputLineLimit);
@@ -1685,7 +1693,7 @@ export const UpdateSettingsRequest: MessageFns<UpdateSettingsRequest> = {
     message.shellIntegrationTimeout = object.shellIntegrationTimeout ?? undefined;
     message.terminalReuseEnabled = object.terminalReuseEnabled ?? undefined;
     message.mcpResponsesCollapsed = object.mcpResponsesCollapsed ?? undefined;
-    message.mcpRichDisplayEnabled = object.mcpRichDisplayEnabled ?? undefined;
+    message.mcpDisplayMode = object.mcpDisplayMode ?? undefined;
     message.terminalOutputLineLimit = object.terminalOutputLineLimit ?? undefined;
     return message;
   },
@@ -1697,7 +1705,7 @@ function createBaseApiConfiguration(): ApiConfiguration {
     apiModelId: undefined,
     apiKey: undefined,
     apiBaseUrl: undefined,
-    clineApiKey: undefined,
+    clineAccountId: undefined,
     openrouterApiKey: undefined,
     anthropicBaseUrl: undefined,
     openaiApiKey: undefined,
@@ -1770,6 +1778,10 @@ function createBaseApiConfiguration(): ApiConfiguration {
     sapAiCoreTokenUrl: undefined,
     sapAiResourceGroup: undefined,
     claudeCodePath: undefined,
+    awsAuthentication: undefined,
+    awsBedrockApiKey: undefined,
+    moonshotApiKey: undefined,
+    moonshotApiLine: undefined,
   };
 }
 
@@ -1787,8 +1799,8 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
     if (message.apiBaseUrl !== undefined) {
       writer.uint32(34).string(message.apiBaseUrl);
     }
-    if (message.clineApiKey !== undefined) {
-      writer.uint32(42).string(message.clineApiKey);
+    if (message.clineAccountId !== undefined) {
+      writer.uint32(42).string(message.clineAccountId);
     }
     if (message.openrouterApiKey !== undefined) {
       writer.uint32(50).string(message.openrouterApiKey);
@@ -2006,6 +2018,18 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
     if (message.claudeCodePath !== undefined) {
       writer.uint32(618).string(message.claudeCodePath);
     }
+    if (message.awsAuthentication !== undefined) {
+      writer.uint32(626).string(message.awsAuthentication);
+    }
+    if (message.awsBedrockApiKey !== undefined) {
+      writer.uint32(634).string(message.awsBedrockApiKey);
+    }
+    if (message.moonshotApiKey !== undefined) {
+      writer.uint32(642).string(message.moonshotApiKey);
+    }
+    if (message.moonshotApiLine !== undefined) {
+      writer.uint32(650).string(message.moonshotApiLine);
+    }
     return writer;
   },
 
@@ -2053,7 +2077,7 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
             break;
           }
 
-          message.clineApiKey = reader.string();
+          message.clineAccountId = reader.string();
           continue;
         }
         case 6: {
@@ -2632,6 +2656,38 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
           message.claudeCodePath = reader.string();
           continue;
         }
+        case 78: {
+          if (tag !== 626) {
+            break;
+          }
+
+          message.awsAuthentication = reader.string();
+          continue;
+        }
+        case 79: {
+          if (tag !== 634) {
+            break;
+          }
+
+          message.awsBedrockApiKey = reader.string();
+          continue;
+        }
+        case 80: {
+          if (tag !== 642) {
+            break;
+          }
+
+          message.moonshotApiKey = reader.string();
+          continue;
+        }
+        case 81: {
+          if (tag !== 650) {
+            break;
+          }
+
+          message.moonshotApiLine = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -2647,7 +2703,7 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
       apiModelId: isSet(object.apiModelId) ? globalThis.String(object.apiModelId) : undefined,
       apiKey: isSet(object.apiKey) ? globalThis.String(object.apiKey) : undefined,
       apiBaseUrl: isSet(object.apiBaseUrl) ? globalThis.String(object.apiBaseUrl) : undefined,
-      clineApiKey: isSet(object.clineApiKey) ? globalThis.String(object.clineApiKey) : undefined,
+      clineAccountId: isSet(object.clineAccountId) ? globalThis.String(object.clineAccountId) : undefined,
       openrouterApiKey: isSet(object.openrouterApiKey) ? globalThis.String(object.openrouterApiKey) : undefined,
       anthropicBaseUrl: isSet(object.anthropicBaseUrl) ? globalThis.String(object.anthropicBaseUrl) : undefined,
       openaiApiKey: isSet(object.openaiApiKey) ? globalThis.String(object.openaiApiKey) : undefined,
@@ -2748,6 +2804,10 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
       sapAiCoreTokenUrl: isSet(object.sapAiCoreTokenUrl) ? globalThis.String(object.sapAiCoreTokenUrl) : undefined,
       sapAiResourceGroup: isSet(object.sapAiResourceGroup) ? globalThis.String(object.sapAiResourceGroup) : undefined,
       claudeCodePath: isSet(object.claudeCodePath) ? globalThis.String(object.claudeCodePath) : undefined,
+      awsAuthentication: isSet(object.awsAuthentication) ? globalThis.String(object.awsAuthentication) : undefined,
+      awsBedrockApiKey: isSet(object.awsBedrockApiKey) ? globalThis.String(object.awsBedrockApiKey) : undefined,
+      moonshotApiKey: isSet(object.moonshotApiKey) ? globalThis.String(object.moonshotApiKey) : undefined,
+      moonshotApiLine: isSet(object.moonshotApiLine) ? globalThis.String(object.moonshotApiLine) : undefined,
     };
   },
 
@@ -2765,8 +2825,8 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
     if (message.apiBaseUrl !== undefined) {
       obj.apiBaseUrl = message.apiBaseUrl;
     }
-    if (message.clineApiKey !== undefined) {
-      obj.clineApiKey = message.clineApiKey;
+    if (message.clineAccountId !== undefined) {
+      obj.clineAccountId = message.clineAccountId;
     }
     if (message.openrouterApiKey !== undefined) {
       obj.openrouterApiKey = message.openrouterApiKey;
@@ -2984,6 +3044,18 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
     if (message.claudeCodePath !== undefined) {
       obj.claudeCodePath = message.claudeCodePath;
     }
+    if (message.awsAuthentication !== undefined) {
+      obj.awsAuthentication = message.awsAuthentication;
+    }
+    if (message.awsBedrockApiKey !== undefined) {
+      obj.awsBedrockApiKey = message.awsBedrockApiKey;
+    }
+    if (message.moonshotApiKey !== undefined) {
+      obj.moonshotApiKey = message.moonshotApiKey;
+    }
+    if (message.moonshotApiLine !== undefined) {
+      obj.moonshotApiLine = message.moonshotApiLine;
+    }
     return obj;
   },
 
@@ -2996,7 +3068,7 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
     message.apiModelId = object.apiModelId ?? undefined;
     message.apiKey = object.apiKey ?? undefined;
     message.apiBaseUrl = object.apiBaseUrl ?? undefined;
-    message.clineApiKey = object.clineApiKey ?? undefined;
+    message.clineAccountId = object.clineAccountId ?? undefined;
     message.openrouterApiKey = object.openrouterApiKey ?? undefined;
     message.anthropicBaseUrl = object.anthropicBaseUrl ?? undefined;
     message.openaiApiKey = object.openaiApiKey ?? undefined;
@@ -3069,6 +3141,10 @@ export const ApiConfiguration: MessageFns<ApiConfiguration> = {
     message.sapAiCoreTokenUrl = object.sapAiCoreTokenUrl ?? undefined;
     message.sapAiResourceGroup = object.sapAiResourceGroup ?? undefined;
     message.claudeCodePath = object.claudeCodePath ?? undefined;
+    message.awsAuthentication = object.awsAuthentication ?? undefined;
+    message.awsBedrockApiKey = object.awsBedrockApiKey ?? undefined;
+    message.moonshotApiKey = object.moonshotApiKey ?? undefined;
+    message.moonshotApiLine = object.moonshotApiLine ?? undefined;
     return message;
   },
 };
@@ -3169,6 +3245,14 @@ export const StateServiceDefinition = {
     updateTelemetrySetting: {
       name: "updateTelemetrySetting",
       requestType: TelemetrySettingRequest,
+      requestStream: false,
+      responseType: Empty,
+      responseStream: false,
+      options: {},
+    },
+    setWelcomeViewCompleted: {
+      name: "setWelcomeViewCompleted",
+      requestType: BooleanRequest,
       requestStream: false,
       responseType: Empty,
       responseStream: false,

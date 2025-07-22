@@ -202,8 +202,6 @@ function convertApiProviderToProto(provider: string | undefined): ProtoApiProvid
 			return ProtoApiProvider.LMSTUDIO
 		case "gemini":
 			return ProtoApiProvider.GEMINI
-		case "gemini-cli":
-			return ProtoApiProvider.GEMINI_CLI
 		case "openai-native":
 			return ProtoApiProvider.OPENAI_NATIVE
 		case "requesty":
@@ -224,6 +222,10 @@ function convertApiProviderToProto(provider: string | undefined): ProtoApiProvid
 			return ProtoApiProvider.CLINE
 		case "litellm":
 			return ProtoApiProvider.LITELLM
+		case "moonshot":
+			return ProtoApiProvider.MOONSHOT
+		case "huggingface":
+			return ProtoApiProvider.HUGGINGFACE
 		case "nebius":
 			return ProtoApiProvider.NEBIUS
 		case "fireworks":
@@ -236,6 +238,8 @@ function convertApiProviderToProto(provider: string | undefined): ProtoApiProvid
 			return ProtoApiProvider.SAMBANOVA
 		case "cerebras":
 			return ProtoApiProvider.CEREBRAS
+		case "groq":
+			return ProtoApiProvider.GROQ
 		case "sapaicore":
 			return ProtoApiProvider.SAPAICORE
 		case "claude-code":
@@ -264,8 +268,6 @@ function convertProtoToApiProvider(provider: ProtoApiProvider): ApiProvider {
 			return "lmstudio"
 		case ProtoApiProvider.GEMINI:
 			return "gemini"
-		case ProtoApiProvider.GEMINI_CLI:
-			return "gemini-cli"
 		case ProtoApiProvider.OPENAI_NATIVE:
 			return "openai-native"
 		case ProtoApiProvider.REQUESTY:
@@ -286,6 +288,10 @@ function convertProtoToApiProvider(provider: ProtoApiProvider): ApiProvider {
 			return "cline"
 		case ProtoApiProvider.LITELLM:
 			return "litellm"
+		case ProtoApiProvider.MOONSHOT:
+			return "moonshot"
+		case ProtoApiProvider.HUGGINGFACE:
+			return "huggingface"
 		case ProtoApiProvider.NEBIUS:
 			return "nebius"
 		case ProtoApiProvider.FIREWORKS:
@@ -298,6 +304,8 @@ function convertProtoToApiProvider(provider: ProtoApiProvider): ApiProvider {
 			return "sambanova"
 		case ProtoApiProvider.CEREBRAS:
 			return "cerebras"
+		case ProtoApiProvider.GROQ:
+			return "groq"
 		case ProtoApiProvider.SAPAICORE:
 			return "sapaicore"
 		case ProtoApiProvider.CLAUDE_CODE:
@@ -312,7 +320,7 @@ export function convertApiConfigurationToProto(config: ApiConfiguration): ProtoA
 	return {
 		apiModelId: config.apiModelId,
 		apiKey: config.apiKey,
-		clineApiKey: config.clineApiKey,
+		clineAccountId: config.clineAccountId,
 		taskId: config.taskId,
 		liteLlmBaseUrl: config.liteLlmBaseUrl,
 		liteLlmModelId: config.liteLlmModelId,
@@ -332,7 +340,9 @@ export function convertApiConfigurationToProto(config: ApiConfiguration): ProtoA
 		awsUseCrossRegionInference: config.awsUseCrossRegionInference,
 		awsBedrockUsePromptCache: config.awsBedrockUsePromptCache,
 		awsUseProfile: config.awsUseProfile,
+		awsAuthentication: config.awsAuthentication,
 		awsProfile: config.awsProfile,
+		awsBedrockApiKey: config.awsBedrockApiKey,
 		awsBedrockEndpoint: config.awsBedrockEndpoint,
 		awsBedrockCustomSelected: config.awsBedrockCustomSelected,
 		awsBedrockCustomModelBaseId: config.awsBedrockCustomModelBaseId as string | undefined,
@@ -366,6 +376,11 @@ export function convertApiConfigurationToProto(config: ApiConfiguration): ProtoA
 		azureApiVersion: config.azureApiVersion,
 		vsCodeLmModelSelector: config.vsCodeLmModelSelector,
 		qwenApiLine: config.qwenApiLine,
+		moonshotApiLine: config.moonshotApiLine,
+		moonshotApiKey: config.moonshotApiKey,
+		huggingFaceApiKey: config.huggingFaceApiKey,
+		huggingFaceModelId: config.huggingFaceModelId,
+		huggingFaceModelInfo: convertModelInfoToProtoOpenRouter(config.huggingFaceModelInfo),
 		nebiusApiKey: config.nebiusApiKey,
 		asksageApiUrl: config.asksageApiUrl,
 		asksageApiKey: config.asksageApiKey,
@@ -374,6 +389,9 @@ export function convertApiConfigurationToProto(config: ApiConfiguration): ProtoA
 		reasoningEffort: config.reasoningEffort,
 		sambanovaApiKey: config.sambanovaApiKey,
 		cerebrasApiKey: config.cerebrasApiKey,
+		groqApiKey: config.groqApiKey,
+		groqModelId: config.groqModelId,
+		groqModelInfo: convertModelInfoToProtoOpenRouter(config.groqModelInfo),
 		requestTimeoutMs: config.requestTimeoutMs,
 		apiProvider: config.apiProvider ? convertApiProviderToProto(config.apiProvider) : undefined,
 		favoritedModelIds: config.favoritedModelIds || [],
@@ -383,8 +401,6 @@ export function convertApiConfigurationToProto(config: ApiConfiguration): ProtoA
 		sapAiCoreTokenUrl: config.sapAiCoreTokenUrl,
 		sapAiCoreBaseUrl: config.sapAiCoreBaseUrl,
 		claudeCodePath: config.claudeCodePath,
-		geminiCliOauthPath: config.geminiCliOAuthPath,
-		geminiCliProjectId: config.geminiCliProjectId,
 	}
 }
 
@@ -393,7 +409,7 @@ export function convertProtoToApiConfiguration(protoConfig: ProtoApiConfiguratio
 	return {
 		apiModelId: protoConfig.apiModelId,
 		apiKey: protoConfig.apiKey,
-		clineApiKey: protoConfig.clineApiKey,
+		clineAccountId: protoConfig.clineAccountId,
 		taskId: protoConfig.taskId,
 		liteLlmBaseUrl: protoConfig.liteLlmBaseUrl,
 		liteLlmModelId: protoConfig.liteLlmModelId,
@@ -413,7 +429,9 @@ export function convertProtoToApiConfiguration(protoConfig: ProtoApiConfiguratio
 		awsUseCrossRegionInference: protoConfig.awsUseCrossRegionInference,
 		awsBedrockUsePromptCache: protoConfig.awsBedrockUsePromptCache,
 		awsUseProfile: protoConfig.awsUseProfile,
+		awsAuthentication: protoConfig.awsAuthentication,
 		awsProfile: protoConfig.awsProfile,
+		awsBedrockApiKey: protoConfig.awsBedrockApiKey,
 		awsBedrockEndpoint: protoConfig.awsBedrockEndpoint,
 		awsBedrockCustomSelected: protoConfig.awsBedrockCustomSelected,
 		awsBedrockCustomModelBaseId: protoConfig.awsBedrockCustomModelBaseId as BedrockModelId | undefined,
@@ -447,6 +465,11 @@ export function convertProtoToApiConfiguration(protoConfig: ProtoApiConfiguratio
 		azureApiVersion: protoConfig.azureApiVersion,
 		vsCodeLmModelSelector: protoConfig.vsCodeLmModelSelector,
 		qwenApiLine: protoConfig.qwenApiLine,
+		moonshotApiLine: protoConfig.moonshotApiLine,
+		moonshotApiKey: protoConfig.moonshotApiKey,
+		huggingFaceApiKey: protoConfig.huggingFaceApiKey,
+		huggingFaceModelId: protoConfig.huggingFaceModelId,
+		huggingFaceModelInfo: convertProtoToModelInfo(protoConfig.huggingFaceModelInfo),
 		nebiusApiKey: protoConfig.nebiusApiKey,
 		asksageApiUrl: protoConfig.asksageApiUrl,
 		asksageApiKey: protoConfig.asksageApiKey,
@@ -455,6 +478,9 @@ export function convertProtoToApiConfiguration(protoConfig: ProtoApiConfiguratio
 		reasoningEffort: protoConfig.reasoningEffort,
 		sambanovaApiKey: protoConfig.sambanovaApiKey,
 		cerebrasApiKey: protoConfig.cerebrasApiKey,
+		groqApiKey: protoConfig.groqApiKey,
+		groqModelId: protoConfig.groqModelId,
+		groqModelInfo: convertProtoToModelInfo(protoConfig.groqModelInfo),
 		requestTimeoutMs: protoConfig.requestTimeoutMs,
 		apiProvider: protoConfig.apiProvider !== undefined ? convertProtoToApiProvider(protoConfig.apiProvider) : undefined,
 		favoritedModelIds: protoConfig.favoritedModelIds.length > 0 ? protoConfig.favoritedModelIds : undefined,
@@ -464,7 +490,5 @@ export function convertProtoToApiConfiguration(protoConfig: ProtoApiConfiguratio
 		sapAiCoreTokenUrl: protoConfig.sapAiCoreTokenUrl,
 		sapAiCoreBaseUrl: protoConfig.sapAiCoreBaseUrl,
 		claudeCodePath: protoConfig.claudeCodePath,
-		geminiCliOAuthPath: protoConfig.geminiCliOauthPath,
-		geminiCliProjectId: protoConfig.geminiCliProjectId,
 	}
 }
