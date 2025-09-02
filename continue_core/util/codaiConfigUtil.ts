@@ -49,11 +49,12 @@ export function updateCodaiConfig(config: Partial<CodeeConfig>): void {
 	const currentConfig = getCodaiConfig()
 	const newConfig = { ...currentConfig, ...config }
 	// let url = newConfig.autocomplete.apiBase
-	let key = newConfig.autocomplete.apiKey
+	let key = config.autocomplete?.apiKey
 
 	// newConfig.autocomplete.apiBase = AesUtil.aesEncrypt(url)
-	newConfig.autocomplete.apiKey = AesUtil.aesEncrypt(key)
-
+	if (key) {
+		newConfig.autocomplete.apiKey = AesUtil.aesEncrypt(key)
+	}
 	fs.writeFileSync(getCodaiConfigJsonPath(), JSON.stringify(newConfig, null, 2))
 }
 
@@ -61,6 +62,7 @@ export function getAutocompleteConfig() {
 	let autocompleteConfig = getCodaiConfig().autocomplete
 	// autocompleteConfig.apiBase = AesUtil.aesDecrypt(autocompleteConfig.apiBase)
 	autocompleteConfig.apiKey = AesUtil.aesDecrypt(autocompleteConfig.apiKey)
+	
 	return autocompleteConfig
 }
 

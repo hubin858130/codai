@@ -1,6 +1,6 @@
-import Section from "../Section"
 import { VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import { useTranslation } from "react-i18next"
+import Section from "../Section"
 
 interface AboutSectionProps {
 	version: string

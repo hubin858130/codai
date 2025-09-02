@@ -1,10 +1,9 @@
 import React from "react"
-import TelemetryBanner from "@/components/common/TelemetryBanner"
 import Announcement from "@/components/chat/Announcement"
-import HomeHeader from "@/components/welcome/HomeHeader"
+import TelemetryBanner from "@/components/common/TelemetryBanner"
 import HistoryPreview from "@/components/history/HistoryPreview"
+import HomeHeader from "@/components/welcome/HomeHeader"
 import { SuggestedTasks } from "@/components/welcome/SuggestedTasks"
-import AutoApproveBar from "@/components/chat/auto-approve-menu/AutoApproveBar"
 import { WelcomeSectionProps } from "../../types/chatTypes"
 import CodaiLogoVariable from "@/assets/CodaiLogoVariable"
 import { t } from "i18next"
@@ -23,29 +22,20 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({
 	shouldShowQuickWins,
 }) => {
 	return (
-		<>
-			<div
-				style={{
-					flex: "1 1 0",
-					minHeight: 0,
-					overflowY: "auto",
-					display: "flex",
-					flexDirection: "column",
-					paddingBottom: "10px",
-				}}>
+		<div className="flex flex-col flex-1 w-full h-full p-0 m-0">
+			<div className="overflow-y-auto flex flex-col pb-2.5">
 				{/* {telemetrySetting === "unset" && <TelemetryBanner />}
 				{showAnnouncement && <Announcement version={version} hideAnnouncement={hideAnnouncement} />}
 				<HomeHeader /> */}
 				<div style={{ padding: "0 20px", flexShrink: 0, textAlign: "center" }}>
-						<h2>{t("chat.welcome.title")}</h2>
-						<div className="my-5">
-							<CodaiLogoVariable className="size-16" />
-						</div>
+					<h2>{t("chat.welcome.title")}</h2>
+					<div className="my-5">
+						<CodaiLogoVariable className="size-16" />
 					</div>
+				</div>
 				{!shouldShowQuickWins && taskHistory.length > 0 && <HistoryPreview showHistoryView={showHistoryView} />}
 			</div>
 			<SuggestedTasks shouldShowQuickWins={shouldShowQuickWins} />
-			<AutoApproveBar />
-		</>
+		</div>
 	)
 }

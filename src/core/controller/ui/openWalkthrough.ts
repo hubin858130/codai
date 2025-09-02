@@ -1,8 +1,8 @@
+import { telemetryService } from "@services/posthog/PostHogClientProvider"
+import type { EmptyRequest } from "@shared/proto/cline/common"
+import { Empty } from "@shared/proto/cline/common"
 import * as vscode from "vscode"
 import type { Controller } from "../index"
-import type { EmptyRequest } from "../../../shared/proto/common"
-import { Empty } from "../../../shared/proto/common"
-import { telemetryService } from "../../../services/posthog/telemetry/TelemetryService"
 
 /**
  * Opens the Cline walkthrough in VSCode
@@ -10,7 +10,7 @@ import { telemetryService } from "../../../services/posthog/telemetry/TelemetryS
  * @param request Empty request
  * @returns Empty response
  */
-export async function openWalkthrough(controller: Controller, request: EmptyRequest): Promise<Empty> {
+export async function openWalkthrough(_controller: Controller, _request: EmptyRequest): Promise<Empty> {
 	try {
 		await vscode.commands.executeCommand("workbench.action.openWalkthrough", "beandao.codai-top#ClineWalkthrough")
 		telemetryService.captureButtonClick("webview_openWalkthrough")

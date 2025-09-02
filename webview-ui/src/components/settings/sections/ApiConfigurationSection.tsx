@@ -1,27 +1,25 @@
-import { VSCodeCheckbox, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
+import { UpdateSettingsRequest } from "@shared/proto/cline/state"
+import { Mode } from "@shared/storage/types"
+import { VSCodeButton, VSCodeCheckbox, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
+import { useEffect, useState } from "react"
+import { useExtensionState } from "@/context/ExtensionStateContext"
+import { BusinessServiceClient, StateServiceClient } from "@/services/grpc-client"
 import { TabButton } from "../../mcp/configuration/McpConfigurationView"
 import ApiOptions from "../ApiOptions"
 import Section from "../Section"
-import { useExtensionState } from "@/context/ExtensionStateContext"
-import { StateServiceClient } from "@/services/grpc-client"
-import { UpdateSettingsRequest } from "@shared/proto/state"
+import { syncModeConfigurations } from "../utils/providerUtils"
+import { useApiConfigurationHandlers } from "../utils/useApiConfigurationHandlers"
 import { useTranslation } from "react-i18next"
-import { vscode } from "@/utils/vscode"
-import { useEffect, useState } from "react"
+import { EmptyRequest, SetAutoCompletionRequest, UpdateApiConfigurationRequest } from "@shared/proto/index.cline"
 
 interface ApiConfigurationSectionProps {
-	isSwitchingMode: boolean
-	handlePlanActModeChange: (mode: "plan" | "act") => Promise<void>
 	renderSectionHeader: (tabId: string) => JSX.Element | null
 }
 
-const ApiConfigurationSection = ({
-	isSwitchingMode,
-	handlePlanActModeChange,
-	renderSectionHeader,
-}: ApiConfigurationSectionProps) => {
+const ApiConfigurationSection = ({ renderSectionHeader }: ApiConfigurationSectionProps) => {
 	const { t, i18n } = useTranslation()
-	const { planActSeparateModelsSetting, chatSettings } = useExtensionState()
+	const { planActSeparateModelsSetting, mode, apiConfiguration } = useExtensionState()
+	const [currentTab, setCurrentTab] = useState<Mode>(mode)
 	const [autocompleteConfig, setAutocompleteConfig] = useState({
 		autocomplete: {
 			provider: "openai",
@@ -33,37 +31,77 @@ const ApiConfigurationSection = ({
 		},
 	})
 	const updateAutoComplete = () => {
-		vscode.postMessage({
-				type: "updateAutocompleteConfig",
-				autocompleteConfig
-			})
+		const request = SetAutoCompletionRequest.create({
+			autoCompletion: {
+				provider: autocompleteConfig.autocomplete.provider,
+				title: autocompleteConfig.autocomplete.title,
+				model: autocompleteConfig.autocomplete.model,
+				apiKey: autocompleteConfig.autocomplete.apiKey,
+				enable: autocompleteConfig.autocomplete.enable,
+				apiBase: autocompleteConfig.autocomplete.apiBase,
+			}
+		});
+		BusinessServiceClient.setAutoCompletion(request).catch(error => {
+			console.error("Failed to update auto-completion settings:", error);
+		});
 	}
 
 	// 在现有代码中添加这个useEffect
 	useEffect(() => {
-		if (autocompleteConfig.autocomplete.apiBase || 
-			autocompleteConfig.autocomplete.apiKey || 
-			autocompleteConfig.autocomplete.model) {
+		if (autocompleteConfig && autocompleteConfig.autocomplete.apiKey.length > 0) {
 			updateAutoComplete();
 		}
 	}, [autocompleteConfig]);
 
 	useEffect(() => {
-		// 请求初始配置
-		vscode.postMessage({ type: "getAutocompleteConfig" })
+		// Load initial auto-completion configuration
+		BusinessServiceClient.getAutoCompletion(EmptyRequest.create())
+			.then(response => {
+				console.log("@@@@@@@,getAutoCompletion:",response)
+				if (response.autoCompletion) {
+					setAutocompleteConfig({
+						autocomplete: {
+							provider: response.autoCompletion.provider ||"openai",
+							title: response.autoCompletion.title ||"autocomplete-coder",
+							apiKey: response.autoCompletion.apiKey || "",
+							model: response.autoCompletion.model || "",
+							apiBase: response.autoCompletion.apiBase || "",
+							enable: response.autoCompletion.enable || false,
+						},
+					});
+				}
+			})
+			.catch(error => {
+				console.error("Failed to get auto-completion settings:", error);
+			});
+	}, []);
 
-		// 监听配置更新
-		const listener = (event: MessageEvent) => {
-			const message = event.data
-			if (message.type === "autocompleteConfig") {
-				setAutocompleteConfig(message.autocompleteConfig)
-			}
+	const { handleFieldsChange } = useApiConfigurationHandlers()
+	const [isTesting, setIsTesting] = useState(false)
+	const [testResult, setTestResult] = useState("")
+
+	const handleTestAutoCompletion = async () => {
+		setIsTesting(true)
+		setTestResult("")
+		try {
+			const request = SetAutoCompletionRequest.create({
+				autoCompletion: {
+					provider: autocompleteConfig.autocomplete.provider,
+					title: autocompleteConfig.autocomplete.title,
+					model: autocompleteConfig.autocomplete.model,
+					apiKey: autocompleteConfig.autocomplete.apiKey,
+					enable: autocompleteConfig.autocomplete.enable,
+					apiBase: autocompleteConfig.autocomplete.apiBase,
+				}
+			})
+			const response = await BusinessServiceClient.testAutoCompletion(request)
+			setTestResult(response.message || "测试成功")
+		} catch (error: any) {
+			setTestResult(error.message || "测试失败")
+		} finally {
+			setIsTesting(false)
 		}
-
-		window.addEventListener("message", listener)
-		return () => window.removeEventListener("message", listener)
-	}, [])
-	
+	}
 	return (
 		<div>
 			{renderSectionHeader("api-config")}
@@ -73,43 +111,47 @@ const ApiConfigurationSection = ({
 					<div className="rounded-md mb-5 bg-[var(--vscode-panel-background)]">
 						<div className="flex gap-[1px] mb-[10px] -mt-2 border-0 border-b border-solid border-[var(--vscode-panel-border)]">
 							<TabButton
-								isActive={chatSettings.mode === "plan"}
-								onClick={() => handlePlanActModeChange("plan")}
-								disabled={isSwitchingMode}
+								disabled={currentTab === "plan"}
+								isActive={currentTab === "plan"}
+								onClick={() => setCurrentTab("plan")}
 								style={{
-									opacity: isSwitchingMode ? 0.6 : 1,
-									cursor: isSwitchingMode ? "not-allowed" : "pointer",
+									opacity: 1,
+									cursor: "pointer",
 								}}>
-								{isSwitchingMode && chatSettings.mode === "act" ? "Switching..." : t("settings.actMode")}
+								{t("settings.planMode")}
 							</TabButton>
 							<TabButton
-								isActive={chatSettings.mode === "act"}
-								onClick={() => handlePlanActModeChange("act")}
-								disabled={isSwitchingMode}
+								disabled={currentTab === "act"}
+								isActive={currentTab === "act"}
+								onClick={() => setCurrentTab("act")}
 								style={{
-									opacity: isSwitchingMode ? 0.6 : 1,
-									cursor: isSwitchingMode ? "not-allowed" : "pointer",
+									opacity: 1,
+									cursor: "pointer",
 								}}>
-								{isSwitchingMode && chatSettings.mode === "plan" ? "Switching..." : t("settings.actMode")}
+								{t("settings.actMode")}
 							</TabButton>
 						</div>
 
 						{/* Content container */}
 						<div className="-mb-3">
-							<ApiOptions showModelOptions={true} />
+							<ApiOptions currentMode={currentTab} showModelOptions={true} />
 						</div>
 					</div>
 				) : (
-					<ApiOptions showModelOptions={true} />
+					<ApiOptions currentMode={mode} showModelOptions={true} />
 				)}
 
 				<div className="mb-[5px]">
 					<VSCodeCheckbox
-						className="mb-[5px]"
 						checked={planActSeparateModelsSetting}
+						className="mb-[5px]"
 						onChange={async (e: any) => {
 							const checked = e.target.checked === true
 							try {
+								// If unchecking the toggle, wait a bit for state to update, then sync configurations
+								if (!checked) {
+									await syncModeConfigurations(apiConfiguration, currentTab, handleFieldsChange)
+								}
 								await StateServiceClient.updateSettings(
 									UpdateSettingsRequest.create({
 										planActSeparateModelsSetting: checked,
@@ -130,7 +172,7 @@ const ApiConfigurationSection = ({
 					<details
 						onToggle={(e) => {
 							if (e.currentTarget.open) {
-								vscode.postMessage({ type: "getAutocompleteConfig" })
+								
 							}
 						}}>
 						<summary className="cursor-pointer font-medium">
@@ -196,22 +238,36 @@ const ApiConfigurationSection = ({
 								{t("settings.autocomplete.model")}
 							</VSCodeTextField>
 
-							<VSCodeCheckbox
-								checked={autocompleteConfig.autocomplete.enable}
-								onChange={(e: any) => {
-									// if (e.target.checked !== autocompleteConfig.autocomplete.enable) {
-									// 	setHasUnsavedChanges(true) //huqb
-									// }
-									setAutocompleteConfig({
-										...autocompleteConfig,
-										autocomplete: {
-											...autocompleteConfig.autocomplete,
-											enable: e.target.checked,
-										},
-									})
-								}}>
-								{t("settings.autocomplete.enable")}
-							</VSCodeCheckbox>
+							<div className="flex items-center gap-2">
+								<VSCodeCheckbox
+									checked={autocompleteConfig.autocomplete.enable}
+									onChange={(e: any) => {
+										// if (e.target.checked !== autocompleteConfig.autocomplete.enable) {
+										// 	setHasUnsavedChanges(true) //huqb
+										// }
+										setAutocompleteConfig({
+											...autocompleteConfig,
+											autocomplete: {
+												...autocompleteConfig.autocomplete,
+												enable: e.target.checked,
+											},
+										})
+									}}>
+									{t("settings.autocomplete.enable")}
+								</VSCodeCheckbox>
+								<VSCodeButton
+									appearance="secondary"
+									disabled={isTesting}
+									onClick={handleTestAutoCompletion}
+								>
+									{isTesting ? t("settings.autocomplete.testing") : t("settings.autocomplete.test")}
+								</VSCodeButton>
+							</div>
+							{testResult && (
+								<div className={`text-sm p-2 rounded ${testResult.includes("失败") ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"}`}>
+									{testResult}
+								</div>
+							)}
 						</div>
 					</details>
 				</div>

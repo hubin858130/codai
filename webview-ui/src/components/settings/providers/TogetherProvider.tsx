@@ -1,24 +1,28 @@
-import { ApiConfiguration } from "@shared/api"
-import { DebouncedTextField } from "../common/DebouncedTextField"
-import { ApiKeyField } from "../common/ApiKeyField"
+import { Mode } from "@shared/storage/types"
 import { useExtensionState } from "@/context/ExtensionStateContext"
+import { ApiKeyField } from "../common/ApiKeyField"
+import { DebouncedTextField } from "../common/DebouncedTextField"
+import { getModeSpecificFields } from "../utils/providerUtils"
 import { useApiConfigurationHandlers } from "../utils/useApiConfigurationHandlers"
-import { useTranslation } from "react-i18next"
+
 /**
  * Props for the TogetherProvider component
  */
 interface TogetherProviderProps {
 	showModelOptions: boolean
 	isPopup?: boolean
+	currentMode: Mode
 }
 
 /**
  * The Together provider configuration component
  */
-export const TogetherProvider = ({ showModelOptions, isPopup }: TogetherProviderProps) => {
+export const TogetherProvider = ({ showModelOptions, isPopup, currentMode }: TogetherProviderProps) => {
 	const { apiConfiguration } = useExtensionState()
-	const { handleFieldChange } = useApiConfigurationHandlers()
-	const { t } = useTranslation()
+	const { handleFieldChange, handleModeFieldChange } = useApiConfigurationHandlers()
+
+	const { togetherModelId } = getModeSpecificFields(apiConfiguration, currentMode)
+
 	return (
 		<div>
 			<ApiKeyField
@@ -27,11 +31,13 @@ export const TogetherProvider = ({ showModelOptions, isPopup }: TogetherProvider
 				providerName="Together"
 			/>
 			<DebouncedTextField
-				initialValue={apiConfiguration?.togetherModelId || ""}
-				onChange={(value) => handleFieldChange("togetherModelId", value)}
-				style={{ width: "100%" }}
-				placeholder={t("settings.api.enterModelId")}>
-				<span style={{ fontWeight: 500 }}>{t("settings.api.modelId")}</span>
+				initialValue={togetherModelId || ""}
+				onChange={(value) =>
+					handleModeFieldChange({ plan: "planModeTogetherModelId", act: "actModeTogetherModelId" }, value, currentMode)
+				}
+				placeholder={"Enter Model ID..."}
+				style={{ width: "100%" }}>
+				<span style={{ fontWeight: 500 }}>Model ID</span>
 			</DebouncedTextField>
 			<p
 				style={{
@@ -39,7 +45,10 @@ export const TogetherProvider = ({ showModelOptions, isPopup }: TogetherProvider
 					marginTop: 3,
 					color: "var(--vscode-descriptionForeground)",
 				}}>
-				<span style={{ color: "var(--vscode-errorForeground)" }}>({t("settings.api.complexPromptsNote")})</span>
+				<span style={{ color: "var(--vscode-errorForeground)" }}>
+					(<span style={{ fontWeight: 500 }}>Note:</span> Codai uses complex prompts and works best with Claude models.
+					Less capable models may not work as expected.)
+				</span>
 			</p>
 		</div>
 	)

@@ -1,9 +1,4 @@
-import { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
-import Tooltip from "@/components/common/Tooltip"
-import { useExtensionState } from "@/context/ExtensionStateContext"
-import { FileServiceClient } from "@/services/grpc-client"
-import { vscode } from "@/utils/vscode"
-import { EmptyRequest } from "@shared/proto/common"
+import { EmptyRequest } from "@shared/proto/cline/common"
 import {
 	ClineRulesToggles,
 	RefreshedRules,
@@ -11,11 +6,15 @@ import {
 	ToggleCursorRuleRequest,
 	ToggleWindsurfRuleRequest,
 	ToggleWorkflowRequest,
-} from "@shared/proto/file"
+} from "@shared/proto/cline/file"
 import { VSCodeButton, VSCodeLink } from "@vscode/webview-ui-toolkit/react"
 import React, { useEffect, useRef, useState } from "react"
 import { useClickAway, useWindowSize } from "react-use"
 import styled from "styled-components"
+import { CODE_BLOCK_BG_COLOR } from "@/components/common/CodeBlock"
+import Tooltip from "@/components/common/Tooltip"
+import { useExtensionState } from "@/context/ExtensionStateContext"
+import { FileServiceClient } from "@/services/grpc-client"
 import RulesToggleList from "./RulesToggleList"
 import { useTranslation } from "react-i18next"
 
@@ -270,13 +269,13 @@ const ClineRulesToggleModal: React.FC = () => {
 							<div className="mb-3">
 								<div className="text-sm font-normal mb-2">{t("CodaiRules.globalRules")}</div>
 								<RulesToggleList
-									rules={globalRules}
-									toggleRule={(rulePath, enabled) => toggleRule(true, rulePath, enabled)}
-									listGap="small"
 									isGlobal={true}
-									ruleType={"codai"}
+									listGap="small"
+									rules={globalRules}
+									ruleType={"cline"}
 									showNewRule={true}
 									showNoRules={false}
+									toggleRule={(rulePath, enabled) => toggleRule(true, rulePath, enabled)}
 								/>
 							</div>
 
@@ -284,31 +283,31 @@ const ClineRulesToggleModal: React.FC = () => {
 							<div style={{ marginBottom: -10 }}>
 								<div className="text-sm font-normal mb-2">{t("CodaiRules.workspaceRules")}</div>
 								<RulesToggleList
-									rules={localRules}
-									toggleRule={(rulePath, enabled) => toggleRule(false, rulePath, enabled)}
-									listGap="small"
 									isGlobal={false}
-									ruleType={"codai"}
+									listGap="small"
+									rules={localRules}
+									ruleType={"cline"}
 									showNewRule={false}
 									showNoRules={false}
+									toggleRule={(rulePath, enabled) => toggleRule(false, rulePath, enabled)}
 								/>
 								<RulesToggleList
-									rules={cursorRules}
-									toggleRule={toggleCursorRule}
-									listGap="small"
 									isGlobal={false}
+									listGap="small"
+									rules={cursorRules}
 									ruleType={"cursor"}
 									showNewRule={false}
 									showNoRules={false}
+									toggleRule={toggleCursorRule}
 								/>
 								<RulesToggleList
-									rules={windsurfRules}
-									toggleRule={toggleWindsurfRule}
-									listGap="small"
 									isGlobal={false}
+									listGap="small"
+									rules={windsurfRules}
 									ruleType={"windsurf"}
 									showNewRule={true}
 									showNoRules={false}
+									toggleRule={toggleWindsurfRule}
 								/>
 							</div>
 						</>
@@ -318,13 +317,13 @@ const ClineRulesToggleModal: React.FC = () => {
 							<div className="mb-3">
 								<div className="text-sm font-normal mb-2">{t("CodaiRules.globalWorkflows")}</div>
 								<RulesToggleList
-									rules={globalWorkflows}
-									toggleRule={(rulePath, enabled) => toggleWorkflow(true, rulePath, enabled)}
-									listGap="small"
 									isGlobal={true}
+									listGap="small"
+									rules={globalWorkflows}
 									ruleType={"workflow"}
 									showNewRule={true}
 									showNoRules={false}
+									toggleRule={(rulePath, enabled) => toggleWorkflow(true, rulePath, enabled)}
 								/>
 							</div>
 
@@ -332,13 +331,13 @@ const ClineRulesToggleModal: React.FC = () => {
 							<div style={{ marginBottom: -10 }}>
 								<div className="text-sm font-normal mb-2">{t("CodaiRules.workspaceWorkflows")}</div>
 								<RulesToggleList
-									rules={localWorkflows}
-									toggleRule={(rulePath, enabled) => toggleWorkflow(false, rulePath, enabled)}
-									listGap="small"
 									isGlobal={false}
+									listGap="small"
+									rules={localWorkflows}
 									ruleType={"workflow"}
 									showNewRule={true}
 									showNoRules={false}
+									toggleRule={(rulePath, enabled) => toggleWorkflow(false, rulePath, enabled)}
 								/>
 							</div>
 						</>
