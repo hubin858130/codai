@@ -1,8 +1,7 @@
+import { telemetryService } from "@services/posthog/PostHogClientProvider"
 import fs from "fs/promises"
 import * as path from "path"
 import simpleGit from "simple-git"
-import * as vscode from "vscode"
-import { telemetryService } from "@/services/posthog/telemetry/TelemetryService"
 import { GitOperations } from "./CheckpointGitOperations"
 import { getShadowGitPath, getWorkingDirectory, hashWorkingDir } from "./CheckpointUtils"
 
@@ -88,7 +87,7 @@ class CheckpointTracker {
 	 * - Creates/initializes shadow git repository
 	 *
 	 * Configuration:
-	 * - Respects 'codai.enableCheckpoints' VS Code setting
+	 * - Respects 'cline.enableCheckpoints' VS Code setting
 	 */
 	public static async create(
 		taskId: string,
@@ -111,7 +110,7 @@ class CheckpointTracker {
 			// Check if git is installed by attempting to get version
 			try {
 				await simpleGit().version()
-			} catch (error) {
+			} catch (_error) {
 				throw new Error("Git must be installed to use checkpoints.") // FIXME: must match what we check for in TaskHeader to show link
 			}
 

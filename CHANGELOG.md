@@ -1,4 +1,10 @@
 # Changelog
+## [1.3.0]
+
+-   Fix token counting errors and infinite loops
+-   Add Autocompletion test
+-   Synchronize Cline v3.26.7
+
 ## [1.2.4]
 
 -   Fix enhanced prompt feature

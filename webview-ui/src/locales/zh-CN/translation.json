@@ -12,7 +12,9 @@
 			"apiBase": "服务器URL",
 			"apiKey": "API密钥",
 			"model": "模型",
-			"enable": "启用代码补全"
+			"enable": "启用代码补全",
+			"testing": "测试中...",
+			"test": "测试"
 		},
 		"other": {
 			"title": "其他设置",

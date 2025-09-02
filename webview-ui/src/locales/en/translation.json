@@ -12,7 +12,9 @@
 			"apiBase": "Base URL",
 			"apiKey": "API Key",
 			"model": "Model",
-			"enable": "Enable Autocomplete"
+			"enable": "Enable Autocomplete",
+			"testing": "Testing...",
+			"test": "Test"
 		},
 		"other": {
 			"title": "Other Settings",

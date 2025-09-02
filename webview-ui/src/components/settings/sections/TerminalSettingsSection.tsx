@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react"
-import { VSCodeTextField, VSCodeCheckbox, VSCodeDropdown, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
+import { StringRequest } from "@shared/proto/cline/common"
+import { UpdateTerminalConnectionTimeoutResponse } from "@shared/proto/index.cline"
+import { VSCodeCheckbox, VSCodeDropdown, VSCodeOption, VSCodeTextField } from "@vscode/webview-ui-toolkit/react"
+import React, { useState } from "react"
 import { useExtensionState } from "@/context/ExtensionStateContext"
-import TerminalOutputLineLimitSlider from "../TerminalOutputLineLimitSlider"
 import { StateServiceClient } from "../../../services/grpc-client"
-import { Int64, Int64Request, StringRequest } from "@shared/proto/common"
 import Section from "../Section"
+import TerminalOutputLineLimitSlider from "../TerminalOutputLineLimitSlider"
 import { updateSetting } from "../utils/settingsHandlers"
 
 interface TerminalSettingsSectionProps {
@@ -25,21 +26,22 @@ export const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = (
 		setInputValue(value)
 
 		const seconds = parseFloat(value)
-		if (isNaN(seconds) || seconds <= 0) {
+		if (Number.isNaN(seconds) || seconds <= 0) {
 			setInputError("Please enter a positive number")
 			return
 		}
 
 		setInputError(null)
-		const timeout = Math.round(seconds * 1000)
+		const timeoutMs = Math.round(seconds * 1000)
 
-		StateServiceClient.updateTerminalConnectionTimeout({
-			value: timeout,
-		} as Int64Request)
-			.then((response: Int64) => {
+		StateServiceClient.updateTerminalConnectionTimeout({ timeoutMs })
+			.then((response: UpdateTerminalConnectionTimeoutResponse) => {
+				const timeoutMs = response.timeoutMs
 				// Backend calls postStateToWebview(), so state will update via subscription
 				// Just sync the input value with the confirmed backend value
-				setInputValue((response.value / 1000).toString())
+				if (timeoutMs !== undefined) {
+					setInputValue((timeoutMs / 1000).toString())
+				}
 			})
 			.catch((error) => {
 				console.error("Failed to update terminal connection timeout:", error)
@@ -78,24 +80,24 @@ export const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = (
 		<div>
 			{renderSectionHeader("terminal")}
 			<Section>
-				<div id="terminal-settings-section" className="mb-5">
+				<div className="mb-5" id="terminal-settings-section">
 					<div className="mb-4">
-						<label htmlFor="default-terminal-profile" className="font-medium block mb-1">
+						<label className="font-medium block mb-1" htmlFor="default-terminal-profile">
 							Default Terminal Profile
 						</label>
 						<VSCodeDropdown
+							className="w-full"
 							id="default-terminal-profile"
-							value={defaultTerminalProfile || "default"}
 							onChange={handleDefaultTerminalProfileChange}
-							className="w-full">
+							value={defaultTerminalProfile || "default"}>
 							{profilesToShow.map((profile) => (
-								<VSCodeOption key={profile.id} value={profile.id} title={profile.description}>
+								<VSCodeOption key={profile.id} title={profile.description} value={profile.id}>
 									{profile.name}
 								</VSCodeOption>
 							))}
 						</VSCodeDropdown>
 						<p className="text-xs text-[var(--vscode-descriptionForeground)] mt-1">
-							Select the default terminal Cline will use. 'Default' uses your VSCode global setting.
+							Select the default terminal Codai will use. 'Default' uses your VSCode global setting.
 						</p>
 					</div>
 
@@ -105,16 +107,16 @@ export const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = (
 							<div className="flex items-center">
 								<VSCodeTextField
 									className="w-full"
-									value={inputValue}
-									placeholder="Enter timeout in seconds"
-									onChange={(event) => handleTimeoutChange(event as Event)}
 									onBlur={handleInputBlur}
+									onChange={(event) => handleTimeoutChange(event as Event)}
+									placeholder="Enter timeout in seconds"
+									value={inputValue}
 								/>
 							</div>
 							{inputError && <div className="text-[var(--vscode-errorForeground)] text-xs mt-1">{inputError}</div>}
 						</div>
 						<p className="text-xs text-[var(--vscode-descriptionForeground)]">
-							Set how long Cline waits for shell integration to activate before executing commands. Increase this
+							Set how long Codai waits for shell integration to activate before executing commands. Increase this
 							value if you experience terminal connection timeouts.
 						</p>
 					</div>
@@ -128,7 +130,7 @@ export const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = (
 							</VSCodeCheckbox>
 						</div>
 						<p className="text-xs text-[var(--vscode-descriptionForeground)]">
-							When enabled, Cline will reuse existing terminal windows that aren't in the current working directory.
+							When enabled, Codai will reuse existing terminal windows that aren't in the current working directory.
 							Disable this if you experience issues with task lockout after a terminal command.
 						</p>
 					</div>
@@ -137,18 +139,18 @@ export const TerminalSettingsSection: React.FC<TerminalSettingsSectionProps> = (
 						<p className="text-[13px] m-0">
 							<strong>Having terminal issues?</strong> Check our{" "}
 							<a
-								href="https://docs.cline.bot/troubleshooting/terminal-quick-fixes"
 								className="text-[var(--vscode-textLink-foreground)] underline hover:no-underline"
-								target="_blank"
-								rel="noopener noreferrer">
+								href="https://docs.cline.bot/troubleshooting/terminal-quick-fixes"
+								rel="noopener noreferrer"
+								target="_blank">
 								Terminal Quick Fixes
 							</a>{" "}
 							or the{" "}
 							<a
-								href="https://docs.cline.bot/troubleshooting/terminal-integration-guide"
 								className="text-[var(--vscode-textLink-foreground)] underline hover:no-underline"
-								target="_blank"
-								rel="noopener noreferrer">
+								href="https://docs.cline.bot/troubleshooting/terminal-integration-guide"
+								rel="noopener noreferrer"
+								target="_blank">
 								Complete Troubleshooting Guide
 							</a>
 							.

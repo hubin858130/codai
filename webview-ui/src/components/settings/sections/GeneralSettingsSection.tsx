@@ -1,22 +1,17 @@
-import { 
-	VSCodeCheckbox, 
-	VSCodeLink,
-	VSCodeOption,
-	VSCodeDropdown,
-} from "@vscode/webview-ui-toolkit/react"
+import { VSCodeCheckbox, VSCodeDropdown, VSCodeLink, VSCodeOption } from "@vscode/webview-ui-toolkit/react"
 import { useExtensionState } from "@/context/ExtensionStateContext"
-import { updateSetting } from "../utils/settingsHandlers"
 import PreferredLanguageSetting from "../PreferredLanguageSetting"
 import Section from "../Section"
+import { updateSetting } from "../utils/settingsHandlers"
 import { useTranslation } from "react-i18next"
-import { useEffect, useState } from "react"
 import { vscode } from "@/utils/vscode"
+import { useEffect, useState } from "react"
+import { BusinessServiceClient } from "@/services/grpc-client"
+import { EmptyRequest, SetCurrentLanguageRequest } from "@shared/proto/index.cline"
 
 interface GeneralSettingsSectionProps {
 	renderSectionHeader: (tabId: string) => JSX.Element | null
 }
-
-
 
 const GeneralSettingsSection = ({ renderSectionHeader }: GeneralSettingsSectionProps) => {
 	const { telemetrySetting } = useExtensionState()
@@ -25,28 +20,21 @@ const GeneralSettingsSection = ({ renderSectionHeader }: GeneralSettingsSectionP
 	useEffect(() => {
 		// 获取当前语言设置
 		vscode.postMessage({ type: "getLanguageConfig" })
-	}, [])
-
-	useEffect(() => {
-		// 监听语言配置更新
-		const listener = (event: MessageEvent) => {
-			const message = event.data
-			if (message.type === "languageConfig") {
-				setCurrentLanguage(message.language)
-				i18n.changeLanguage(message.language)
-			}
-		}
-
-		window.addEventListener("message", listener)
-		return () => window.removeEventListener("message", listener)
+		BusinessServiceClient.getCurrentLanguage(EmptyRequest.create())
+		.then(response => {
+			setCurrentLanguage(response.value)
+			i18n.changeLanguage(response.value)
+		})
 	}, [i18n])
 
 	const handleLanguageChange = (e: any) => {
 		const newLanguage = e.target.value
 		setCurrentLanguage(newLanguage)
-		vscode.postMessage({
-			type: "updateLanguageConfig",
-			language: newLanguage,
+		i18n.changeLanguage(newLanguage)
+		BusinessServiceClient.setCurrentLanguage(SetCurrentLanguageRequest.create({
+				language: newLanguage,
+			})).catch(err => {
+			console.error("setCurrentLanguage:", err);
 		})
 	}
 
@@ -59,22 +47,22 @@ const GeneralSettingsSection = ({ renderSectionHeader }: GeneralSettingsSectionP
 
 				{/* <div className="mb-[5px]">
 					<VSCodeCheckbox
-						className="mb-[5px]"
 						checked={telemetrySetting !== "disabled"}
+						className="mb-[5px]"
 						onChange={(e: any) => {
 							const checked = e.target.checked === true
 							updateSetting("telemetrySetting", checked ? "enabled" : "disabled")
 						}}>
-						Allow anonymous error and usage reporting
+						Allow error and usage reporting
 					</VSCodeCheckbox>
 					<p className="text-xs mt-[5px] text-[var(--vscode-descriptionForeground)]">
-						Help improve Cline by sending anonymous usage data and error reports. No code, prompts, or personal
-						information are ever sent. See our{" "}
-						<VSCodeLink href="https://docs.cline.bot/more-info/telemetry" className="text-inherit">
+						Help improve Codai by sending usage data and error reports. No code, prompts, or personal information are
+						ever sent. See our{" "}
+						<VSCodeLink className="text-inherit" href="https://docs.cline.bot/more-info/telemetry">
 							telemetry overview
 						</VSCodeLink>{" "}
 						and{" "}
-						<VSCodeLink href="https://cline.bot/privacy" className="text-inherit">
+						<VSCodeLink className="text-inherit" href="https://cline.bot/privacy">
 							privacy policy
 						</VSCodeLink>{" "}
 						for more details.
@@ -107,7 +95,6 @@ const GeneralSettingsSection = ({ renderSectionHeader }: GeneralSettingsSectionP
 						</div>
 					</details>
 				</div>
-
 			</Section>
 		</div>
 	)
